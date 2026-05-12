@@ -1,0 +1,263 @@
+#船员
+
+
+
+"role.maskedDancer.name" : "假面舞者"
+"role.maskedDancer.short" : "舞"
+"role.maskedDancer.blurb" : "跟我一起共舞吧?"
+"role.maskedDancer.doc" : "邀请三名玩家参加舞会。在下一轮会议结束后可开启舞会"
+"options.role.maskedDancer.detail" : "假面舞者可以邀请三人并且开启舞会。<br>根据被邀请者的阵营来决定舞会效果。<br><b>这是半糖送给你的礼物之一！</b>"
+"role.maskedDancer.ability.title" : "<b>固有能力【假面舞会】</b>"
+"role.maskedDancer.ability.main" : "可以使用<b>邀请</b>来邀请三人。<br>邀请三人并且本轮结束后、可以<b>开启舞会</b><br>如果选择的人中、一名伪装者、一名船员、一名中立或者三名船员，那么无事发生<br>如果有两名船员、一个中立或者伪装者、那么中立或者伪装者死亡。<br>如果没有船员、那么假面舞者自杀。<br>如果只有一个船员、那么随机击杀一个被邀请者。"
+"role.maskeddancer.doc.invite" : "<b>邀请</b><br>邀请一人来到舞会"
+"role.maskeddancer.doc.start" : "<b>开启舞会</b><br>邀请三人后可开启舞会。"
+"role.maskedDancer.tips" : "<b>· 邀请满3人后、需要在下一轮才能开启舞会</b>"
+"options.role.maskeddancer.inviteCooldownFirst" : "首次邀请冷却"
+"options.role.maskeddancer.inviteCooldownSecond" : "第二次邀请冷却"
+"options.role.maskeddancer.inviteCooldownThird" : "第三次邀请冷却"
+"options.role.maskeddancer.partyuses" : "舞会次数"
+"button.label.maskedDancer.invite" : "邀请"
+"button.label.maskedDancer.start" : "开启舞会"
+"options.role.maskeddancer.startcooldown" : "开启舞会冷却"
+
+"achievement.maskedDancer.party.title" : "虚假的面具"
+"achievement.maskedDancer.party.goal" : "开启一次舞会。"
+
+"achievement.maskedDancer.accident.title" : "一场事故！"
+"achievement.maskedDancer.accident.goal" : "有人死于舞会事故。"
+
+"achievement.maskedDancer.suicide.title" : "破碎的假面"
+"achievement.maskedDancer.suicide.goal" : "假面舞者在舞会中自尽。"
+
+
+
+
+
+
+
+
+"role.referee.name" : "裁判"
+"role.referee.short" : "裁判"
+"role.referee.blurb" : "不要辜负我对你的期望"
+"role.referee.doc" : "招募一名玩家成为大神官。<br>若招募到内鬼或中立，可能根据设置自杀。<br><b>第一轮无法招募。</b>"
+"role.referee.ability.title" : "<b>固有能力【正义裁断】</b>"
+"role.referee.ability.main" : "可以招募一名玩家成为大神官。第一轮无法使用技能。"
+"role.referee.doc.recruit" : "<b>招募</b><br>使目标成为大神官"
+"options.role.referee.detail" : "裁判可以招募一人成为大神官。<br><b>这是半糖送给你的礼物之一！</b>"
+
+"options.role.referee.cooldown" : "招募冷却"
+"options.role.referee.uses" : "招募次数"
+"options.role.referee.suicideImpostor" : "招募到内鬼时自杀"
+"options.role.referee.suicideNeutral" : "招募到中立时自杀"
+"options.role.referee.suicideCrewmate" : "招募到船员时自杀"
+"button.label.referee.recruit" : "招募"
+
+
+
+
+
+
+
+#伪装者
+
+
+"role.BeNothing.name" : "背叛的彗星之子"
+"role.BeNothing.short" : "叛彗"
+"role.BeNothing.blurb" : "给予他们致命一击"
+"options.role.BeNothing.detail" : "可进入隐身状态，同时大幅提升移动速度。<br>持续时间结束后恢复正常。<br><b>这是半糖送给你的礼物之一！</b>"
+"role.BeNothing.doc" : "<b>本职业为测试职业，拥有逆天+Bug双重因素。</b><br><b>正常游玩别开。</b><br>可进入隐身状态，同时大幅提升移动速度。持续时间结束后恢复正常。"
+"options.role.BeNothing.cooldown" : "隐身冷却"
+"options.role.BeNothing.duration" : "隐身持续时间"
+"options.role.BeNothing.speedMultiplier" : "加速倍率"
+"button.label.BeNothing" : "隐身"
+
+"achievement.BeNothing.common1.title" : "？"
+"achievement.BeNothing.common1.cond" : "棍母"
+"achievement.BeNothing.common1.goal" : "获得邪恶的彗星之子职业"
+
+"role.restorer.name" : "还原者"
+"role.restorer.short" : "还"
+"role.restorer.blurb" : "想起最纯真的自我吧"
+"options.role.restorer.detail" : "选择一名玩家，在下一轮会议结束后，<br>将其职业还原为初始状态。<br><b>这是半糖送给你的礼物之一！</b>。"
+"role.restorer.doc" : "还原者可以标记其他玩家，在下一轮会议结束后强制改变其职业。<br><br>使用技能选择目标，对方将被「还原」为最基础的职业：船员、内鬼或小丑。"
+"role.restorer.doc.image" : "<b>还原</b><br>使目标还原为他原初的职业。<br>船员阵营-船员 内鬼阵营-内鬼 中立阵营-<b>小丑</b><br>还原可用次数为<b><color=#00ffff>%USES%次</color></b>"
+"options.role.restorer.cooldown" : "还原冷却"
+"options.role.restorer.skillUses" : "还原可用次数"
+"button.label.restorer" : "还原"
+"role.restorer.ability.title" : "<b>固有能力【原初之时】 </b>"
+"role.restorer.ability.main" : "可以使用还原来还原他人的职业"
+"role.restorer.tips" : "·<b>不要投出你还原的小丑哦！</b><br>·本职业借鉴<b>抹除者</b>"
+
+"achievement.restorer.common.restored.title" : "我是谁？我在哪？"
+"achievement.restorer.common.restored.cond" : ""
+"achievement.restorer.common.restored.goal" : "被还原者还原职业。"
+
+
+"achievement.restorer.common.win.title" : "一切都跟刚开始一样"
+"achievement.restorer.common.win.cond" : ""
+"achievement.restorer.common.win.goal" : "胜利一次"
+
+
+"achievement.restorer.common.dead.title" : "终末"
+"achievement.restorer.common.dead.cond" : "提示：也许需要被首刀？"
+"achievement.restorer.common.dead.goal" : "未使用还原技能时死亡"
+
+
+"achievement.restorer.challenge.same.title" : "竟然是跟我相同的魔法"
+"achievement.restorer.challenge.same.cond" : ""
+"achievement.restorer.challenge.same.goal" : "还原另一名还原者"
+
+
+"achievement.restorer.challenge.all.title" : "还原在场所有人"
+"achievement.restorer.challenge.all.cond" : "提示：建议在5人以内完成"
+"achievement.restorer.challenge.all.goal" : "还原所有人的职业"
+
+
+"achievement.restorer.challenge.unused.title" : "好像忘了什么？"
+"achievement.restorer.challenge.unused.cond" : ""
+"achievement.restorer.challenge.unused.goal" : "一整局不使用还原"
+
+
+"achievement.restorer.challenge.jesterWin.title" : "天赐的欢愉！"
+"achievement.restorer.challenge.jesterWin.cond" : "提示：投出前请想好后果哦"
+"achievement.restorer.challenge.jesterWin.goal" : "投出被还原者还原的小丑"
+"achievement.restorer.challenge.jesterWin.splitted.0" : "天赐的"
+"achievement.restorer.challenge.jesterWin.splitted.1" : "失手"
+"achievement.restorer.challenge.jesterWin.splitted.2" : "欢快的"
+
+
+
+
+
+
+
+
+
+
+"role.objector.name" : "异议者"
+"role.objector.blurb" : "我对本次会议的结果不满意"
+"role.objector.doc" : "<b>本职业有bug。</b><br>你可以在会议上使用<b>异议</b>技能。<br>如果使用了异议，那么本轮所有人的投票将被转换为弃票"
+"options.role.objector.detail" : "异议者可以使用技能让本轮会议投票无效<br><b>这是半糖送给你的礼物之一！</b>"
+"role.objector.ability.title" : "<b>固有能力【异议裁定】</b>"
+"role.objector.ability.main" : "你可以使用异议来让本轮会议所有人的投票结果更改为弃票。<br>如果你反悔了，你可以在投票结果出现前取消异议。"
+"role.objector.doc.objection" : "<b>异议</b><br>在会议阶段时进行异议。最多可用<b><color=#00ffff>%USES%次</color>。</b>"
+"role.objector.doc.cancel" : "<b>取消异议</b><br>可以取消异议。"
+"role.objector.tips" : "<b>·不建议非匿名投票下开启本职业</b>"
+"options.role.objector.uses" : "异议最大使用次数"
+"objector.ui.uses" : "剩余异议次数：%LEFTUSES%"
+
+"achievement.objector.common.success.title" : "已处理放逐人员"
+"achievement.objector.common.success.cond" : ""
+"achievement.objector.common.success.goal" : "异议一次"
+
+
+
+
+"role.owl.name" : "猫头鹰"
+"role.owl.short" : "鹰"
+"role.owl.blurb" : "深夜的人为我所用！"
+"role.owl.doc" : "你可以使用催眠来催眠一个人。<br>被催眠者会获得一次击杀机会，并且计算为伪装者阵营。<br>被催眠者击杀一人后回归正常。如果不击杀的时间超过了<b><color=#00ffff>%DUR%秒</color></b>，<b>被催眠者自杀。</b>"
+"options.role.owl.detail" : "猫头鹰可以催眠他人。<br><b>这是半糖送给你的礼物之一！</b>"
+"role.owl.ability.title" : "<b>固有能力【催眠】</b>"
+"role.owl.ability.main" : ""
+"role.owl.tips" : "<b>·如果使用了噬魂，你会瞬移到被催眠者身旁来击杀他，而不是无声无息地让被催眠者自杀。</b>"
+"options.role.owl.cooldown" : "催眠冷却"
+"options.role.owl.maxUses" : "最大催眠次数"
+"options.role.owl.duration" : "被催眠者自杀时限"
+"options.role.owl.privateChat" : "私密频道"
+"options.role.owl.soulEatCooldown" : "噬魂冷却"
+"button.label.owl.hypnotize" : "催眠"
+"button.label.owl.soulEat" : "噬魂"
+"button.label.owl.soulEatMeeting" : "噬魂"
+"role.owl.doc.hypnotize" : "<b>催眠</b><br>催眠一个人。最多可用<b><color=#00ffff>%MAXUSES%</color></b>次。"
+"role.owl.doc.soulEat" : "<b>噬魂</b><br>立即杀死被催眠者。"
+"owl.chatName" : "猫头鹰"
+
+
+
+#中立
+
+"role.Havenger.blurb" : "以牙还牙、以命偿命"
+"role.Havenger.doc" : "<b>本职业有bug</b><br>如果自由阶段被刀，尸体消失，并在下一轮获得寻仇状态<br>期间禁止开会，所有人禁止跳管。<br>若刀错，寻仇者与被刀者死亡、若超时，寻仇者死亡、若刀对，寻仇者胜利。"
+"role.Havenger.name" : "寻仇者"
+"role.Havenger.tips" : "·你的寻仇击杀次数只有一次。"
+"options.role.Havenger.detail" : "寻仇者死亡后需要向凶手报仇<br><b>这是半糖送给你的礼物之一！</b>"
+"role.Havenger.short" : "寻"
+"options.role.Havenger.revengeDuration" : "寻仇持续时间"
+"teams.Havenger" : "寻仇者"
+"button.label.Havenger.kill" : "报仇"
+
+"achievement.avenger.common.revenge.title" : "血债血偿"
+"achievement.avenger.common.revenge.goal" : "击杀凶手"
+"achievement.avenger.common.revenge.cond" : ""
+
+"achievement.avenger.common.wrongKill.title" : "滥杀无辜"
+"achievement.avenger.common.wrongKill.goal" : "寻仇阶段击杀非凶手"
+"achievement.avenger.common.wrongKill.cond" : ""
+
+"achievement.avenger.common.timeout.title" : "魂散"
+"achievement.avenger.common.timeout.goal" : "寻仇时间结束、未击杀任何人"
+"achievement.avenger.common.timeout.cond" : ""
+
+
+
+
+
+"role.imagination.name" : "想象力"
+"role.imagination.short" : "想"
+"role.imagination.blurb" : "丰富的想象"
+"role.imagination.doc" : "活到最后抢夺他人的胜利<br>每轮可以想象一个职业并获得其技能。"
+"teams.imagination" : "想象力"
+"options.role.imagination.candidateCount" : "每轮可想象职业数量"
+"options.role.imagination.roleFilter" : "可想象的职业"
+"options.role.imagination.detail" : "想象力可以每轮想象一个职业并获得其职业特质<br>存活到最后抢夺职业。<br><b>这是半糖送给你的礼物之一！</b>"
+"role.imagination.ability.title" : "<b>固有能力【想象超群】</b>"
+"role.imagination.ability.main" : "你可以在每轮会议结束或者游戏开始时选择一个职业并获得他的能力。<br>本轮结束后，你需要重新选择职业。"
+"role.imagination.doc.skill" : "<b>想象</b><br>每轮自动使用、可以选择一个职业并获得其职业能力。"
+"role.imagination.tips" : "<b>·某些职业选择后不会拥有他的技能。</b><br><b>·你可以抢夺胜利。</b>"
+
+"role.imagination.prefix" : "想象的%ROLE%"
+"role.imagination.select" : "选择一个职业进行想象(选择完毕后请手动关闭本窗口)"
+
+
+
+
+
+#附加
+
+"role.firstStrike.name" : "闪击"
+"role.firstStrike.short" : "%"
+"role.firstStrike.generalBlurb" : ""
+"options.role.firstStrike.detail" : "每次会议结束或游戏开局时，<br>你的击杀冷却会立刻重置为<color=#FF0000>0秒</color>，<br>可立即发动一次袭击。<br><b>这是半糖送给你的礼物之一！</b>"
+"role.firstStrike.doc" : "每次会议结束或游戏开局时，你的击杀冷却会立刻重置为<color=#FF0000>0秒</color>。"
+
+
+"role.imagimodi.name" : "想象力"
+"role.imagimodi.generalBlurb" : "丰富的想象"
+"role.imagimodi.doc" : "请查看<b>想象力</b>主职业。"
+
+
+"role.HNoiseMaker.name" : "大嗓门"
+"role.HNoiseMaker.generalBlurb" : "死了你就叫一声"
+"role.HNoiseMaker.doc" : "大嗓门死亡时，会在死亡地点发出警报、箭头提示并伴随“嗷”一声。<br><b>本职业为大嗓门的附加版本。</b>"
+"options.role.HNoiseMaker.noiseDuration" : "警报持续时间"
+"options.role.HNoiseMaker.detail" : "大嗓门被击杀会发出警报声。<br>跟诱饵一起玩到的有福了。<br><b>这是半糖送给你的礼物之一！</b>"
+
+
+
+"role.keymaster.name" : "执钥"
+"role.keymaster.generalBlurb" : "芝麻开门"
+"role.keymaster.doc" : "你可以直接开启除了<b>SKELD</b>和<b>MIRAHQ</b>以外的所有门"
+"options.role.keymaster.detail" : "你可以直接开门"
+"options.modifier.keymaster.cooldown" : "开门冷却"
+"button.label.keymaster.open" : "开门"
+
+
+"role.hypnotized.name" : "被催眠者"
+"role.hypnotized.generalBlurb" : "被催眠的产物"
+"role.hypnotized.doc" : "你被猫头鹰催眠了，获得一次击杀机会。<br>限定时间内未使用你将自杀。"
+
+#死因
+
+"state.imaginationDepression" : "抑郁"
+"state.partyAccident" : "舞会事故"
