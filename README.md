@@ -17,14 +17,16 @@
   </a>    
 
 ### 说明
-- 本项目为**Nebula on the Ship**的职业插件，新增了一些职业以及指令。
+- 本项目为[**Nebula on the Ship**](https://github.com/Dolly1016/Nebula)的职业插件，新增了一些职业以及指令。
   
 > [!NOTE]
-> 本项目的大半职业基层逻辑由**AI工具**所编写。调试与漏洞修复由开发者完成。<br>*日后可能不会再如此做。具体请查看changelog。*
+> 本项目的部分职业为AI创作。具体请查看
+[来源文档](ATTRIBUTIONS.md)  
+> *日后可能不会再如此做。具体请查看changelog。*
 
 ### 导入方法
-- 1.下载Nebula on the Ship模组并且正确导入，正确运行一次。
-- 2.在游戏目录下应新建的**Addons**目录加入本项目的压缩包文件。
+- 1.下载[Nebula on the Ship](https://github.com/Dolly1016/Nebula)模组并且正确导入，正确运行一次。
+- 2.在游戏目录下应新建的**Addons**目录加入本项目的压缩包文件。  
 *注:不要解压本压缩包文件*
 - 3.如果没有出现差错，那么导入完毕。
 > [!note]
