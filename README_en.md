@@ -1,10 +1,10 @@
 # Half-Sugar's Gift
 
 ## Select Language
-> 简体中文  
-> [繁體中文]()  
-> [English - Current]()  
-> [日本語]()  
+> [简体中文](README.md)  
+> [繁體中文](README_zh-hant.md)  
+> [English - Current](README_en.md)  
+> [日本語](README_ja.md)  
 
 | HSG Version | Supported Among Us Version | Download Link |
 |-------------|----------------------------|---------------|
