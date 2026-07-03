@@ -1,7 +1,7 @@
 # 半糖的禮物
 
 ## 選擇語言
-> [簡體中文](README.md) 
+> [簡體中文](README.md)   
 > [繁體中文-當前文件](README_zh-hant)  
 > [English](README_en)  
 > [日本語](README_ja)  
