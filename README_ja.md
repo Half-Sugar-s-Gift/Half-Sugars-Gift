@@ -2,9 +2,9 @@
 
 ## 言語を選択
 > [简体中文](README.md)    
-> [繁體中文](README_zh-hant)  
-> [English](README_en)  
-> [日本語 - 現在のドキュメント](README_ja)  
+> [繁體中文](README_zh-hant.md)  
+> [English](README_en.md)  
+> [日本語 - 現在のドキュメント](README_ja.md)  
 
 | HSG バージョン | 対応 Among Us バージョン | ダウンロードリンク |
 |---------------|--------------------------|-------------------|
