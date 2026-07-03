@@ -1,10 +1,10 @@
 # 半糖的礼物
 
 ## Select Language 
-> 简体中文-当前文档  
-> [繁體中文]()  
-> [English]()  
-> [日本語]()  
+> [简体中文](README.md)  
+> [繁體中文](README_zh-hant.md)  
+> [English](README_ja.md)  
+> [日本語](README_en.md)  
 
 |HSG版本|支持Among Us版本|下载链接|
 |---------|---------|---------|
@@ -21,7 +21,6 @@
 > [!NOTE]
 > 本项目的部分职业为AI创作。具体请查看
 [来源文档](ATTRIBUTIONS.md)  
-> *日后可能不会再如此做。具体请查看changelog。*
 
 ### 导入方法
 - 1.下载[Nebula on the Ship](https://github.com/Dolly1016/Nebula)模组并且正确导入，正确运行一次。
