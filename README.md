@@ -3,8 +3,8 @@
 ## Select Language 
 > [简体中文](README.md)  
 > [繁體中文](README_zh-hant.md)  
-> [English](README_ja.md)  
-> [日本語](README_en.md)  
+> [English](README_en)  
+> [日本語](README_ja)  
 
 |HSG版本|支持Among Us版本|下载链接|
 |---------|---------|---------|
