@@ -1,12 +1,20 @@
-# 半糖的礼物
+# 你好，欢迎来到HSG文档
 
 ## Select Language 
-> [简体中文](README.md)  
+> 简体中文——本文档  
 > [繁體中文](README_zh-hant.md)  
 > [English](README_en.md)  
 > [日本語](README_ja.md)  
 
-|HSG版本|支持Among Us版本|下载链接|
+# 跳转到对应章节
+- [正式版本](#-正式版本)
+- [预发布版本]()
+- [安装教程]()
+- [联系我们]()
+
+# 正式版本
+
+|HSG版本|对应Among Us版本|下载链接|
 |---------|---------|---------|
 |1.0.0|17.3.0|[下载](https://github.com/hvtXsvc-skysilk/Half-sugar-s-gift/releases/download/v1.0.0/Half.sugar.s.gift.1.0.0.zip)|
 
