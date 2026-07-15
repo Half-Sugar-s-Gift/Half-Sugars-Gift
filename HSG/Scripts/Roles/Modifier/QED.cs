@@ -1,10 +1,4 @@
-﻿using Virial;
-using Virial.Assignable;
-using Virial.Game;
-using hvtXsvc.Core;
-using GamePlayer = Virial.Game.Player;
-
-namespace NebulaN.Roles.Modifier;
+﻿namespace NebulaN.Roles.Modifier;
 
 public class QED : DefinedAllocatableModifierTemplate, HasCitation, DefinedAllocatableModifier
 {
@@ -57,13 +51,13 @@ public class QED : DefinedAllocatableModifierTemplate, HasCitation, DefinedAlloc
 
             _abilityButton.OnClick = _ =>
             {
-                SoundManagers.RpcPlayPositional("QED", MyPlayer.Position, 0.75f);
+                AudioHelper.RpcPlayGlobal("Sounds/QED_Global.wav", 0.75f);
             };
         }
         void RuntimeAssignable.DecorateNameConstantly(ref string name, bool canSeeAllInfo, bool inEndScene)
         {
-            if (AmOwner)
-                name += " QED".Color(new UnityEngine.Color(0.15f, 0f, 0.85f));
+            if (!AmOwner) return;
+            name += ColorHelper.CreateRandom(" QED");
         }
     }
 }

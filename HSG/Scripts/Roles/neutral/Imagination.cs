@@ -1,4 +1,4 @@
-﻿using hvtXsvc.Core;
+﻿/*using hvtXsvc.Core;
 using Nebula.Configuration;
 using NebulaN.Roles.Modifier;
 using GamePlayer = Virial.Game.Player;
@@ -76,4 +76,4 @@ public class Imagination : DefinedRoleTemplate, HasCitation, DefinedRole,
                 MyPlayer.AddModifier(ImaginationModifier.MyRole);
         }
     }
-}
+}*/

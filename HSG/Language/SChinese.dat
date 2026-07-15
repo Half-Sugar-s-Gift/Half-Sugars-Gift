@@ -1,36 +1,27 @@
 #船员
 
 
-
 "role.maskedDancer.name" : "假面舞者"
 "role.maskedDancer.short" : "舞"
 "role.maskedDancer.blurb" : "跟我一起共舞吧?"
 "role.maskedDancer.doc" : "邀请三名玩家参加舞会。在下一轮会议结束后可开启舞会"
 "options.role.maskedDancer.detail" : "假面舞者可以邀请三人并且开启舞会。<br>根据被邀请者的阵营来决定舞会效果。<br><b>这是半糖送给你的礼物之一！</b>"
 "role.maskedDancer.ability.title" : "<b>固有能力【假面舞会】</b>"
-"role.maskedDancer.ability.main" : "可以使用<b>邀请</b>来邀请三人。<br>邀请三人并且本轮结束后、可以<b>开启舞会</b><br>如果选择的人中、一名伪装者、一名船员、一名中立或者三名船员，那么无事发生<br>如果有两名船员、一个中立或者伪装者、那么中立或者伪装者死亡。<br>如果没有船员、那么假面舞者自杀。<br>如果只有一个船员、那么随机击杀一个被邀请者。"
+"role.maskedDancer.ability.main" : "可以使用<b>邀请</b>来邀请三人。<br>邀请三人并且本轮结束后、可以<b>开启舞会</b><br>如果选择的人中、三名船员，那么无事发生<br>如果有两名船员、一个中立或者伪装者、那么中立或者伪装者死亡。<br>如果没有船员、那么假面舞者自杀。<br>如果只有一个船员、那么随机击杀一个被邀请者。"
 "role.maskeddancer.doc.invite" : "<b>邀请</b><br>邀请一人来到舞会"
 "role.maskeddancer.doc.start" : "<b>开启舞会</b><br>邀请三人后可开启舞会。"
 "role.maskedDancer.tips" : "<b>· 邀请满3人后、需要在下一轮才能开启舞会</b>"
-"options.role.maskeddancer.inviteCooldownFirst" : "首次邀请冷却"
-"options.role.maskeddancer.inviteCooldownSecond" : "第二次邀请冷却"
-"options.role.maskeddancer.inviteCooldownThird" : "第三次邀请冷却"
+"options.role.maskeddancer.inviteCooldownA" : "首次邀请冷却"
+"options.role.maskeddancer.inviteCooldownB" : "第二次邀请冷却"
+"options.role.maskeddancer.inviteCooldownC" : "第三次邀请冷却"
 "options.role.maskeddancer.partyuses" : "舞会次数"
 "button.label.maskedDancer.invite" : "邀请"
 "button.label.maskedDancer.start" : "开启舞会"
 "options.role.maskeddancer.startcooldown" : "开启舞会冷却"
 
-"achievement.maskedDancer.party.title" : "虚假的面具"
-"achievement.maskedDancer.party.goal" : "开启一次舞会。"
-
-"achievement.maskedDancer.accident.title" : "一场事故！"
-"achievement.maskedDancer.accident.goal" : "有人死于舞会事故。"
-
-"achievement.maskedDancer.suicide.title" : "破碎的假面"
-"achievement.maskedDancer.suicide.goal" : "假面舞者在舞会中自尽。"
 
 
-
+# ---暂时废弃---
 "role.referee.name" : "裁判"
 "role.referee.short" : "裁判"
 "role.referee.blurb" : "不要辜负我对你的期望"
@@ -46,7 +37,7 @@
 "options.role.referee.suicideNeutral" : "招募到中立时自杀"
 "options.role.referee.suicideCrewmate" : "招募到船员时自杀"
 "button.label.referee.recruit" : "招募"
-
+# --- ---
 
 "role.wish.name" : "「愿」"
 "role.wish.blurb" : "愿下次相遇不是阴阳两隔"
@@ -63,11 +54,13 @@
 "options.role.wish.suicideNeutral" : "祈愿中立阵营是否暴毙"
 "options.role.wish.suicideCrewmate" : "祈愿船员是否暴毙"
 "button.label.wish.mark" : "祈愿"
+"role.wish.markdead" : "「愿」星空中那名为“<color=#%COLOR%>%VICTIM%</color>”的星光，<br>黯淡地消逝在了名为“%KILLER%”的手中。"
+"role.wish.murdererdead" : "「愿」星空中那名为“<color=#%COLOR%>%VICTIM%</color>”的星光，<br>与其凶手一同消逝在了空中。"
 
 
 "role.snitch.name" : "告密者"
 "role.snitch.blurb" : "我一定会将这份情报，安全地带回去！"
-"role.snitch.short" : "告密"
+"role.snitch.short" : "告"
 "role.snitch.canBeGuess.true" : "你仍然可以被赌杀"
 "role.snitch.canBeGuess.false" : "你将无法被赌杀"
 "role.snitch.imposter.all" : "得知所有伪装者"
@@ -81,11 +74,11 @@
 "options.role.snitch.canBeGuess" : "暴露位置后可被赌杀"
 "options.role.snitch.zhixiangJiGeLang" : "指向伪装者数量"
 "options.role.snitch.all" : "所有"
-"1" : "1"
-"2" : "2"
-"3" : "3"
-"4" : "4"
-"5" : "5"
+"options.role.snitch.one" : "1"
+"options.role.snitch.two" : "2"
+"options.role.snitch.three" : "3"
+"options.role.snitch.four" : "4"
+"options.role.snitch.five" : "5"
 "options.role.snitch.useSpeTask" : "特殊设置任务数量"
 "options.role.snitch.TaskShuLiang" : "任务数量"
 "options.role.snitch.NeCo" : "指向中立类型"
@@ -94,6 +87,86 @@
 "options.role.snitch.neutral.none" : "不指向中立"
 
 
+"role.mirrorpeeper.name" : "窥镜者"
+"role.mirrorpeeper.short" : "镜"
+"role.mirrorpeeper.blurb" : "窥视秘法"
+"options.role.mirrorpeeper.detail" : "窥镜者使用技能后，根据房主设置，<br>可以得知一些事情发生<br><b>这是半糖送给你的礼物之一！</b>"
+
+"options.role.mirrorpeeper.cooldown" : "窥镜冷却"
+"options.role.mirrorpeeper.maxUses" : "窥镜最大使用次数"
+"options.role.mirrorpeeper.guewillq" : "会议上有人死亡时闪光"
+"options.role.mirrorpeeper.DieWillQ" : "有人死亡时闪光"
+"options.role.mirrorpeeper.towq" : "有人做完任务时闪光"
+"options.role.mirrorpeeper.gcd" : "会议上有人死亡且为自杀时闪光颜色"
+"options.role.mirrorpeeper.gcmd" : "会议上有人死亡且凶手不是死者时闪光颜色"
+"options.role.mirrorpeeper.tc" : "有人做完任务时闪光颜色"
+"options.role.mirrorpeeper.dc" : "有人死亡时闪光颜色"
+
+
+
+"role.mirrorpeeper.doc" : "当某些事情发生时，你将会收到提示。"
+"role.mirrorpeeper.ability.title" : "<b>【固有能力】 窥天之镜</b>"
+"role.mirrorpeeper.ability.main" : "你可以使用技能「窥镜」，使用后，将在下一轮以及下一轮会议中生效。"
+"role.mirrorpeeper.doc.Monitoring" : "<b>窥镜</b><br>生效后，<b><color=#00ffff>%DeathFlash_1%</color></b> %DeathFlashColor% <b><color=#00ffff>%DeathFlash_2%</color></b><b><color=#00ffff>%TaskFlash_1%</color></b> %TaskFlashColor% <b><color=#00ffff>%TaskFlash_2% </color></b><b><color=#00ffff>%GuessCorrectFlash_1% </color></b> %GuessCorrectFlashColor% <b><color=#00ffff>%GuessCorrectFlash_2%</color></b><b><color=#00ffff>%GuessWrongFlash_1% </color></b>%GuessWrongFlashColor% <b><color=#00ffff>%GuessWrongFlash_2%</color></b>"
+
+
+"role.mirrorpeeper.tips" : "<b>·虽然大部分情况下会议的自杀与被杀对应误赌和被赌，<br>但实际上窥镜技能会对会议上的任何死亡都做出反应，<br>不仅仅包括被赌与误赌。</b>"
+
+"role.mirrorpeeper.desc.death.prefix" : "<br>当有人死亡时，你的屏幕将会闪"
+"role.mirrorpeeper.desc.death.suffix" : "的光"
+"role.mirrorpeeper.desc.task.prefix" : "<br>当有人完成任务时，你的屏幕将会闪"
+"role.mirrorpeeper.desc.task.suffix" : "的光"
+"role.mirrorpeeper.desc.guess.correct.prefix" : "<br>当会议中有人自杀时，你的屏幕将会闪"
+"role.mirrorpeeper.desc.guess.correct.suffix" : "的光"
+"role.mirrorpeeper.desc.guess.wrong.prefix" : "<br>当会议中有人死亡且凶手非死者时，你的屏幕将会闪"
+"role.mirrorpeeper.desc.guess.wrong.suffix" : "的光"
+
+"options.role.mirrorpeeper.red" : "<b><color=#FF0000>红色</color></b>"
+"options.role.mirrorpeeper.yellow" : "<b><color=#FFFF00>黄色</color></b>"
+"options.role.mirrorpeeper.cyan" : "<b><color=#00EEEE>青色</color></b>"
+"options.role.mirrorpeeper.green" : "<b><color=#00FF00>绿色</color></b>"
+"options.role.mirrorpeeper.blue" : "<b><color=#0000FF>蓝色</color></b>"
+"options.role.mirrorpeeper.purple" : "<b><color=#800080>紫色</color></b>"
+"options.role.mirrorpeeper.wishY" : "<b><color=#FFE699>淡黄</color></b>"
+"options.role.mirrorpeeper.UNKNOWN" : "未知"
+
+"button.label.mirrorpeeper.Monitoring" : "窥镜"
+
+"role.lurker.name" : "潜行者"
+"role.lurker.short" : "潜"
+"role.lurker.blurb" : "披荆斩棘"
+"options.role.lurker.ckc" : "可以击杀"
+"options.role.lurker.cooldown" : "击杀冷却"
+"options.role.lurker.nt" : "潜行者无需做任务"
+"lurker.kill" : "击杀"
+"options.role.lurker.detail" : "潜行者可以阻止除了船员阵营以外的全部阵营胜利，<br>直到他死亡。<br><b>这是半糖送给你的礼物之一！</b>"
+"role.lurker.doc" : "潜行者可以阻止除了船员阵营以外的全部阵营胜利，直到潜行者死亡。<b><color=#00ffff>%CANKILL%</color></b>%NT%"
+"role.lurker.ck.true" : "<br>当有阵营可以胜利，且非船员阵营时，<b>潜行者获得一次击杀能力</b>，击杀冷却为 <b><color=#00ffff>%CD%</color></b> "
+"role.lurker.ck.false" : ""
+"role.lurker.nt.true" : "，<b><color=#00ffff><br>以及，潜行者没有任务。</color></b>"
+"role.lurker.nt.false" : "。"
+
+"role.dilemma.name" : "抉择者"
+"role.dolemma.short" : "抉"
+"role.dilemma.blurb" : "你的选择是？"
+"options.role.dilemma.detail" : "你可以按下按钮来让随机事件发生。<br><b>这是半糖送给你的礼物之一！</b>"
+"role.dilemma.doc" : "你可以按下按钮来让随机事件发生。"
+"role.dilemma.ability.title" : "固有能力【抉择】"
+"role.dilemma.ability.main" : "按钮附上了一张说明书，上面写着可能触发的事件。<b><br>1.以你的名义召开紧急会议<br>2.击杀一名伪装者，如没有伪装者那么无事发生。<br>3.爆炸（只会炸死使用者）<br>4.重新成为普通人<br>5.为随机一人提供一把绿色钥匙（即执钥附加）<br>6.与随机一人更换职业。</b>"
+"role.dilemma.ability.doc" : "<b>抉择</b><br>按下按钮、启动抉择事件。"
+"role.dilemma.hudtextSuicide" : "（爆炸声）"
+"options.role.dilemma.maxUses" : "技能最多使用次数"
+"options.role.dilemma.cooldown" : "技能冷却"
+"options.role.dilemma.AddMaxUsesWhenDoTask" : "做任务后增加使用次数"
+"options.role.dilemma.NeedTasksCount" : "增加使用次数所需任务数"
+"button.label.dilimma.choose" : "抉择"
+"role.dilemma.hudtextEmergencyMeeting" : "警报声"
+"role.dilemma.hudtextKillImp" : "好像有一名伪装者死亡了..."
+"role.dilemma.hudtextNoImp" : "已经不存在伪装者了"
+"role.dilemma.hudtextBeCrew" : "按钮消失了？"
+"role.dilemma.hudtextAddModi" : "有人取得了一把钥匙"
+"role.dilemma.hudtextChangeRole" : "这是..谁？"
+"role.dilemma.hudtextUn" : "这不可能"
 
 
 
@@ -105,17 +178,13 @@
 
 "role.BeNothing.name" : "背叛的彗星之子"
 "role.BeNothing.short" : "叛彗"
-"role.BeNothing.blurb" : "给予他们致命一击"
+"role.BeNothing.blurb" : "Q！"
 "options.role.BeNothing.detail" : "可进入隐身状态，同时大幅提升移动速度。<br>持续时间结束后恢复正常。<br><b>这是半糖送给你的礼物之一！</b>"
 "role.BeNothing.doc" : "<b>本职业为测试职业，拥有逆天+Bug双重因素。</b><br><b>正常游玩别开。</b><br>可进入隐身状态，同时大幅提升移动速度。持续时间结束后恢复正常。"
 "options.role.BeNothing.cooldown" : "隐身冷却"
 "options.role.BeNothing.duration" : "隐身持续时间"
 "options.role.BeNothing.speedMultiplier" : "加速倍率"
 "button.label.BeNothing" : "隐身"
-
-"achievement.BeNothing.common1.title" : "？"
-"achievement.BeNothing.common1.cond" : "棍母"
-"achievement.BeNothing.common1.goal" : "获得邪恶的彗星之子职业"
 
 "role.restorer.name" : "还原者"
 "role.restorer.short" : "还"
@@ -129,51 +198,6 @@
 "role.restorer.ability.title" : "<b>固有能力【原初之时】 </b>"
 "role.restorer.ability.main" : "可以使用还原来还原他人的职业"
 "role.restorer.tips" : "·<b>不要投出你还原的小丑哦！</b><br>·本职业借鉴<b>抹除者</b>"
-
-"achievement.restorer.common.restored.title" : "我是谁？我在哪？"
-"achievement.restorer.common.restored.cond" : ""
-"achievement.restorer.common.restored.goal" : "被还原者还原职业。"
-
-
-"achievement.restorer.common.win.title" : "一切都跟刚开始一样"
-"achievement.restorer.common.win.cond" : ""
-"achievement.restorer.common.win.goal" : "胜利一次"
-
-
-"achievement.restorer.common.dead.title" : "终末"
-"achievement.restorer.common.dead.cond" : "提示：也许需要被首刀？"
-"achievement.restorer.common.dead.goal" : "未使用还原技能时死亡"
-
-
-"achievement.restorer.challenge.same.title" : "竟然是跟我相同的魔法"
-"achievement.restorer.challenge.same.cond" : ""
-"achievement.restorer.challenge.same.goal" : "还原另一名还原者"
-
-
-"achievement.restorer.challenge.all.title" : "还原在场所有人"
-"achievement.restorer.challenge.all.cond" : "提示：建议在5人以内完成"
-"achievement.restorer.challenge.all.goal" : "还原所有人的职业"
-
-
-"achievement.restorer.challenge.unused.title" : "好像忘了什么？"
-"achievement.restorer.challenge.unused.cond" : ""
-"achievement.restorer.challenge.unused.goal" : "一整局不使用还原"
-
-
-"achievement.restorer.challenge.jesterWin.title" : "天赐的欢愉！"
-"achievement.restorer.challenge.jesterWin.cond" : "提示：投出前请想好后果哦"
-"achievement.restorer.challenge.jesterWin.goal" : "投出被还原者还原的小丑"
-"achievement.restorer.challenge.jesterWin.splitted.0" : "天赐的"
-"achievement.restorer.challenge.jesterWin.splitted.1" : "失手"
-"achievement.restorer.challenge.jesterWin.splitted.2" : "欢快的"
-
-
-
-
-
-
-
-
 
 
 "role.objector.name" : "异议者"
@@ -213,28 +237,6 @@
 
 
 #中立
-
-"role.Havenger.blurb" : "以牙还牙、以命偿命"
-"role.Havenger.doc" : "如果自由阶段被刀，尸体消失，并在下一轮获得寻仇状态<br>期间禁止开会，所有人禁止跳管。<br>若刀错，寻仇者与被刀者死亡、若超时，寻仇者死亡、若刀对，寻仇者胜利。"
-"role.Havenger.name" : "寻仇者"
-"role.Havenger.tips" : "·你的寻仇击杀次数只有一次。"
-"options.role.Havenger.detail" : "寻仇者死亡后需要向凶手报仇<br><b>这是半糖送给你的礼物之一！</b>"
-"role.Havenger.short" : "寻"
-"options.role.Havenger.revengeDuration" : "寻仇持续时间"
-"teams.Havenger" : "寻仇者"
-"button.label.Havenger.kill" : "报仇"
-
-"achievement.avenger.common.revenge.title" : "血债血偿"
-"achievement.avenger.common.revenge.goal" : "击杀凶手"
-"achievement.avenger.common.revenge.cond" : ""
-
-"achievement.avenger.common.wrongKill.title" : "滥杀无辜"
-"achievement.avenger.common.wrongKill.goal" : "寻仇阶段击杀非凶手"
-"achievement.avenger.common.wrongKill.cond" : ""
-
-"achievement.avenger.common.timeout.title" : "魂散"
-"achievement.avenger.common.timeout.goal" : "寻仇时间结束、未击杀任何人"
-"achievement.avenger.common.timeout.cond" : ""
 
 
 
@@ -280,11 +282,11 @@
 
 #附加
 
-"role.firstStrike.name" : "闪击"
-"role.firstStrike.short" : "%"
-"role.firstStrike.generalBlurb" : ""
-"options.role.firstStrike.detail" : "每次会议结束或游戏开局时，<br>你的击杀冷却会立刻重置为<color=#FF0000>0秒</color>，<br>可立即发动一次袭击。<br><b>这是半糖送给你的礼物之一！</b>"
-"role.firstStrike.doc" : "每次会议结束或游戏开局时，你的击杀冷却会立刻重置为<color=#FF0000>0秒</color>。"
+"role.blitz.name" : "闪击"
+"role.blitz.short" : "%"
+"role.blitz.generalBlurb" : "进击！"
+"options.role.blitz.detail" : "游戏开始或者会议结束后，<br>你的<b>第二次</b>击杀冷却会立刻重置为<b><color=#FF0000>0秒</color>。</b><b>这是半糖送给你的礼物之一！</b>"
+"role.blitz.doc" : "每次会议结束或游戏开局时，你的<b>第二次</b>击杀冷却会立刻重置为<b><color=#FF0000>0秒</color></b>。"
 
 
 "role.imagimodi.name" : "想象力"
@@ -292,25 +294,64 @@
 "role.imagimodi.doc" : "请查看<b>想象力</b>主职业。"
 
 
-"role.HNoiseMaker.name" : "大嗓门"
-"role.HNoiseMaker.generalBlurb" : "死了你就叫一声"
-"role.HNoiseMaker.doc" : "大嗓门死亡时，会在死亡地点发出警报、箭头提示并伴随“嗷”一声。<br><b>本职业为大嗓门的附加版本。</b>"
-"options.role.HNoiseMaker.noiseDuration" : "警报持续时间"
-"options.role.HNoiseMaker.detail" : "大嗓门被击杀会发出警报声。<br>跟诱饵一起玩到的有福了。<br><b>这是半糖送给你的礼物之一！</b>"
-
-
-
 "role.keymaster.name" : "执钥"
 "role.keymaster.generalBlurb" : "芝麻开门"
+"role.keymaster.short" : ">"
 "role.keymaster.doc" : "你可以直接开启除了<b>SKELD</b>和<b>MIRAHQ</b>以外的所有门"
-"options.role.keymaster.detail" : "你可以直接开门"
+"options.role.keymaster.detail" : "拥有执钥附加的人可以直接开门。<br><b>这是半糖送给你的礼物之一！</b>""
 "options.modifier.keymaster.cooldown" : "开门冷却"
+"options.modifier.keymaster.Specooldown" : "净化室开门冷却"
 "button.label.keymaster.open" : "开门"
 
 
 "role.hypnotized.name" : "被催眠者"
 "role.hypnotized.generalBlurb" : "被催眠的产物"
 "role.hypnotized.doc" : "你被猫头鹰催眠了，获得一次击杀机会。<br>限定时间内未使用你将自杀。"
+
+"role.HIGH.name" : "高人"
+"role.HIGH.short" : "H"
+"role.HIGH.generalBlurb" : "向上生长"
+"options.role.HIGH.detail" : "...<b>这是半糖送给你的礼物之一！</b>"
+"role.HIGH.doc" : "你的身高会随机变化，<br><b>你就是当代高人。</b><size=0.5><i>......也有可能是矮人</i></size>"
+"options.modifier.high.min" : "生长最低值"
+"options.modifier.high.max" : "生长最高值"
+"options.modifier.high.jiange" : "变化间隔"
+
+"role.WIDE.name" : "宽人"
+"role.WIDE.generalBlurb" : "向旁生长"
+"role.WIDE.short" : "W"
+"options.role.WIDE.detail" : "...<b>这是半糖送给你的礼物之一！</b>"
+"role.WIDE.doc" : "你的宽度会随机变化。<br><b>你这个宽粉。</b>"
+"options.modifier.wide.min" : "生长最低值"
+"options.modifier.wide.max" : "生长最高值"
+"options.modifier.wide.jiange" : "变化间隔"
+
+"role.QED.name" : "QED"
+"role.QED.short" : "QED"
+"options.role.QED.detail" : "...<b>这是半糖送给你的礼物之一！</b>"
+"role.QED.generalBlurb" : "病名未知的疼痛"
+"role.QED.doc" : "你说的对但是<br><b>償（つぐな）いたい すぐ会（あ）いたい 来（く）る媒体（ばいたい）<br>病名（びょうめい）は無（な）いけど胸（むね）が痛（いた）い <br>誠(まこと)に意思(いし)が弱(よわ)い奇奇怪怪(ききかいかい) <br>どうしようもないけど まだ曖昧(あいまい) <br>息（いき）が詰(つ)まりそう <br>つまり 集(あつ)まりから <br>阻害(そがい)されてしまうような <br>申(もう)し訳(わけ)ないほどに集(あつ)まってく<br>Q E D <br>証明(しょうめい)</b>"
+
+"role.turtle.name" : "乌龟"
+"role.turtle.short" : "龟"
+"role.turtle.generalBlurb" : "磨蹭 磨蹭"
+"role.turtle.doc" : "你走的很慢。"
+"options.role.turtle.detail" : "拥有乌龟附加的人走的比较慢</b><b>这是半糖送给你的礼物之一！</b>"
+
+"role.sharpeye.name" : "敏觉"
+"role.sharpeye.short" : "敏"
+"role.sharpeye.generalBlurb" : "我感受到了！"
+"role.sharpeye.doc" : "当有人更换职业时，你将会有闪光提示。"
+"options.role.sharpeye.detail" : "敏觉在有人更换职业时会有提示。</b><b>这是半糖送给你的礼物之一！</b>"
+
+"role.rainbowcandy.name" : "彩虹糖"
+"role.rainbowcandy.short" : "彩"
+"role.rainbowcandy.generalBlurb" : "绚烂之色"
+"role.rainbowcandy.doc" : "你的颜色是随机变化的。"
+"options.role.rainbowcandy.detail" : "彩虹糖的颜色会随机变化。</b><b>这是半糖送给你的礼物之一！</b>"
+"options.modifier.rainbowcandy.interval" : "变化间隔"
+
+
 
 #死因
 
@@ -319,9 +360,37 @@
 "state.brokewish" : "碎愿" 
 "state.sanling" : "散灵"
 "state.soulback" : "魂归"
+"state.invisible" : "无形"
 
 #阵营
 "teams.Havenger" : "寻仇者"
 "HavengerWin" : "寻仇者胜利"
 "teams.spirit" : "灵"
 "spiritWin" : "灵胜利"
+
+#设置
+"exit0": "<color=#FFFFFF>退出中</color>"
+"exit1": "<color=#FFCCCC>退出中.</color>"
+"exit2": "<color=#FF9999>退出中..</color>"
+"exit3": "<color=#FF6666>退出中...</color>"
+"exit4": "<color=#FF3333>退出中....</color>"
+"exit5": "<color=#FF0000>退出中.....</color>"
+
+# MVS 设置
+"options.hsg.mvs.holder.title" : "更多投票设置"
+"options.hsg.mvs.holder.detail" : "更多的投票设置，由 Half Sugar's Gift 添加"
+"options.hsg.mvs.enablevotetimechange" : "更改剩余投票时间 - 本项有暂未修复的诸多问题，谨慎开启"
+"options.hsg.mvs.enablevotetimechange.detail" : "当剩余特定数量的人未投票时，更改剩余投票时间。<br>当这个时间小于剩余的投票时间，不做任何变化。"
+"options.hsg.mvs.triggercount" : "减少时间所需人数"
+"options.hsg.mvs.voteduration" : "减少时间量"
+"options.hsg.mvs.voteduration.detail" : "本设置项不是减少时间，而是将时间更改为这个时间。"
+"options.hsg.mvs.disableonthresholdreached" : "达到阈值时禁用"
+"options.hsg.mvs.disableonthresholdreached.detail" : "当剩余人数小于等于该配置项的数量时，禁用更改剩余投票时间。"
+
+
+
+# 指令
+"cmd.suicide.inlobby" : "大厅中无法自杀"
+
+
+

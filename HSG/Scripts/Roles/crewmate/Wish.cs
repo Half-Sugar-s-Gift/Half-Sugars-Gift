@@ -1,15 +1,4 @@
-﻿using hvtXsvc.Core;
-using Nebula;
-using Nebula.Modules;
-using Nebula.Modules.Cosmetics;
-using Nebula.Player;
-using NebulaN.Core;
-using System;
-using Virial;
-using Virial.Events.Player;
-using GamePlayer = Virial.Game.Player;
-
-namespace NebulaN.Scripts.Roles.crewmate;
+﻿namespace NebulaN.Roles.crewmate;
 
 public class Wish : DefinedRoleTemplate, HasCitation, DefinedRole,
     RuntimeAssignableGenerator<RuntimeRole>,IAssignableDocument
@@ -78,7 +67,7 @@ public class Wish : DefinedRoleTemplate, HasCitation, DefinedRole,
     "Wishlight",
     (targetId, _) => {
         if (PlayerControl.LocalPlayer.PlayerId == targetId)
-            AmongUsUtil.PlayQuickFlash(new UnityEngine.Color(1f,0.9f,0.6f,0.5f));
+            AmongUsUtil.PlayQuickFlash(new Virial.Color(1f,0.9f,0.6f,0.5f));
     }
 );
     public static readonly Wish MyRole = new Wish();
@@ -86,7 +75,7 @@ public class Wish : DefinedRoleTemplate, HasCitation, DefinedRole,
     Citation HasCitation.Citation => Citations.hvtXsvc_hsg;
 
 
-
+    Image? DefinedAssignable.IconImage => NebulaAPI.AddonAsset.GetResource("Smallicon/WishIcon.png")?.AsImage();
 
     public class Instance : RuntimeAssignableTemplate, RuntimeRole, RuntimeAssignable, IGameOperator
     {
@@ -101,7 +90,7 @@ public class Wish : DefinedRoleTemplate, HasCitation, DefinedRole,
 
         void RuntimeAssignable.OnActivated()
         {
-            if (!AmOwner) { return; }
+            if (!AmOwner)  return; 
             UsesLeft = MarkMaxUses;
             Virial.Media.Image WishMark = NebulaAPI.AddonAsset.GetResource("hope.png")?.AsImage(100f);
             var playerTracker = NebulaAPI.Modules.PlayerTracker(this, MyPlayer);
@@ -155,13 +144,16 @@ public class Wish : DefinedRoleTemplate, HasCitation, DefinedRole,
                 var murderer = ev.Murderer; // 那我不用了。
                 if (murderer != null)
                 {
-                    string msg = Language.Translate("role.wish.markdead").Replace("%KILLER%", murderer.PlayerName);
+                    string hex = PatchManager.GetPlayerHexColor(MarkedPlayer);
+                    string msg = Language.Translate("role.wish.markdead").Replace("%KILLER%", murderer.PlayerName)
+                        .Replace("%VICTIM%", MarkedPlayer.PlayerName);
                     HudManager.Instance.Chat.AddChat(PlayerControl.LocalPlayer, msg);
-                    HsgDebug.Log($"out:{msg}");
+                    HsgDebug.Log($"{msg}");
                 }
                 else
                 {
-                    HudManager.Instance.Chat.AddChat(PlayerControl.LocalPlayer, Language.Translate("role.wish.markdeadbutmurdererdeadtoo"));
+                    string msg2 = Language.Translate("role.wish.murdererdead").Replace("%VICTIMS%", MarkedPlayer.PlayerName);
+                    HudManager.Instance.Chat.AddChat(PlayerControl.LocalPlayer, Language.Translate(msg2));
                 }
             }
         }
@@ -178,7 +170,7 @@ public class Wish : DefinedRoleTemplate, HasCitation, DefinedRole,
             if (MarkedPlayer != null && ev.Exiled?.Contains(MarkedPlayer) == true)
             {
                 MarkedPlayer.Revive(MyPlayer, MarkedPlayer.Position, true, true);
-                AmongUsUtil.PlayQuickFlash(new UnityEngine.Color(1f, 0.9f, 0.6f, 0.5f));
+                AmongUsUtil.PlayQuickFlash(new Virial.Color(1f, 0.9f, 0.6f, 0.5f));
                 RpcPlayReviveFlash.Invoke(MarkedPlayer.PlayerId);
                 MarkedPlayer = null;
             }
@@ -186,7 +178,6 @@ public class Wish : DefinedRoleTemplate, HasCitation, DefinedRole,
         [Local]
         private void DecorateMarkedPlayerName(PlayerDecorateNameEvent ev)
         {
-            // 仅当观察者是愿自己时生效
             if (!AmOwner) return;
             if (MyPlayer.IsDead) return;
             if (MarkedPlayer != null && ev.Player == MarkedPlayer)

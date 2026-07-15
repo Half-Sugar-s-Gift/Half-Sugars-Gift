@@ -1,21 +1,6 @@
-﻿using hvtXsvc.Core;
-using Nebula.Modules;
-using Nebula.Player;
-using Nebula.Roles.Abilities;
-using Nebula.Roles.Complex;
-using Nebula.Utilities;
-using NebulaN.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Virial;
-using Virial.Events.Game;
-using Virial.Events.Player;
-using GamePlayer = Virial.Game.Player;
+﻿namespace NebulaN.Roles.Crewmate;
 
-namespace NebulaN.Roles.Crewmate;
-
-public class Snitch : DefinedRoleTemplate, HasCitation, DefinedRole,IAssignableDocument
+public class Snitch : DefinedRoleTemplate, HasCitation, DefinedRole, IAssignableDocument
 {
     static BoolConfiguration CanBeGuess = NebulaAPI.Configurations.Configuration(
         "options.role.snitch.canBeGuess",
@@ -24,7 +9,7 @@ public class Snitch : DefinedRoleTemplate, HasCitation, DefinedRole,IAssignableD
 
     static ValueConfiguration<int> ZhixiangJiGeLang = NebulaAPI.Configurations.Configuration(
         "options.role.snitch.zhixiangJiGeLang",
-        new[] { "options.role.snitch.all", "1", "2", "3", "4", "5" },
+        new[] { "options.role.snitch.all", "options.role.snitch.one", "options.role.snitch.two", "options.role.snitch.three", "options.role.snitch.four", "options.role.snitch.five" },
         1
         );
     static BoolConfiguration UseSpeTask = NebulaAPI.Configurations.Configuration(
@@ -47,7 +32,6 @@ public class Snitch : DefinedRoleTemplate, HasCitation, DefinedRole,IAssignableD
         2
         );
 
-
     private Snitch() : base(
         "snitch",
         Cor.green,
@@ -55,13 +39,11 @@ public class Snitch : DefinedRoleTemplate, HasCitation, DefinedRole,IAssignableD
         NebulaTeams.CrewmateTeam,
         new Virial.Configuration.IConfiguration[]
         {
-            CanBeGuess,ZhixiangJiGeLang,UseSpeTask,TaskShuLiang,NeCo,
+            CanBeGuess, ZhixiangJiGeLang, UseSpeTask, TaskShuLiang, NeCo,
         }
     )
     {
-        //ConfigurationHolder!.Illustration = NebulaAPI.AddonAsset.GetResource("BigPic/RefereePic.png")?.AsImage(115f);
     }
-    // Virial.Media.Image? DefinedAssignable.IconImage => NebulaAPI.AddonAsset.GetResource("Smallicon/RefereeIcon.png")?.AsImage();
 
     public Citation Citation => Citations.TheOtherRoles;
 
@@ -75,10 +57,8 @@ public class Snitch : DefinedRoleTemplate, HasCitation, DefinedRole,IAssignableD
     }
     IEnumerable<AssignableDocumentReplacement> IAssignableDocument.GetDocumentReplacements()
     {
-        string canguess = CanBeGuess ? Language.Translate("role.snitch.canBeGuess.true"): Language.Translate("role.snitch.canBeGuess.false");
-
+        string canguess = CanBeGuess ? Language.Translate("role.snitch.canBeGuess.true") : Language.Translate("role.snitch.canBeGuess.false");
         yield return new AssignableDocumentReplacement("%CanBeGuessed%", canguess);
-
 
         string imps;
         int impss = ZhixiangJiGeLang.GetValue();
@@ -100,117 +80,195 @@ public class Snitch : DefinedRoleTemplate, HasCitation, DefinedRole,IAssignableD
     }
 
     public RuntimeRole CreateInstance(GamePlayer player, int[] arguments) => new Instance(player);
-    static RemoteProcess<byte> RpcFlash = new("RpcFlash", (targetId, _) => {
+
+    static RemoteProcess<byte> RpcFlash = new("RpcFlash", (targetId, _) =>
+    {
         if (GamePlayer.GetPlayer(targetId)?.AmOwner == true)
-            AmongUsUtil.PlayQuickFlash(UnityEngine.Color.green);
+            AmongUsUtil.PlayQuickFlash(Cor.green);
     });
 
-    static RemoteProcess<(byte SnitchId, byte targetId)> RpcCreateArr = new("SniCreateArr", (msg, _) => {
-        var sni = GamePlayer.GetPlayer(msg.SnitchId);
-        if (sni?.Role is Snitch.Instance inst)
+    static RemoteProcess<byte> RpcFlashRed = new("RpcFlashRed", (targetId, _) =>
+    {
+        if (GamePlayer.GetPlayer(targetId)?.AmOwner == true)
+            AmongUsUtil.PlayQuickFlash(Cor.impRed);
+    });
+
+    static RemoteProcess<byte> RpcCreateArrowToSnitch = new("RpcCreateArrowToSnitch", (targetId, _) =>
+    {
+        var target = GamePlayer.GetPlayer(targetId);
+        var snitch = GamePlayer.AllPlayers.FirstOrDefault(p => p.Role is Snitch.Instance);
+        if (snitch != null && target != null && target.AmOwner)
         {
-            var target = GamePlayer.GetPlayer(msg.targetId);
-            if (target != null)
-            {
-                var arrow = new TrackingArrowAbility(sni, 0f, new UnityEngine.Color(0, 1, 0), false);
-                arrow.Register(inst);
-                inst.Actarr.Add(arrow);
-                if (!inst.arrmap.ContainsKey(sni.PlayerId))
-                    inst.arrmap[sni.PlayerId] = new List<TrackingArrowAbility>();
-                inst.arrmap[sni.PlayerId].Add(arrow);
-            }
+            var arrow = new TrackingArrowAbility(snitch, 0f, Virial.Color.Green, false);
+            arrow.Register(snitch.Role as Instance);
+            var inst = snitch.Role as Instance;
+            inst?.AddArrowForTarget(target, arrow);
         }
     });
-    public class Instance: RuntimeAssignableTemplate, RuntimeRole, RuntimeAssignable, IGameOperator
+
+    static RemoteProcess<(byte snitchId, byte targetId)> RpcCreateRedArrow = new("RpcCreateRedArrow", (msg, _) =>
+    {
+        var snitch = GamePlayer.GetPlayer(msg.snitchId);
+        var target = GamePlayer.GetPlayer(msg.targetId);
+        if (snitch?.AmOwner == true && target != null)
+        {
+            var arrow = new TrackingArrowAbility(target, 0f, Virial.Color.Red, false);
+            arrow.Register(snitch.Role as Instance);
+            var inst = snitch.Role as Instance;
+            inst?.AddArrowForTarget(target, arrow);
+        }
+    });
+
+    public class Instance : RuntimeAssignableTemplate, RuntimeRole, RuntimeAssignable, IGameOperator
     {
         public DefinedRole Role => MyRole;
         public Instance(GamePlayer player) : base(player) { }
 
-        int lastTaskLeft = -1;
-        internal List<TrackingArrowAbility> Actarr= new List<TrackingArrowAbility>();
-        internal Dictionary<byte, List<TrackingArrowAbility>> arrmap = new();
-        void Warning()
+        private int assignedTaskTotal = -1;
+        private int completedTasks = 0;
+        private bool isWarning = false;
+        private bool isTaskCompleted = false;
+
+        internal List<TrackingArrowAbility> Actarr = new List<TrackingArrowAbility>();
+        internal Dictionary<byte, List<TrackingArrowAbility>> arrmap = new Dictionary<byte, List<TrackingArrowAbility>>();
+        internal Dictionary<byte, List<TrackingArrowAbility>> arrowsPointingToSnitch = new Dictionary<byte, List<TrackingArrowAbility>>();
+
+        public void AddArrowForTarget(GamePlayer target, TrackingArrowAbility arrow)
         {
-            var AllKillers = GamePlayer.AllPlayers.Where(p => p.Role.Role.IsKiller && !p.IsDead).ToList();
-            int i = NeCo.GetValue();
-            var targets = AllKillers.Where(p =>
-            {
-                if (p.IsImpostor) return true;
-                if (i == 0) return true;
-                if (i == 1) return true;
-                return false;
-            }).ToList();
-            AmongUsUtil.PlayQuickFlash(UnityEngine.Color.green);
-            foreach (var target in targets)
-            {
-                RpcFlash.Invoke(target.PlayerId);
-            }
-            foreach (var target in targets)
-            {
-                RpcCreateArr.Invoke((MyPlayer.PlayerId, target.PlayerId));
-            }
+            if (!arrmap.ContainsKey(target.PlayerId))
+                arrmap[target.PlayerId] = new List<TrackingArrowAbility>();
+            arrmap[target.PlayerId].Add(arrow);
+            Actarr.Add(arrow);
+        }
+
+        public void AddArrowPointingToSnitch(GamePlayer owner, TrackingArrowAbility arrow)
+        {
+            if (!arrowsPointingToSnitch.ContainsKey(owner.PlayerId))
+                arrowsPointingToSnitch[owner.PlayerId] = new List<TrackingArrowAbility>();
+            arrowsPointingToSnitch[owner.PlayerId].Add(arrow);
         }
 
         void RuntimeAssignable.OnActivated()
         {
-            
+            if (AmOwner && !AmOwner)
+            {
+                throw new Exception("你这黑客。");
+            }
         }
 
         [Local]
-        void AddTask(PlayerTasksTrySetLocalEvent ev)
+        void SetTask(PlayerTasksTrySetLocalEvent ev)
         {
-            if (!AmOwner) return;
+            if (ev.Player.Role.Role != MyRole) return;
+            int targetTotal;
             if (UseSpeTask)
             {
-                int target = TaskShuLiang;
-                int current = ev.Tasks.Count;
-                if (target < current)
+                targetTotal = TaskShuLiang;
+                while (ev.Tasks.Count > targetTotal)
                 {
-                    ev.Tasks.RemoveRange(target, current - target);
+                    int index = UnityEngine.Random.Range(0, ev.Tasks.Count);
+                    ev.Tasks.RemoveAt(index);
                 }
-                else if (target > current)
+                if (ev.Tasks.Count < targetTotal)
+                    ev.AddExtraQuota(targetTotal - ev.Tasks.Count);
+            }
+            else
+            {
+                targetTotal = ev.Tasks.Count + ev.ExtraQuota;
+                if (targetTotal == 0)
                 {
-                    ev.AddExtraQuota(target - current);
+                    ev.AddExtraQuota(1);
+                    targetTotal = 1;
                 }
             }
+            assignedTaskTotal = targetTotal;
+            completedTasks = 0;
         }
+
         [Local]
-        void TaskCompleted(PlayerTaskCompleteLocalEvent ev)
+        void TaskComplete(PlayerTaskCompleteLocalEvent ev)
         {
             if (!AmOwner) return;
-            int Left = MyPlayer.Tasks.CurrentTasks;
-            if (Left == 0 && lastTaskLeft != 0)
+            if (assignedTaskTotal <= 0) return;
+            completedTasks++;
+            int left = assignedTaskTotal - completedTasks;
+            if (left == 1 && !isWarning)
             {
-                var imp=GamePlayer.AllPlayers.Where(p => p.IsImpostor && !p.IsDead).ToList();
-                int arrs=ZhixiangJiGeLang.GetValue();
-                if(arrs == 0) arrs = imp.Count;
-                else arrs = Math.Min(arrs, imp.Count);
-                var targets = imp.OrderBy(_ => Guid.NewGuid()).Take(arrs).ToList();
-                foreach (var target in targets) 
+                isWarning = true;
+                tskWarning();
+            }
+            if (completedTasks >= assignedTaskTotal && !isTaskCompleted)
+            {
+                isTaskCompleted = true;
+                tskComplete();
+            }
+        }
+
+        void tskWarning()
+        {
+            AmongUsUtil.PlayQuickFlash(Cor.green);
+
+            var targets = GetNeuAndImp();
+            foreach (var target in targets)
+            {
+                RpcFlash.Invoke(target.PlayerId);
+                RpcCreateArrowToSnitch.Invoke(target.PlayerId);
+            }
+        }
+
+        void tskComplete()
+        {
+            var impostors = GamePlayer.AllPlayers.Where(p => p.IsImpostor && !p.IsDead).ToList();
+            foreach (var imp in impostors)
+            {
+                RpcFlashRed.Invoke(imp.PlayerId);
+            }
+            int arrCount = ZhixiangJiGeLang.GetValue();
+            if (arrCount == 0) arrCount = impostors.Count;
+            else arrCount = Math.Min(arrCount, impostors.Count);
+            var selected = impostors.OrderBy(_ => Guid.NewGuid()).Take(arrCount).ToList();
+            foreach (var target in selected)
+            {
+                RpcCreateRedArrow.Invoke((MyPlayer.PlayerId, target.PlayerId));
+            }
+        }
+
+        List<GamePlayer> GetNeuAndImp()
+        {
+            var result = new List<GamePlayer>();
+            int neutOption = NeCo.GetValue();
+            foreach (var p in GamePlayer.AllPlayers)
+            {
+                if (p.IsDead) continue;
+                if (p.IsImpostor)
                 {
-                    var arr = new TrackingArrowAbility(target, 0f, new UnityEngine.Color(0,1,0), false);
-                    arr.Register(this);
-                    Actarr.Add(arr);
-                    if (!arrmap.ContainsKey(target.PlayerId))
-                        arrmap[target.PlayerId] = new List<TrackingArrowAbility>();
-                    arrmap[target.PlayerId].Add(arr);
+                    result.Add(p);
+                    continue;
+                }
+                if (p.Role.Role.Category == RoleCategory.NeutralRole)
+                {
+                    bool isEvil = IsEvilNeu(p.Role.Role);
+                    if (neutOption == 0)
+                        result.Add(p);
+                    else if (neutOption == 1 && isEvil)
+                        result.Add(p);
                 }
             }
-            else if(Left==1 && lastTaskLeft != 1)
-            {
-                Warning();
-            }
-            lastTaskLeft = Left;
+            return result;
         }
+
+        bool IsEvilNeu(DefinedRole role)
+        {
+            return role.IsKiller;
+        }
+
         [Local]
         void Guessed(PlayerCanGuessPlayerLocalEvent ev)
         {
-            if (!AmOwner) return;
-            if (!CanBeGuess)
-            {
-                ev.CanGuess = false;
-            }
+            if (ev.Target != MyPlayer) return;
+            if(!CanBeGuess) ev.CanGuess = false;
         }
+
         [Local]
         void OnGameEnd(GameEndEvent ev)
         {
@@ -218,7 +276,9 @@ public class Snitch : DefinedRoleTemplate, HasCitation, DefinedRole,IAssignableD
                 arrow.Release();
             Actarr.Clear();
             arrmap.Clear();
+            arrowsPointingToSnitch.Clear();
         }
+
         [Local]
         void OnPlayerDie(PlayerDieEvent ev)
         {
@@ -227,7 +287,11 @@ public class Snitch : DefinedRoleTemplate, HasCitation, DefinedRole,IAssignableD
                 foreach (var arrow in arrows) arrow.Release();
                 arrmap.Remove(ev.Player.PlayerId);
             }
+            if (arrowsPointingToSnitch.TryGetValue(ev.Player.PlayerId, out var arrowsToSnitch))
+            {
+                foreach (var arrow in arrowsToSnitch) arrow.Release();
+                arrowsPointingToSnitch.Remove(ev.Player.PlayerId);
+            }
         }
     }
-    
 }

@@ -255,25 +255,16 @@
 
 #附加
 
-"role.firstStrike.name" : "閃撃"
-"role.firstStrike.short" : "%"
-"role.firstStrike.generalBlurb" : ""
-"options.role.firstStrike.detail" : "会議終了ごと、またはゲーム開始時、<br>あなたのキルクールダウンが即座に<color=#FF0000>0秒</color>にリセットされ、<br>すぐに襲撃を仕掛けられます。<br><b>これは Half Sugar からのプレゼントの一つです！</b>"
-"role.firstStrike.doc" : "会議終了ごと、またはゲーム開始時、あなたのキルクールダウンが即座に<color=#FF0000>0秒</color>にリセットされます。"
+"role.blitz.name" : "ブリッツ"
+"role.blitz.short" : "%"
+"role.blitz.generalBlurb" : "進撃！"
+"options.role.blitz.detail" : "ゲーム開始時または会議終了後、<br>あなたの<b>2回目</b>のキルクールダウンが即座に<b><color=#FF0000>0秒</color></b>にリセットされ、<br>即座に一度攻撃を仕掛けることができます。<br><b>これはバンタンからのプレゼントの一つです！</b>"
+"role.blitz.doc" : "会議終了後またはゲーム開始時ごとに、あなたのキルクールダウンが即座に<b><color=#FF0000>0秒</color></b>にリセットされます。"
 
 
 "role.imagimodi.name" : "想像力"
 "role.imagimodi.generalBlurb" : "豊かな想像"
 "role.imagimodi.doc" : "<b>想像力</b>のメイン職業を参照してください。"
-
-
-"role.HNoiseMaker.name" : "大声"
-"role.HNoiseMaker.generalBlurb" : "死んだら叫ぶ"
-"role.HNoiseMaker.doc" : "大声が死亡したとき、死亡地点でアラートと矢印が表示され、「ワオ」と鳴きます。<br><b>この職業は大声の追加バージョンです。</b>"
-"options.role.HNoiseMaker.noiseDuration" : "アラート持続時間"
-"options.role.HNoiseMaker.detail" : "大声がキルされると警告音が鳴る。<br>おとりと一緒にプレイするのが楽しみ。<br><b>これは Half Sugar からのプレゼントの一つです！</b>"
-
-
 
 "role.keymaster.name" : "キーマスター"
 "role.keymaster.generalBlurb" : "開けゴマ"
@@ -282,10 +273,6 @@
 "options.modifier.keymaster.cooldown" : "ドア開閉クールダウン"
 "button.label.keymaster.open" : "ドアを開ける"
 
-
-"role.hypnotized.name" : "催眠された者"
-"role.hypnotized.generalBlurb" : "催眠の産物"
-"role.hypnotized.doc" : "あなたはフクロウに催眠され、1回のキルチャンスを得ます。<br>制限時間内に使用しなければ自殺します。"
 
 #死因
 

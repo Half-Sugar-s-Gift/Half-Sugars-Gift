@@ -1,28 +1,4 @@
-﻿global using Nebula.Game;
-global using Nebula.Utilities;
-global using System;
-global using System.Collections.Generic;
-global using System.Linq;
-global using System.Text;
-global using System.Threading.Tasks;
-global using UnityEngine;
-global using Virial;
-global using Virial.Assignable;
-global using Virial.Attributes;
-global using Virial.Compat;
-global using Virial.Components;
-global using Virial.Configuration;
-global using Virial.Events.Game;
-global using Virial.Events.Game.Meeting;
-global using Virial.Game;
-global using Citations1 = hvtXsvc.Core.Citations;
-global using Color1 = Virial.Color;
-global using NPlayer1 = Virial.Game.Player;
-using Nebula.Modules;
-using NebulaN.Core;
-using Virial.Events.Player;
-
-namespace NebulaN.Roles.Impostor;
+﻿namespace NebulaN.Roles.Impostor;
 public class Restorer : DefinedRoleTemplate, HasCitation, DefinedRole,
     RuntimeAssignableGenerator<RuntimeRole>, IAssignableDocument
 {
@@ -61,7 +37,7 @@ public class Restorer : DefinedRoleTemplate, HasCitation, DefinedRole,
         NebulaAPI.AddonAsset.GetResource("Smallicon/RestorerIcon.png")?.AsImage();
 
   
-    Citation? HasCitation.Citation => Citations1.hvtXsvc_hsg;
+    Citation? HasCitation.Citation => Citations.hvtXsvc_hsg;
 
     
     bool IAssignableDocument.HasTips => true;
@@ -77,14 +53,14 @@ public class Restorer : DefinedRoleTemplate, HasCitation, DefinedRole,
 
     IEnumerable<AssignableDocumentReplacement> IAssignableDocument.GetDocumentReplacements()
     {
-        yield return new AssignableDocumentReplacement("%USES%", ((int)skillUses).ToString());
+        yield return new AssignableDocumentReplacement("%USES%", (skillUses).ToString());
     }
 
 
     public static readonly Restorer MyRole = new Restorer();
 
 
-    public RuntimeRole CreateInstance(NPlayer1 player, int[] arguments)
+    public RuntimeRole CreateInstance(GamePlayer player, int[] arguments)
         => new Instance(player);
 
 
@@ -99,7 +75,7 @@ public class Restorer : DefinedRoleTemplate, HasCitation, DefinedRole,
         bool usedRestore = false;
         List<byte> restoredPlayers = new List<byte>();
 
-        public Instance(NPlayer1 player) : base(player) { }
+        public Instance(GamePlayer player) : base(player) { }
         public DefinedRole Role => MyRole;
 
         Dictionary<byte, DefinedRole> pendingRestore = new Dictionary<byte, DefinedRole>();
@@ -172,7 +148,7 @@ public class Restorer : DefinedRoleTemplate, HasCitation, DefinedRole,
 
             foreach (var kv in pendingRestore)
             {
-                var player = NPlayer1.GetPlayer(kv.Key);
+                var player = GamePlayer.GetPlayer(kv.Key);
                 if (player != null && !player.IsDead)
                 {
                     player.SetRole(kv.Value, null);
@@ -182,7 +158,7 @@ public class Restorer : DefinedRoleTemplate, HasCitation, DefinedRole,
             }
 
         
-            var allOthers = NPlayer1.AllPlayers
+            var allOthers = GamePlayer.AllPlayers
                 .Where(p => !p.IsDead && p.PlayerId != MyPlayer.PlayerId)
                 .Select(p => p.PlayerId)
                 .OrderBy(id => id);
@@ -218,7 +194,7 @@ public class Restorer : DefinedRoleTemplate, HasCitation, DefinedRole,
 
             foreach (var id in restoredPlayers)
             {
-                var p = NPlayer1.GetPlayer(id);
+                var p = GamePlayer.GetPlayer(id);
                 if (p != null && p.Role.Role.LocalizedName == "jester" &&
                     ev.EndState.Winners.Test(p))
                 {
@@ -236,7 +212,7 @@ public class Restorer : DefinedRoleTemplate, HasCitation, DefinedRole,
             "RestorerRestored",
             (targetId, _) =>
             {
-                if (NPlayer1.LocalPlayer.PlayerId == targetId)
+                if (GamePlayer.LocalPlayer.PlayerId == targetId)
                 {
                     new StaticAchievementToken("restorer.common.restored");
                 }

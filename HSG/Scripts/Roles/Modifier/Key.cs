@@ -1,16 +1,5 @@
-﻿using NPlayer = Virial.Game.Player;
-using Vector2 = UnityEngine.Vector2;
-using hvtXsvc.Core;
-using Nebula;
-using Nebula.Modules;
-using Nebula.Modules.ScriptComponents;
-using Nebula.Utilities;
-using UnityEngine;
-using Virial;
-using Virial.Assignable;
-using Virial.Compat;
-using Virial.Configuration;
-using Virial.Game;
+﻿
+namespace NebulaN.Roles.Modifier;
 
 public class KeyMaster : DefinedAllocatableModifierTemplate, HasCitation, DefinedAllocatableModifier
 {
@@ -42,10 +31,8 @@ public class KeyMaster : DefinedAllocatableModifierTemplate, HasCitation, Define
         "keymaster",
         "key",
         new Virial.Color(0f, 1f, 0f),
-        new Virial.Configuration.IConfiguration[] { cooldown,Specooldown},
-        allocateToCrewmate: true,
-        allocateToImpostor: true,
-        allocateToNeutral: true
+        new Virial.Configuration.IConfiguration[] { cooldown,Specooldown}
+
     )
     { }
 
@@ -54,10 +41,10 @@ public class KeyMaster : DefinedAllocatableModifierTemplate, HasCitation, Define
     Virial.Media.Image? DefinedAssignable.IconImage =>
         NebulaAPI.AddonAsset.GetResource("Smallicon/KeyIcon.png")?.AsImage();
 
-    RuntimeModifier RuntimeAssignableGenerator<RuntimeModifier>.CreateInstance(NPlayer player, int[] arguments)
+    RuntimeModifier RuntimeAssignableGenerator<RuntimeModifier>.CreateInstance(GamePlayer player, int[] arguments)
         => new Instance(player);
 
-    public RuntimeModifier CreateInstance(NPlayer player, int[] arguments)
+    public RuntimeModifier CreateInstance(GamePlayer player, int[] arguments)
     {
         return ((RuntimeAssignableGenerator<RuntimeModifier>)MyRole).CreateInstance(player, arguments);
     }
@@ -66,11 +53,10 @@ public class KeyMaster : DefinedAllocatableModifierTemplate, HasCitation, Define
     public class Instance : RuntimeAssignableTemplate, RuntimeModifier, IGameOperator
     {
         DefinedModifier RuntimeModifier.Modifier => MyRole;
-
         Virial.Media.Image? doorHackImage = NebulaAPI.AddonAsset.GetResource("KeyMasterButton.png")?.AsImage(115f);
         //int usesLeft;
 
-        public Instance(NPlayer player) : base(player) { }
+        public Instance(GamePlayer player) : base(player) { }
 
         void IGameOperator.OnReleased() { }
 
@@ -79,17 +65,14 @@ public class KeyMaster : DefinedAllocatableModifierTemplate, HasCitation, Define
             if (AmOwner)
             {
                 //usesLeft = maxUses;
-
                 ModAbilityButton hackButton = NebulaAPI.Modules.AbilityButton(this)
                     .BindKey(VirtualKeyInput.Ability, "keymaster.open", false)
                     .SetImage(doorHackImage)
                     .SetLabel("keymaster.open");
-
                 hackButton.Availability = (ModAbilityButton button) =>
-                    MyPlayer.CanMove && !MyPlayer.IsDead && AnyClosedDoorInRange();
+                    MyPlayer.CanMove && !MyPlayer.IsDead && AnyClosedDoorInRange() && !button.IsInCooldown;
 
-                hackButton.Visibility = (ModAbilityButton button) =>
-                    !MyPlayer.IsDead;
+                hackButton.Visibility = (ModAbilityButton button) => !MyPlayer.IsDead;
 
                 hackButton.OnClick = (ModAbilityButton button) =>
                 {
@@ -98,37 +81,33 @@ public class KeyMaster : DefinedAllocatableModifierTemplate, HasCitation, Define
 
                     foreach (OpenableDoor door in ShipStatus.Instance.AllDoors)
                     {
-                        if (!door.IsOpen)  // 不再排除净化室
+                        if (!door.IsOpen)
                         {
                             float dist = Vector2.Distance(pos, door.transform.position);
                             if (dist <= OpenRadius)
                             {
-                                // 记录是否打开了净化室门
                                 if (door.Room == SystemTypes.Decontamination)
                                     openedDecontamination = true;
-
                                 ShipStatus.Instance.RpcUpdateSystem(SystemTypes.Doors, (byte)(door.Id | 64));
                             }
                         }
                     }
-                    if (openedDecontamination)
-                        hackButton.CoolDownTimer?.Start(Specooldown);
-                    else
-                        hackButton.CoolDownTimer?.Start(cooldown);
+
+                    float cd = openedDecontamination ? Specooldown : cooldown;
+                    var timer = NebulaAPI.Modules.Timer(this, cd).SetAsAbilityTimer();
+                    button.CoolDownTimer = timer.Start();
                 };
-                var timer = new TimerImpl(cooldown).SetAsAbilityCoolDown();
-                hackButton.CoolDownTimer = GameEntityExtension.Register<TimerImpl>(timer, this, null);
             }
         }
 
         private bool AnyClosedDoorInRange()
         {
-            var pos = new UnityEngine.Vector2(MyPlayer.TruePosition.x, MyPlayer.TruePosition.y);
+            var pos = new Vector2(MyPlayer.TruePosition.x, MyPlayer.TruePosition.y);
             foreach (OpenableDoor door in ShipStatus.Instance.AllDoors)
             {
-                if (!door.IsOpen && door.Room != SystemTypes.Decontamination)
+                if (!door.IsOpen)
                 {
-                    if (UnityEngine.Vector2.Distance(pos, door.transform.position) <= OpenRadius)
+                    if (Vector2.Distance(pos, door.transform.position) <= OpenRadius)
                         return true;
                 }
             }
