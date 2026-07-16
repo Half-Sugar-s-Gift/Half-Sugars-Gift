@@ -1,4 +1,7 @@
-﻿namespace NebulaN.Roles.crewmate;
+﻿
+
+
+namespace NebulaN.Roles.crewmate;
 
 public class Wish : DefinedRoleTemplate, HasCitation, DefinedRole,
     RuntimeAssignableGenerator<RuntimeRole>,IAssignableDocument
@@ -133,7 +136,6 @@ public class Wish : DefinedRoleTemplate, HasCitation, DefinedRole,
                 if (suicide) { MyPlayer.Suicide(State.BrokenWish,null,KillParameter.NormalKill,null); }
                 button.StartCoolDown();
             };
-
         }
         [Local]
         private void PlayerMurderedEvent(PlayerMurderedEvent ev)

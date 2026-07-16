@@ -50,7 +50,6 @@ public class BeNothing : DefinedRoleTemplate, HasCitation, DefinedRole, RuntimeA
     public class Instance : RuntimeAssignableTemplate, RuntimeRole
     {
         public Instance(GamePlayer player) : base(player) { }
-
         public DefinedRole Role => MyRole;
 
         public void OnActivated()
