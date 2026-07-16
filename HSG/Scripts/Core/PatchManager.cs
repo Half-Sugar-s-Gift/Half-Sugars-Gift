@@ -1,4 +1,4 @@
-﻿/*
+/*
  * 赛博佛祖 镇楼
  * 永无BUG
  * 
@@ -105,6 +105,7 @@ static public class Cor
     static public Virial.Color MPCor = new(0.902f, 0.902f, 1f);
     static public Virial.Color Yellow = new(1f, 1f, 0f);
     static public Virial.Color LurkerCor = new(0.8f,0,0);
+    static public Virial.Color PurpleWitchJudge = new(0.45f, 0.1f, 0.55f);
 }
 public class State
 {
@@ -132,6 +133,10 @@ public class State
     /// 死因：无形
     /// </summary>
     public static TranslatableTag INVISIBLE = new TranslatableTag("state.invisible");
+    /// <summary>
+    /// 死因：审判长处刑
+    /// </summary>
+    public static TranslatableTag ExecutedByJudge = new TranslatableTag("state.executedByJudge");
 }
 public static class Team
 {
@@ -140,6 +145,12 @@ public static class Team
     /// </summary>
     public static readonly RoleTeam SpiritTeam = NebulaAPI.Preprocessor.CreateTeam("teams.spirit", new Virial.Color(0f, 0.1f, 0.4f), 0);
     public static readonly GameEnd SpiritWin = NebulaAPI.Preprocessor.CreateEnd("spiritWin", SpiritTeam.Color, 100);
+    /// <summary>
+    /// 魔女审判长阵营
+    /// </summary>
+    public static readonly RoleTeam WitchJudgeTeam = NebulaAPI.Preprocessor.CreateTeam("teams.witchJudge", new Virial.Color(0.45f, 0.1f, 0.55f), 0);
+    public static readonly GameEnd WitchJudgeWin = NebulaAPI.Preprocessor.CreateEnd("witchJudgeWin", WitchJudgeTeam.Color, 100);
+    public static readonly ExtraWin ExtraWitchJudgeWin = NebulaAPI.Preprocessor.CreateExtraWin("witchJudgeExtraWin", WitchJudgeTeam.Color);
 }
 #endregion
 #region PatchManager主类
@@ -244,6 +255,28 @@ public static partial class PatchManager
         UnityEngine.Color color = Palette.PlayerColors[colorId];
         return ColorUtility.ToHtmlStringRGB(color); 
     }
+
+    /// <summary>
+    /// 获取玩家当前颜色的本地化名称
+    /// </summary>
+    public static string GetPlayerColorName(GamePlayer player)
+    {
+        var pc = player.VanillaPlayer;
+        if (pc == null) return "白色";
+
+        int colorId = pc.Data.DefaultOutfit.ColorId;
+        try
+        {
+            var names = Palette.ColorNames;
+            if (names != null && colorId >= 0 && colorId < names.Length)
+            {
+                var name = DestroyableSingleton<TranslationController>.Instance.GetString(names[colorId]);
+                if (!string.IsNullOrEmpty(name)) return name;
+            }
+        }
+        catch { }
+        return $"玩家{colorId}";
+    }
 }
 
 
@@ -312,6 +345,23 @@ public static partial class PatchManager
         pc.SetName("System");
         HudManager.Instance.Chat.AddChat(pc, msg);
         pc.SetName(orig);
+    }
+
+    public static void SendLocalNotification(string msg)
+    {
+        var notifier = HudManager.Instance.Notifier;
+        var newMessage = GameObject.Instantiate<LobbyNotificationMessage>(
+            notifier.notificationMessageOrigin,
+            Vector3.zero, Quaternion.identity, notifier.transform);
+        newMessage.transform.localPosition = new Vector3(0f, 0f, -2f);
+        newMessage.SetUp(msg,
+            notifier.settingsChangeSprite,
+            notifier.settingsChangeColor,
+            (Action)(() => notifier.OnMessageDestroy(newMessage)));
+        notifier.ShiftMessages();
+        notifier.AddMessageToQueue(newMessage);
+        AmongUsLLImpl.SoundManagerInstance.PlaySoundImmediate(
+            notifier.settingsChangeSound, false, 1f, 1f, null);
     }
 
     public static bool SendNormalMessage(string msg)
