@@ -26,67 +26,62 @@
  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  */
 #region 全局引用
-global using System;
-global using System.Collections.Generic;
-global using System.Linq;
-global using System.Text;
-global using System.Threading.Tasks;
-global using System.Reflection;
-global using System.IO;
-global using System.Collections;
-
-
-global using Nebula.Game;
-global using Nebula.Utilities;
-global using Nebula.Modules;
-global using Nebula.Game.Statistics;
+global using BepInEx.Unity.IL2CPP.Utils.Collections;
+global using HalfSugarGift.Core;
+global using HalfSugarGift.Core.Patch;
+global using HalfSugarGift.Core.Settings;
+global using HarmonyLib;
+global using InnerNet;
 global using Nebula;
-global using Nebula.Roles.Abilities;
-global using Nebula.Roles;
-global using Nebula.Roles.Modifier;
-global using Nebula.Roles.Neutral;
-global using Nebula.Roles.Crewmate;
-global using Nebula.Roles.Impostor;
+global using Nebula.Behavior;
 global using Nebula.Documents;
+global using Nebula.Extensions;
+global using Nebula.Game;
+global using Nebula.Game.Statistics;
+global using Nebula.Modules;
 global using Nebula.Modules.ScriptComponents;
 global using Nebula.Player;
-global using Nebula.Behavior;
-global using Nebula.Extensions;
-
+global using Nebula.Roles;
+global using Nebula.Roles.Abilities;
+global using Nebula.Roles.Crewmate;
+global using Nebula.Roles.Impostor;
+global using Nebula.Roles.Modifier;
+global using Nebula.Roles.Neutral;
+global using Nebula.Utilities;
+global using System;
+global using System.Collections;
+global using System.Collections.Generic;
+global using System.IO;
+global using System.Linq;
+global using System.Reflection;
+global using System.Text;
+global using System.Threading.Tasks;
 global using UnityEngine;
-
+global using UnityEngine.Networking;
 global using Virial;
 global using Virial.Assignable;
 global using Virial.Attributes;
 global using Virial.Compat;
 global using Virial.Components;
 global using Virial.Configuration;
+global using Virial.DI;
 global using Virial.Events.Game;
 global using Virial.Events.Game.Meeting;
-global using Virial.Game;
-global using Virial.Runtime;
 global using Virial.Events.Player;
-global using Virial.Utilities;
+global using Virial.Game;
 global using Virial.Media;
-global using Virial.DI;
-global using GamePlayer = Virial.Game.Player;
-
-global using HalfSugarGift.Core;
-global using HalfSugarGift.Core.Patch;
-global using HalfSugarGift.Core.Settings;
-global using Citations = HalfSugarGift.Core.Citations;
-global using ColorHelper = HalfSugarGift.Core.Patch.ColorHelper;
-
-global using HarmonyLib;
-global using InnerNet;
-
-global using BepInEx.Unity.IL2CPP.Utils.Collections;
-
-global using UnityEngine.Networking;
+global using Virial.Runtime;
 global using Virial.Text;
+global using Virial.Utilities;
+global using Citations = HalfSugarGift.Core.Citations;
 global using Color = UnityEngine.Color;
-global using Vector3 = UnityEngine.Vector3;
+global using ColorHelper = HalfSugarGift.Core.Patch.ColorHelper;
+global using GamePlayer = Virial.Game.Player;
 global using Vector2 = UnityEngine.Vector2;
+global using Vector3 = UnityEngine.Vector3;
+using Nebula.Roles.Complex;
+using NebulaN.Roles.Modifier;
+using NebulaN.Roles.Neutral;
 #endregion
 
 namespace HalfSugarGift.Core.Patch;
@@ -105,7 +100,6 @@ static public class Cor
     static public Virial.Color MPCor = new(0.902f, 0.902f, 1f);
     static public Virial.Color Yellow = new(1f, 1f, 0f);
     static public Virial.Color LurkerCor = new(0.8f,0,0);
-    static public Virial.Color PurpleWitchJudge = new(0.45f, 0.1f, 0.55f);
 }
 public class State
 {
@@ -145,12 +139,6 @@ public static class Team
     /// </summary>
     public static readonly RoleTeam SpiritTeam = NebulaAPI.Preprocessor.CreateTeam("teams.spirit", new Virial.Color(0f, 0.1f, 0.4f), 0);
     public static readonly GameEnd SpiritWin = NebulaAPI.Preprocessor.CreateEnd("spiritWin", SpiritTeam.Color, 100);
-    /// <summary>
-    /// 魔女审判长阵营
-    /// </summary>
-    public static readonly RoleTeam WitchJudgeTeam = NebulaAPI.Preprocessor.CreateTeam("teams.witchJudge", new Virial.Color(0.45f, 0.1f, 0.55f), 0);
-    public static readonly GameEnd WitchJudgeWin = NebulaAPI.Preprocessor.CreateEnd("witchJudgeWin", WitchJudgeTeam.Color, 100);
-    public static readonly ExtraWin ExtraWitchJudgeWin = NebulaAPI.Preprocessor.CreateExtraWin("witchJudgeExtraWin", WitchJudgeTeam.Color);
 }
 #endregion
 #region PatchManager主类
@@ -255,28 +243,6 @@ public static partial class PatchManager
         UnityEngine.Color color = Palette.PlayerColors[colorId];
         return ColorUtility.ToHtmlStringRGB(color); 
     }
-
-    /// <summary>
-    /// 获取玩家当前颜色的本地化名称
-    /// </summary>
-    public static string GetPlayerColorName(GamePlayer player)
-    {
-        var pc = player.VanillaPlayer;
-        if (pc == null) return "白色";
-
-        int colorId = pc.Data.DefaultOutfit.ColorId;
-        try
-        {
-            var names = Palette.ColorNames;
-            if (names != null && colorId >= 0 && colorId < names.Length)
-            {
-                var name = DestroyableSingleton<TranslationController>.Instance.GetString(names[colorId]);
-                if (!string.IsNullOrEmpty(name)) return name;
-            }
-        }
-        catch { }
-        return $"玩家{colorId}";
-    }
 }
 
 
@@ -345,6 +311,23 @@ public static partial class PatchManager
         pc.SetName("System");
         HudManager.Instance.Chat.AddChat(pc, msg);
         pc.SetName(orig);
+    }
+
+    public static void SendLocalNotification(string msg)
+    {
+        var notifier = HudManager.Instance.Notifier;
+        var newMessage = GameObject.Instantiate<LobbyNotificationMessage>(
+            notifier.notificationMessageOrigin,
+            Vector3.zero, Quaternion.identity, notifier.transform);
+        newMessage.transform.localPosition = new Vector3(0f, 0f, -2f);
+        newMessage.SetUp(msg,
+            notifier.settingsChangeSprite,
+            notifier.settingsChangeColor,
+            (Action)(() => notifier.OnMessageDestroy(newMessage)));
+        notifier.ShiftMessages();
+        notifier.AddMessageToQueue(newMessage);
+        AmongUsLLImpl.SoundManagerInstance.PlaySoundImmediate(
+            notifier.settingsChangeSound, false, 1f, 1f, null);
     }
 
     public static void SendLocalNotification(string msg)
