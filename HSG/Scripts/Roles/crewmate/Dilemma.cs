@@ -30,6 +30,8 @@ public class Dilemma : DefinedRoleTemplate, DefinedRole, RuntimeAssignableGenera
     public RuntimeRole CreateInstance(GamePlayer player, int[] arguments) => new Instance(player);
     public static readonly Dilemma MyRole = new Dilemma();
 
+
+
     public Citation Citation => Citations.hvtXsvc_hsg;
     IEnumerable<AssignableDocumentImage> IAssignableDocument.GetDocumentImages()
     {
