@@ -94,7 +94,7 @@ public class Mage : DefinedRoleTemplate, DefinedRole, HasCitation,
         private static readonly Virial.Media.Image? WeakButtonIcon =
             NebulaAPI.AddonAsset.GetResource("Weak.png")?.AsImage(100f);
         private static readonly Virial.Media.Image? RestoreButtonIcon =
-                NebulaAPI.AddonAsset.GetResource("RestorerButton.png")?.AsImage(110f);
+                NebulaAPI.AddonAsset.GetResource("RestorerButton.png")?.AsImage(100f);
 
         //  状态 
         private bool _switched;                    // 是否处于第二人格
