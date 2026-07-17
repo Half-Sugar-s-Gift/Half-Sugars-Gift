@@ -94,7 +94,7 @@ public class Mage : DefinedRoleTemplate, DefinedRole, HasCitation,
         private static readonly Virial.Media.Image? WeakButtonIcon =
             NebulaAPI.AddonAsset.GetResource("Weak.png")?.AsImage(100f);
         private static readonly Virial.Media.Image? RestoreButtonIcon =
-                NebulaAPI.AddonAsset.GetResource("RestorerButton.png")?.AsImage(100f);
+                NebulaAPI.AddonAsset.GetResource("RestorerButton.png")?.AsImage(110f);
 
         //  状态 
         private bool _switched;                    // 是否处于第二人格
@@ -106,7 +106,7 @@ public class Mage : DefinedRoleTemplate, DefinedRole, HasCitation,
         private ModAbilityButton? _weakButton;
         private ModAbilityButton? _restoreButton;
 
-        // === 通过反射获取 Nebula 内部 UnknownOutfit（隐蔽者同款伪装外观） ===
+        // === 通过反射获取 Nebula 内部 UnknownOutfit（伪装外观） ===
         private static OutfitDefinition? GetUnknownOutfit()
         {
             var game = NebulaAPI.CurrentGame;
@@ -208,7 +208,7 @@ public class Mage : DefinedRoleTemplate, DefinedRole, HasCitation,
             }
         );
 
-        // === 监听玩家死亡 → 检查是否所有脆弱目标已死亡 ===
+        // === 监听玩家死亡 ，检查是否所有脆弱目标已死亡 ===
         [Local]
         void OnPlayerDie(PlayerDieEvent ev)
         {
@@ -245,15 +245,16 @@ public class Mage : DefinedRoleTemplate, DefinedRole, HasCitation,
             }
         }
 
-        // === 名字装饰 ===
-        // 第二人格：隐藏自己名字（对所有人可见）
-        void DecorateName(PlayerDecorateNameEvent ev)
+        // === 名字 ===
+        // 第二人格：魔法使眼里所有人都看不见名字（本地）
+        [Local]
+        void DecorateAllHidden(PlayerDecorateNameEvent ev)
         {
-            if (MyPlayer.IsDead || !_switched || ev.Player != MyPlayer) return;
+            if (MyPlayer.IsDead || !_switched) return;
             ev.Name = "";
         }
 
-        // 第一人格：灰色标记脆弱目标（仅法师可见）
+        // 第一人格：灰色标记脆弱目标（仅魔法师可见）
         [Local]
         void DecorateWeaknessName(PlayerDecorateNameEvent ev)
         {
@@ -269,7 +270,7 @@ public class Mage : DefinedRoleTemplate, DefinedRole, HasCitation,
             if (_switched && !MyPlayer.IsDead)
             {
                 ev.UpdateSaturation(0f, true);   // 黑白去色
-                ev.UpdateBrightness(1.15f, true); // 稍提亮（灰白感）
+                ev.UpdateBrightness(1.15f, true); // 提亮
             }
         }
 
