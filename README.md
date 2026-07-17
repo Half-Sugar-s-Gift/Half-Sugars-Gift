@@ -1,4 +1,6 @@
-# 你好，欢迎来到HSG文档
+This mod is not affiliated with Among Us or Innersloth LLC, and the content contained therein is not endorsed or otherwise sponsored by Innersloth LLC. Portions of the materials contained herein are property of Innersloth LLC. © Innersloth LLC.
+
+# Half Sugar's Gift
 
 ## Select Language 
 > 简体中文——本文档  
@@ -11,6 +13,7 @@
 - [预发布版本](#预发布版本)
 - [安装教程](#导入方法)
 - [联系我们](#加入我们的群聊)
+- [常见错误解决方式](#常见错误解决方式)
 
 # 正式版本
 
@@ -39,17 +42,34 @@
 [来源文档](ATTRIBUTIONS.md)  
 
 # 导入方法
-- 1.下载[Nebula on the Ship](https://github.com/Dolly1016/Nebula)模组并且正确导入，正确运行一次。
+- 1.下载[Nebula on the Ship](https://github.com/Dolly1016/Nebula)模组并且正确导入，正确运行一次。  
 - 2.在游戏目录下应新建的**Addons**目录加入本项目的压缩包文件。  
-*注:不要解压本压缩包文件*
-- 3.如果没有出现差错，那么导入完毕。
-> [!note]
-> 如果你需要下载懒人包请到[半糖的小窝](https://github.com/hvtXsvc-skysilk/Half-sugar-s-gift/README.md/#半糖的小窝)
-  
+
+- 3.导入完毕。
+- **⚠️注意:不要解压本压缩包文件**
+
+# 常见错误解决方式
+这将会教你一些常见的无法进入游戏/插件未生效的问题解决方案。  
+一. 加载阶段时，显示一个骷髅头，中间有一段类似于“系统找不到指定的文件'winget'”或者包含winget的类似字样：  
+Q&A：  
+Q： 是什么导致的这个问题？  
+A： 因为加载NoS需要.NET 8 SDK，如果电脑上没有，那么NoS会自动调用winget（一个下载工具）来下载.NET 8 SDK。如果你的电脑没有安装Winget，就会导致本错误。  
+解决方案：  
+- 下载 [.NET8 SDK（Windows X64）](https://dotnet.microsoft.com/zh-cn/download/dotnet/thank-you/sdk-8.0.423-windows-x64-installer)  
+- （备选方案）或下载 [Winget（Microsoft store链接）](https://www.microsoft.com/p/app-installer/9nblggh4nns1)    
+
+
+
+二. 进入游戏未加载本插件。    
+
+首先需要进行问题排查。 如果你别的职业/功能插件也没被加载，那么，去下载[.NET8 SDK](https://dotnet.microsoft.com/zh-cn/download/dotnet/thank-you/sdk-8.0.423-windows-x64-installer)。如果只是没有HSG插件，
+打开NoS根目录\Cache\Dll\包含“Half Sugar's Gift”的文档文件（注意，是.log的文档文件） 搜索有没有ERROR字段，如果有，将本日志，你的运行环境（比如电脑系统版本）原封不动的发送到hvtXsvc@Outlook.com。  
+如果没有，重新尝试导入。  
 # 感谢以下贡献者
 半糖——策划  
-hvtXsvc——主开发者  
-Nesplayer——wiki开发  
+[hvtXsvc](https://github.com/hvtXsvc) —— 主开发者  
+[猫猫](https://github.com/AfishMW) —— 开发者  
+[Nesplayer](https://github.com/Nesplayer) —— wiki开发  
 曦曦——主画师  
 
 # 如何为本插件贡献？
