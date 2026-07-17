@@ -100,6 +100,7 @@ static public class Cor
     static public Virial.Color MPCor = new(0.902f, 0.902f, 1f);
     static public Virial.Color Yellow = new(1f, 1f, 0f);
     static public Virial.Color LurkerCor = new(0.8f,0,0);
+    static public Virial.Color ImaginationCor = new(128,128,128);
 }
 public class State
 {
@@ -139,6 +140,9 @@ public static class Team
     /// </summary>
     public static readonly RoleTeam SpiritTeam = NebulaAPI.Preprocessor.CreateTeam("teams.spirit", new Virial.Color(0f, 0.1f, 0.4f), 0);
     public static readonly GameEnd SpiritWin = NebulaAPI.Preprocessor.CreateEnd("spiritWin", SpiritTeam.Color, 100);
+    public static readonly RoleTeam ImaginationTeam = NebulaAPI.Preprocessor!.CreateTeam( "teams.imagination",new Virial.Color(128,128,128),TeamRevealType.OnlyMe);
+    public static readonly GameEnd ImaginationWin = NebulaAPI.Preprocessor!.CreateEnd("imaginationWin", ImaginationTeam.Color );
+
 }
 #endregion
 #region PatchManager主类
@@ -242,6 +246,111 @@ public static partial class PatchManager
         int colorId = pc.Data.DefaultOutfit.ColorId;
         UnityEngine.Color color = Palette.PlayerColors[colorId];
         return ColorUtility.ToHtmlStringRGB(color); 
+    }
+    static public bool OpenRoleSelectWindowUsingTabs(
+    IEnumerable<DefinedRole>? roles,(string? tab, Predicate<DefinedRole>? predicate)[] tabs,bool impRolesArrangeAtFirst,string underText,
+    Action<DefinedRole> onSelected,ref MetaScreen __result,bool showCloseButton = false)
+    {
+        var window = MetaScreen.GenerateWindow(
+            new(7.6f, 4.2f),
+            HudManager.Instance.transform,
+            new Vector3(0, 0, -50f),
+            true,false,withCloseButton:showCloseButton
+        );
+
+        MetaWidgetOld widget = new();
+        MetaWidgetOld inner = new();
+        if (roles == null)
+        {
+            HashSet<DefinedRole> roleSet = [];
+            foreach (var r in Nebula.Roles.Roles.AllRoles)
+                foreach (var abilityRole in r.GetGuessableAbilityRoles())
+                    roleSet.Add(abilityRole);
+            foreach (var type in AssignmentType.AllTypes)
+            {
+                if (!type.CanGuessAsAbility) continue;
+                foreach (var r in Nebula.Roles.Roles.AllRoles)
+                {
+                    if (type.Predicate.Invoke(r.AssignmentStatus, r) &&
+                        r.GetCustomAllocationParameters(type)?.RoleCountSum > 0)
+                        roleSet.Add(r);
+                }
+            }
+            roles = roleSet;
+        }
+
+        int CategoryToInt(RoleCategory roleCategory) => roleCategory switch
+        {
+            RoleCategory.ImpostorRole => impRolesArrangeAtFirst ? 0 : 1,
+            RoleCategory.CrewmateRole => impRolesArrangeAtFirst ? 1 : 0,
+            _ => 2
+        };
+
+        bool isFirst = true;
+        foreach (var tab in tabs)
+        {
+            var ary = roles.Where(r => tab.predicate?.Invoke(r) ?? true).ToArray();
+            ary.Sort((r1, r2) =>
+            {
+                if (r1.Category == r2.Category) return r1.InternalName.CompareTo(r2.InternalName);
+                return CategoryToInt(r1.Category).CompareTo(CategoryToInt(r2.Category));
+            });
+
+            if (isFirst) isFirst = false;
+            else inner.Append(new MetaWidgetOld.VerticalMargin(0.1f));
+
+            if (tab.tab != null)
+                inner.Append(new MetaWidgetOld.Text(MeetingRoleSelectWindow.TabAttribute)
+                {
+                    MyText = new RawTextComponent(tab.tab),
+                    Alignment = IMetaWidgetOld.AlignmentOption.Center
+                });
+
+            inner.Append(ary, r => new CombinedWidgetOld(
+                new MetaWidgetOld.HorizonalMargin(0.1f),
+                new MetaWidgetOld.Button(() => onSelected.Invoke(r), MeetingRoleSelectWindow.ButtonAttribute)
+                {
+                    RawText = r.DisplayColoredName,
+                    TextHorizonotalExtraMargin = 0.15f,
+                    PostBuilder = (button, renderer, text) =>
+                    {
+                        renderer.maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
+                        button.transform.localPosition += new Vector3(0.05f, 0f, 0f);
+                        text.transform.localPosition += new Vector3(0.072f, 0f, 0f);
+                        var icon = UnityHelper.CreateObject<SpriteRenderer>("Icon", button.transform, new(-0.65f, 0f, -0.1f));
+                        icon.sprite = r.GetRoleIcon()?.GetSprite();
+                        icon.maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
+                        icon.material = RoleIcon.GetRoleIconMaterial(r, 0.8f);
+                        icon.transform.localScale = new(0.253f, 0.253f, 1f);
+                        icon.SetBothOrder(15);
+                    }
+                }), 4, -1, 0, 0.59f);
+        }
+        MetaWidgetOld.ScrollView scroller = new(new(6.9f, 3f), inner, true)
+        {
+            Alignment = IMetaWidgetOld.AlignmentOption.Center
+        };
+
+        widget.Append(scroller);
+        widget.Append(new MetaWidgetOld.Text(TextAttributeOld.BoldAttr)
+        {
+            MyText = new RawTextComponent(underText),
+            Alignment = IMetaWidgetOld.AlignmentOption.Center
+        });
+
+        window.SetWidget(widget);
+        IEnumerator CoCloseOnResult()
+        {
+            if (MeetingHud.Instance)
+                while (MeetingHud.Instance.state != MeetingHud.VoteStates.Results) yield return null;
+            else
+                while (!MeetingHud.Instance) yield return null;
+            window.CloseScreen();
+        }
+        window.StartCoroutine(CoCloseOnResult().WrapToIl2Cpp());
+
+        __result = window;
+        return false;
     }
 }
 
