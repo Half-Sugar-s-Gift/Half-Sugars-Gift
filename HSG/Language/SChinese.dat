@@ -303,7 +303,7 @@
 
 "role.witchJudge.name" : "魔女审判长"
 "role.witchJudge.short" : "审"
-"role.witchJudge.blurb" : "安息，让无法克制杀意的孩子们，永久地沉睡吧。"
+"role.witchJudge.blurb" : "安息吧，让无法克制杀意的孩子们，永久地沉睡吧。"
 "role.witchJudge.doc" : "利用审判长的权力，惩罚并裁决罪人。处刑2名带刀职业独立获胜。"
 "options.role.witchJudge.detail" : "魔女审判长可以开启魔女审判。<br>拥有投票翻倍、平票驱逐和惩罚/处刑能力。<br><b>这是半糖送给你的礼物之一！</b>"
 "role.witchJudge.ability.title" : "<b>固有能力【魔女审判】</b>"
