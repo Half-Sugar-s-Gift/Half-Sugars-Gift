@@ -101,6 +101,7 @@ static public class Cor
     static public Virial.Color Yellow = new(1f, 1f, 0f);
     static public Virial.Color LurkerCor = new(0.8f,0,0);
     static public Virial.Color ImaginationCor = new(128,128,128);
+    static public Virial.Color PurpleWitchJudge = new(0.45f, 0.1f, 0.55f);
 }
 public class State
 {
@@ -140,6 +141,12 @@ public static class Team
     /// </summary>
     public static readonly RoleTeam SpiritTeam = NebulaAPI.Preprocessor.CreateTeam("teams.spirit", new Virial.Color(0f, 0.1f, 0.4f), 0);
     public static readonly GameEnd SpiritWin = NebulaAPI.Preprocessor.CreateEnd("spiritWin", SpiritTeam.Color, 100);
+    /// <summary>
+    /// 魔女审判长阵营
+    /// </summary>
+    public static readonly RoleTeam WitchJudgeTeam = NebulaAPI.Preprocessor.CreateTeam("teams.witchJudge", new Virial.Color(0.45f, 0.1f, 0.55f), 0);
+    public static readonly GameEnd WitchJudgeWin = NebulaAPI.Preprocessor.CreateEnd("witchJudgeWin", WitchJudgeTeam.Color, 100);
+    public static readonly ExtraWin ExtraWitchJudgeWin = NebulaAPI.Preprocessor.CreateExtraWin("witchJudgeExtraWin", WitchJudgeTeam.Color);
     public static readonly RoleTeam ImaginationTeam = NebulaAPI.Preprocessor!.CreateTeam( "teams.imagination",new Virial.Color(128,128,128),TeamRevealType.OnlyMe);
     public static readonly GameEnd ImaginationWin = NebulaAPI.Preprocessor!.CreateEnd("imaginationWin", ImaginationTeam.Color );
 
@@ -420,23 +427,6 @@ public static partial class PatchManager
         pc.SetName("System");
         HudManager.Instance.Chat.AddChat(pc, msg);
         pc.SetName(orig);
-    }
-
-    public static void SendLocalNotification(string msg)
-    {
-        var notifier = HudManager.Instance.Notifier;
-        var newMessage = GameObject.Instantiate<LobbyNotificationMessage>(
-            notifier.notificationMessageOrigin,
-            Vector3.zero, Quaternion.identity, notifier.transform);
-        newMessage.transform.localPosition = new Vector3(0f, 0f, -2f);
-        newMessage.SetUp(msg,
-            notifier.settingsChangeSprite,
-            notifier.settingsChangeColor,
-            (Action)(() => notifier.OnMessageDestroy(newMessage)));
-        notifier.ShiftMessages();
-        notifier.AddMessageToQueue(newMessage);
-        AmongUsLLImpl.SoundManagerInstance.PlaySoundImmediate(
-            notifier.settingsChangeSound, false, 1f, 1f, null);
     }
 
     public static void SendLocalNotification(string msg)

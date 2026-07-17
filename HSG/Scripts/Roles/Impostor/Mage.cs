@@ -101,12 +101,13 @@ public class Mage : DefinedRoleTemplate, DefinedRole, HasCitation,
         private int _weakUsesLeft;                 // 当前轮剩余脆弱使用次数
         private readonly List<byte> _weakenedPlayerIds = new(); // 被施法的玩家ID
 
-        private const string CamoTag = "MageCamo"; // 第二人格伪装标签
+        private const string CamoTag = "MageCamo";
+        private float _camoCheckTimer;
 
         private ModAbilityButton? _weakButton;
         private ModAbilityButton? _restoreButton;
 
-        // === 通过反射获取 Nebula 内部 UnknownOutfit（隐蔽者同款伪装外观） ===
+        // === 通过反射获取 UnknownOutfit（隐蔽者同款伪装外观） ===
         private static OutfitDefinition? GetUnknownOutfit()
         {
             var game = NebulaAPI.CurrentGame;
@@ -178,7 +179,9 @@ public class Mage : DefinedRoleTemplate, DefinedRole, HasCitation,
         private void SwitchBackToFirst()
         {
             _switched = false;
-            MyPlayer.RemoveOutfitByTag(CamoTag);
+            // 移除所有玩家的伪装
+            foreach (var p in NebulaGameManager.Instance!.AllPlayerInfo)
+                p.RemoveOutfitByTag(CamoTag);
             _weakUsesLeft = RequiredKillCount;
             _weakenedPlayerIds.Clear();
             if (_weakButton != null)
@@ -235,10 +238,16 @@ public class Mage : DefinedRoleTemplate, DefinedRole, HasCitation,
             if (_weakenedPlayerIds.Count == 0 && _weakUsesLeft == 0)
             {
                 _switched = true;
-                // 应用隐蔽者同款伪装（默认皮肤 + 隐藏名字）
+                // 对其他所有存活玩家应用伪装外观（灰色无装饰无名字）
                 var unknown = GetUnknownOutfit();
                 if (unknown != null)
-                    MyPlayer.AddOutfit(new OutfitCandidate(unknown, CamoTag, OutfitPriority.Camouflage, true));
+                {
+                    foreach (var p in NebulaGameManager.Instance!.AllPlayerInfo)
+                    {
+                        if (!p.IsDead && p != MyPlayer)
+                            p.AddOutfit(new OutfitCandidate(unknown, CamoTag, OutfitPriority.Camouflage, true));
+                    }
+                }
                 // 临时使用 TitleShower 显示提示
                 var title = NebulaAPI.CurrentGame?.GetModule<TitleShower>();
                 title?.SetText(Language.Translate("role.mage.switched"), Cor.impRed, 3f, true);
@@ -246,13 +255,6 @@ public class Mage : DefinedRoleTemplate, DefinedRole, HasCitation,
         }
 
         // === 名字装饰 ===
-        // 第二人格：隐藏自己名字（对所有人可见）
-        void DecorateName(PlayerDecorateNameEvent ev)
-        {
-            if (MyPlayer.IsDead || !_switched || ev.Player != MyPlayer) return;
-            ev.Name = "";
-        }
-
         // 第一人格：灰色标记脆弱目标（仅法师可见）
         [Local]
         void DecorateWeaknessName(PlayerDecorateNameEvent ev)
@@ -273,9 +275,41 @@ public class Mage : DefinedRoleTemplate, DefinedRole, HasCitation,
             }
         }
 
+        // === 第二人格期间每 2 秒检测一次：确保所有玩家（除魔法使自己）都处于伪装状态 ===
+        [Local]
+        void OnUpdate(GameUpdateEvent ev)
+        {
+            if (!_switched || MyPlayer.IsDead) return;
+            _camoCheckTimer += Time.deltaTime;
+            if (_camoCheckTimer < 2f) return;
+            _camoCheckTimer = 0f;
+
+            var unknown = GetUnknownOutfit();
+            if (unknown == null) return;
+            foreach (var p in NebulaGameManager.Instance!.AllPlayerInfo)
+            {
+                if (p.IsDead || p == MyPlayer) continue;
+                p.AddOutfit(new OutfitCandidate(unknown, CamoTag, OutfitPriority.Camouflage, true));
+            }
+        }
+
+        // === 第二人格期间有新玩家复活 → 立刻应用伪装 ===
+        [Local]
+        void OnPlayerRevive(PlayerReviveEvent ev)
+        {
+            if (!_switched || MyPlayer.IsDead || ev.Player == MyPlayer) return;
+            var unknown = GetUnknownOutfit();
+            if (unknown != null)
+                ev.Player.AddOutfit(new OutfitCandidate(unknown, CamoTag, OutfitPriority.Camouflage, true));
+        }
+
         void IGameOperator.OnReleased()
         {
-            MyPlayer.RemoveOutfitByTag(CamoTag);
+            if (_switched)
+            {
+                foreach (var p in NebulaGameManager.Instance!.AllPlayerInfo)
+                    p.RemoveOutfitByTag(CamoTag);
+            }
         }
 
         void RuntimeAssignable.DecorateNameConstantly(ref string name, bool canSeeAllInfo, bool inEndScene) { }
