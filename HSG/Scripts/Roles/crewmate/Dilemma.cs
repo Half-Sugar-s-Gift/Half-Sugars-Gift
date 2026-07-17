@@ -110,7 +110,6 @@ public class Dilemma : DefinedRoleTemplate, DefinedRole, RuntimeAssignableGenera
                 case 1:
                     AmongUsUtil.PlayQuickFlash(Cor.Yellow);
                     MyPlayer.RequestEmergencyMeeting(true,false);
-                    Title?.SetText(Language.Translate("role.dilemma.hudtextEmergencyMeeting"),Cor.impRed, 1.5f, true);
                     break;
                 case 2:
                     var impostors = GamePlayer.AllPlayers.Where(p => p.IsImpostor && !p.IsDead).ToList();
@@ -164,6 +163,32 @@ public class Dilemma : DefinedRoleTemplate, DefinedRole, RuntimeAssignableGenera
                     break;
             }
             HsgDebug.Log($"抉择者取效果：{i}");
+        }
+        void a(UpdateEvent ev)
+        {
+        }
+        void b(SabotageSystemType t)
+        {
+        }
+        void c(FakeSabotageStatus fss)
+        {
+            fss.PushFakeSabotage(SystemTypes.Reactor);
+        }
+        void d(MushroomMixupSabotageSystem ev)
+        {
+        }
+        void e(PlayerTasksTrySetLocalEvent ev)
+        {
+            ev.Tasks.ForEach(x =>
+            {
+            });
+        }
+        void f(PlayerTaskCompleteEvent ev)
+        {
+            ev.Player.Tasks.CurrentTasks.CompareTo(1);
+        }
+        void g(ICriticalSabotage ev)
+        {
         }
     }
 }

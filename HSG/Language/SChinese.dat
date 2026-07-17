@@ -233,6 +233,18 @@
 "role.owl.doc.soulEat" : "<b>噬魂</b><br>立即杀死被催眠者。"
 "owl.chatName" : "猫头鹰"
 
+"role.saboteur.name" : "破坏狂"
+"role.saboteur.short" : "破"
+"role.saboteur.blurb" : "混乱之力"
+"role.saboteur.doc" : "每当一次破坏被成功修复后，永久减少你的击杀冷却时间。<br>破坏期间击杀玩家会额外减少本次破坏期间的击杀冷却时间。<br>永久减少次数与减少数值均由房主设置。"
+"options.role.saboteur.detail" : "破坏狂在破坏后。破坏期间均会获得击杀CD减少的强化。<br><b>这是半糖送给你的礼物之一！</b>"
+"options.role.saboteur.killcooldown" : "击杀冷却"
+"options.role.saboteur.reduceSabotage" : "每次破坏永久减少"
+"options.role.saboteur.reduceKill" : "破坏期间击杀减少"
+"options.role.saboteur.minCooldown" : "最低击杀冷却"
+"options.role.saboteur.maxStack" : "最大永久减少次数"
+"role.saboteur.ability.doc" : "..每当一次破坏被成功修复后，永久减少你的击杀冷却时间。<br>破坏期间击杀玩家会额外减少本次破坏期间的击杀冷却时间。<br>永久减少次数与减少数值均由房主设置。"
+
 
 
 #中立
