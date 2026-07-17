@@ -138,7 +138,7 @@
 "options.role.lurker.ckc" : "可以击杀"
 "options.role.lurker.cooldown" : "击杀冷却"
 "options.role.lurker.nt" : "潜行者无需做任务"
-"lurker.kill" : "击杀"
+"button.label.lurker.kill" : "击杀"
 "options.role.lurker.detail" : "潜行者可以阻止除了船员阵营以外的全部阵营胜利，<br>直到他死亡。<br><b>这是半糖送给你的礼物之一！</b>"
 "role.lurker.doc" : "潜行者可以阻止除了船员阵营以外的全部阵营胜利，直到潜行者死亡。<b><color=#00ffff>%CANKILL%</color></b>%NT%"
 "role.lurker.ck.true" : "<br>当有阵营可以胜利，且非船员阵营时，<b>潜行者获得一次击杀能力</b>，击杀冷却为 <b><color=#00ffff>%CD%</color></b> "
@@ -272,11 +272,13 @@
 "options.role.imagination.detail" : "想象力可以每轮想象一个职业并获得其职业特质<br>存活到最后抢夺职业。<br><b>这是半糖送给你的礼物之一！</b>"
 "role.imagination.ability.title" : "<b>固有能力【想象超群】</b>"
 "role.imagination.ability.main" : "你可以在每轮会议结束或者游戏开始时选择一个职业并获得他的能力。<br>本轮结束后，你需要重新选择职业。"
-"role.imagination.doc.skill" : "<b>想象</b><br>每轮自动使用、可以选择一个职业并获得其职业能力。"
-"role.imagination.tips" : "<b>·某些职业选择后不会拥有他的技能。</b><br><b>·你可以抢夺胜利。</b>"
+"role.imagination.ability.doc" : "<b>想象</b><br>每轮自动使用、可以选择一个职业并获得其职业能力。"
+"role.imagination.tips" : "<b>· 无职业可选后，想象力会自杀。</b>"
 
-"role.imagination.prefix" : "想象的%ROLE%"
-"role.imagination.select" : "选择一个职业进行想象(选择完毕后请手动关闭本窗口)"
+"role.imagination.prefix" : "<color=#808080>想象的</color>%ROLE%"
+"role.imagination.select" : "选择一个职业进行想象"
+"options.role.imagination.filter" : "可选职业过滤"
+"options.role.imagination.candidateCount" : "可选职业数"
 
 "role.spirit.name" : "「灵」"
 "role.spirit.short" : "灵"
@@ -328,9 +330,21 @@
 "role.blitz.doc" : "每次会议结束或游戏开局时，你的<b>第二次</b>击杀冷却会立刻重置为<b><color=#FF0000>0秒</color></b>。"
 
 
-"role.imagimodi.name" : "想象力"
-"role.imagimodi.generalBlurb" : "丰富的想象"
-"role.imagimodi.doc" : "请查看<b>想象力</b>主职业。"
+"role.imaginationM.name" : "想象力"
+"role.imaginationM.short" : "想"
+"role.imaginationM.generalBlurb" : "丰富的想象"
+"role.imaginationM.doc" : "活到最后抢夺他人的胜利<br>每轮可以想象一个职业并获得其技能。"
+"teams.imagination" : "想象力"
+"options.role.imaginationM.candidateCount" : "每轮可想象职业数量"
+"options.role.imaginationM.roleFilter" : "可想象的职业"
+"options.role.imaginationM.detail" : "想象力可以每轮想象一个职业并获得其职业特质<br>存活到最后抢夺职业。<br><b>这是半糖送给你的礼物之一！</b>"
+"role.imaginationM.ability.title" : "<b>固有能力【想象超群】</b>"
+"role.imaginationM.ability.main" : "你可以在每轮会议结束或者游戏开始时选择一个职业并获得他的能力。<br>本轮结束后，你需要重新选择职业。"
+"role.imaginationM.ability.doc" : "<b>想象</b><br>每轮自动使用、可以选择一个职业并获得其职业能力。"
+"role.imaginationM.tips" : "<b>·无职业可选后，你会自杀。</b>"
+
+"role.imaginationM.prefix" : "想象的%ROLE%"
+"role.imaginationM.select" : "选择一个职业进行想象"
 
 
 "role.keymaster.name" : "执钥"

@@ -1,60 +1,31 @@
-﻿using Nebula.Configuration;
-using NebulaN.Roles.Modifier;
+﻿using NebulaN.Roles.Neutral;
 
-namespace NebulaN.Roles.Neutral
+namespace NebulaN.Roles.Modifier
 {
-    public class Imagination : DefinedRoleTemplate, DefinedRole, DefinedAssignable, IAssignableDocument, HasCitation
+    public class ImaginationModifier : DefinedAllocatableModifierTemplate, DefinedAllocatableModifier, IAssignableDocument, HasCitation
     {
-        public static readonly RoleTeam MyTeam = HalfSugarGift.Core.Patch.Team.ImaginationTeam;
-        private static readonly HashSet<DefinedRole> SelectedRoles = new();
-
-        public static HashSet<DefinedRole> GetSelectedRoles()
-        {
-            return SelectedRoles;
-        }
-
-        static IntegerConfiguration ChooseCount = NebulaAPI.Configurations.Configuration(
-            "options.role.imagination.candidateCount", (1, 10), 4);
-
-        public static readonly SimpleRoleFilterConfiguration RoleFilter =
-            new SimpleRoleFilterConfiguration("options.role.imagination.filter")
-            {
-                RolePredicate = r => !r.IsSystemRole &&
-                    (r.Category == RoleCategory.CrewmateRole || r.Category == RoleCategory.ImpostorRole),
-                ScrollerTag = "imagineFilter",
-                InvertOption = true,
-                PreviewOnlySpawnableRoles = false
-            };
-
-        Imagination() : base(
-            "imagination",
-            Cor.ImaginationCor,
-            RoleCategory.NeutralRole,
-            MyTeam,
-            [RoleFilter,ChooseCount]
-        )
-        {
-            ConfigurationHolder!.Illustration = NebulaAPI.AddonAsset.GetResource("BigPic/ImaginationPic.png")?.AsImage(115f);
-        }
+        public static readonly ImaginationModifier MyRole = new();
+        bool DefinedModifier.IsMadmate => false;
+        
+        ImaginationModifier() : base("imaginationM", "iM", Cor.ImaginationCor) { ConfigurationHolder!.Illustration = NebulaAPI.AddonAsset.GetResource("BigPic/ImaginationPic.png")?.AsImage(115f); }
         Image? DefinedAssignable.IconImage => NebulaAPI.AddonAsset.GetResource("Smallicon/MaskedDancerIcon.png")?.AsImage();
-        public static readonly Imagination MyRole = new();
         public Citation Citation => Citations.hvtXsvc_hsg;
-        public static int CandidateCount => ChooseCount;
-        RuntimeRole RuntimeAssignableGenerator<RuntimeRole>.CreateInstance(GamePlayer player, int[] arguments)
+
+        RuntimeModifier RuntimeAssignableGenerator<RuntimeModifier>.CreateInstance(GamePlayer player, int[] arguments)
             => new Instance(player);
+        bool ISpawnable.IsSpawnable => false;
         IEnumerable<AssignableDocumentImage> IAssignableDocument.GetDocumentImages()
         {
             yield return new AssignableDocumentImage(
                 NebulaAPI.AddonAsset.GetResource("imagine.png")?.AsImage(115f),
-                "role.imagination.ability.doc"
+                "role.imaginationM.ability.doc"
             );
         }
         bool IAssignableDocument.HasAbility => true;
         bool IAssignableDocument.HasTips => true;
-        public class Instance : RuntimeAssignableTemplate, RuntimeRole
+        public class Instance : RuntimeAssignableTemplate, RuntimeModifier
         {
-            DefinedRole RuntimeRole.Role => MyRole;
-
+            DefinedModifier RuntimeModifier.Modifier => MyRole;
             public Instance(GamePlayer player) : base(player) { }
 
             void RuntimeAssignable.OnActivated() { }
@@ -78,11 +49,11 @@ namespace NebulaN.Roles.Neutral
                         !selectedRoles.Contains(r)
                     )
                     .OrderBy(_ => Guid.NewGuid())
-                    .Take(CandidateCount)
+                    .Take(Imagination.CandidateCount)
                     .ToList();
                 if (candidateRoles.Count == 0)
                 {
-                    MyPlayer.Suicide(State.Depression,null,KillParameter.NormalKill,null);
+                    MyPlayer.Suicide(State.Depression, null, KillParameter.NormalKill, null);
                 }
                 var tabs = new (string? tab, Predicate<DefinedRole>? predicate)[]
                 {
@@ -105,11 +76,6 @@ namespace NebulaN.Roles.Neutral
                             selectedRole,
                             selectedRole.DefaultAssignableArguments ?? []
                         );
-
-                        MyPlayer.AddModifier(
-                            ImaginationModifier.MyRole,
-                            null
-                        );
                     },
                     ref result,
                     showCloseButton
@@ -124,6 +90,17 @@ namespace NebulaN.Roles.Neutral
                     !MyPlayer.IsDead &&
                     !NebulaGameManager.Instance!.AllPlayerInfo.Any(p => !p.IsDead && p.Role.Role.IsKiller)
                 );
+            }
+            string RuntimeAssignable.OverrideRoleName(string lastRoleName, bool isShort, bool canSeeAllInfo)
+            {
+                if (canSeeAllInfo || AmOwner)
+                {
+                    var currentRole = MyPlayer.Role.Role;
+                    if (currentRole is not Imagination)
+                        return Language.Translate("role.imagination.prefix")
+                            .Replace("%ROLE%", currentRole.DisplayColoredName);
+                }
+                return null;
             }
         }
     }
