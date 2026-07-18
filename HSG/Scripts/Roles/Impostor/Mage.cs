@@ -122,7 +122,7 @@ public class Mage : DefinedRoleTemplate, DefinedRole, HasCitation,
         public Instance(GamePlayer player) : base(player) { }
 
         // 显示带淡入+保持+淡出效果的标题
-        private static void SetTextWithFade(TitleShower? shower, string text, VColor color, float holdDuration = 1f, bool shake = true)
+        private static void SetTextWithFade(TitleShower? shower, string text, Virial.Color color, float holdDuration = 1f, bool shake = true)
         {
             if (shower == null) return;
 
