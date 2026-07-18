@@ -10,7 +10,7 @@ public class Saboteur : DefinedSingleAbilityRoleTemplate<Saboteur.Ability>, HasC
         "options.role.saboteur.killcooldown",
         CoolDownType.Relative,
         (0f, 60f, 2.5f),
-        25f,
+        30f,
         (-40f, 40f, 2.5f),
         +5f,
         (0.125f, 2f, 0.125f),

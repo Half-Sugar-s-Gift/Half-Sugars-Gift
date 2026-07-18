@@ -361,20 +361,32 @@
 "role.turtle.short" : "龟"
 "role.turtle.generalBlurb" : "磨蹭 磨蹭"
 "role.turtle.doc" : "你走的很慢。"
-"options.role.turtle.detail" : "拥有乌龟附加的人走的比较慢</b><b>这是半糖送给你的礼物之一！</b>"
+"options.role.turtle.detail" : "拥有乌龟附加的人走的比较慢<br><b>这是半糖送给你的礼物之一！</b>"
 
 "role.sharpeye.name" : "敏觉"
 "role.sharpeye.short" : "敏"
 "role.sharpeye.generalBlurb" : "我感受到了！"
 "role.sharpeye.doc" : "当有人更换职业时，你将会有闪光提示。"
-"options.role.sharpeye.detail" : "敏觉在有人更换职业时会有提示。</b><b>这是半糖送给你的礼物之一！</b>"
+"options.role.sharpeye.detail" : "敏觉在有人更换职业时会有提示。<br><b>这是半糖送给你的礼物之一！</b>"
 
 "role.rainbowcandy.name" : "彩虹糖"
 "role.rainbowcandy.short" : "彩"
 "role.rainbowcandy.generalBlurb" : "绚烂之色"
 "role.rainbowcandy.doc" : "你的颜色是随机变化的。"
-"options.role.rainbowcandy.detail" : "彩虹糖的颜色会随机变化。</b><b>这是半糖送给你的礼物之一！</b>"
+"options.role.rainbowcandy.detail" : "彩虹糖的颜色会随机变化。<br></b><b>这是半糖送给你的礼物之一！</b>"
 "options.modifier.rainbowcandy.interval" : "变化间隔"
+
+# 幽灵
+
+"role.glimmer.name" : "烁光"
+"role.glimmer.short" : "烁"
+"role.glimmer.blurb" : "零星的光芒"
+"role.glimmer.doc" : "烁光拥有警示技能。可以对其他玩家使用，令其屏幕闪光。"
+"options.role.glimmer.detail" : "烁光可以警示他人。<br></b><b>这是半糖送给你的礼物之一！</b>"
+"options.role.glimmer.uses" : "警示最大使用次数"
+"options.role.glimmer.cooldown" : "警示冷却"
+"options.role.glimmer.flashDuration" : "警示闪光时间"
+"button.label.glimmer.flash" : "警示"
 
 
 
