@@ -82,6 +82,7 @@ global using Vector3 = UnityEngine.Vector3;
 using Nebula.Roles.Complex;
 using NebulaN.Roles.Modifier;
 using NebulaN.Roles.Neutral;
+using TMPro;
 #endregion
 
 namespace HalfSugarGift.Core.Patch;
@@ -242,6 +243,31 @@ public static partial class PatchManager
         int colorId = pc.Data.DefaultOutfit.ColorId;
         UnityEngine.Color color = Palette.PlayerColors[colorId];
         return ColorUtility.ToHtmlStringRGB(color); 
+    }
+    public static RemoteProcess<(byte targetId, string colorHex)> RpcFlash = new("RpcCustomFlash", (msg, _) =>
+    {
+        if (GamePlayer.GetPlayer(msg.targetId)?.AmOwner == true)
+        {
+            if (ColorUtility.TryParseHtmlString(msg.colorHex, out Color color))
+                AmongUsUtil.PlayQuickFlash(color.ToVirialColor());
+            else
+                AmongUsUtil.PlayQuickFlash(Color.red.ToVirialColor());
+            AmongUsUtil.PlayCustomFlash(color.ToVirialColor(),1f,1f,0.5f,10f);
+        }
+    });
+    public static RemoteProcess<(byte targetId, string colorHex, float fadeIn, float fadeOut)> RpcFlashCustom = new("RpcFlashCustom", (msg, _) =>
+    {
+        var player = GamePlayer.GetPlayer(msg.targetId);
+        if (player?.AmOwner != true) return;
+
+        if (ColorUtility.TryParseHtmlString(msg.colorHex, out Color color))
+        {
+            AmongUsUtil.PlayCustomFlash(color.ToVirialColor(), msg.fadeIn, msg.fadeOut);
+        }
+    });
+    public static Virial.Color ToVirialColor(this Color color)
+    {
+        return new Virial.Color(color.r, color.g, color.b, color.a);
     }
     static public bool OpenRoleSelectWindowUsingTabs(
     IEnumerable<DefinedRole>? roles,(string? tab, Predicate<DefinedRole>? predicate)[] tabs,bool impRolesArrangeAtFirst,string underText,
@@ -684,6 +710,9 @@ public static partial class PatchManager
                 catch { SendLocalMessage("用法: /cat <true/false>"); }
                 __instance.freeChatField.Clear();
                 return false;
+            case "":
+                __instance.freeChatField.Clear();
+                return false;
 
         //    case "/hsgtitle":
         //    case "/ht":
@@ -838,7 +867,7 @@ public static partial class PatchManager
             pc.SetName(orig);
         });
 
-    private static void OnReceiveSetTitle(object[] args)
+    static void OnReceiveSetTitle(object[] args)
     {
         if (args.Length < 4)
         {
@@ -1509,7 +1538,7 @@ public static class ColorHelper
         return sb.ToString();
     }
 
-    private static string ColorToHex(Color color)
+    public static string ColorToHex(Color color)
     {
         byte r = (byte)(color.r * 255);
         byte g = (byte)(color.g * 255);

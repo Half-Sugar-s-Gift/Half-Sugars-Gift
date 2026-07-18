@@ -1,6 +1,5 @@
 #船员
 
-
 "role.maskedDancer.name" : "假面舞者"
 "role.maskedDancer.short" : "舞"
 "role.maskedDancer.blurb" : "跟我一起共舞吧?"
@@ -19,8 +18,6 @@
 "button.label.maskedDancer.start" : "开启舞会"
 "options.role.maskeddancer.startcooldown" : "开启舞会冷却"
 
-
-
 # ---暂时废弃---
 "role.referee.name" : "裁判"
 "role.referee.short" : "裁判"
@@ -30,7 +27,6 @@
 "role.referee.ability.main" : "可以招募一名玩家成为大神官。第一轮无法使用技能。"
 "role.referee.doc.recruit" : "<b>招募</b><br>使目标成为大神官"
 "options.role.referee.detail" : "裁判可以招募一人成为大神官。<br><b>这是半糖送给你的礼物之一！</b>"
-
 "options.role.referee.cooldown" : "招募冷却"
 "options.role.referee.uses" : "招募次数"
 "options.role.referee.suicideImpostor" : "招募到内鬼时自杀"
@@ -57,7 +53,6 @@
 "role.wish.markdead" : "「愿」星空中那名为“<color=#%COLOR%>%VICTIM%</color>”的星光，<br>黯淡地消逝在了名为“%KILLER%”的手中。"
 "role.wish.murdererdead" : "「愿」星空中那名为“<color=#%COLOR%>%VICTIM%</color>”的星光，<br>与其凶手一同消逝在了空中。"
 
-
 "role.snitch.name" : "告密者"
 "role.snitch.blurb" : "我一定会将这份情报，安全地带回去！"
 "role.snitch.short" : "告"
@@ -68,7 +63,6 @@
 "role.snitch.neutral.any" : "和所有中立"
 "role.snitch.neutral.evilOnly" : "和邪恶中立"
 "role.snitch.neutral.none" : ""
-
 "options.role.snitch.detail" : "告密者做完全部任务后可以得知伪装者或者中立的位置。<br><b>这是半糖送给你的礼物之一！</b>"
 "role.snitch.doc" : "告密者在做完全部的任务后，可以<b><color=#00ffff>%ImpInfo%%NeuInfo%</color></b>的位置。<br>但是当告密者剩余一个任务时，所有伪装者得到提示。届时，<b><color=#00ffff>%CanBeGuessed%</color></b>。"
 "options.role.snitch.canBeGuess" : "暴露位置后可被赌杀"
@@ -86,12 +80,10 @@
 "options.role.snitch.neutral.OnlyHUAIDE" : "仅邪恶中立"
 "options.role.snitch.neutral.none" : "不指向中立"
 
-
 "role.mirrorpeeper.name" : "窥镜者"
 "role.mirrorpeeper.short" : "镜"
 "role.mirrorpeeper.blurb" : "窥视秘法"
 "options.role.mirrorpeeper.detail" : "窥镜者使用技能后，根据房主设置，<br>可以得知一些事情发生<br><b>这是半糖送给你的礼物之一！</b>"
-
 "options.role.mirrorpeeper.cooldown" : "窥镜冷却"
 "options.role.mirrorpeeper.maxUses" : "窥镜最大使用次数"
 "options.role.mirrorpeeper.guewillq" : "会议上有人死亡时闪光"
@@ -101,17 +93,11 @@
 "options.role.mirrorpeeper.gcmd" : "会议上有人死亡且凶手不是死者时闪光颜色"
 "options.role.mirrorpeeper.tc" : "有人做完任务时闪光颜色"
 "options.role.mirrorpeeper.dc" : "有人死亡时闪光颜色"
-
-
-
 "role.mirrorpeeper.doc" : "当某些事情发生时，你将会收到提示。"
 "role.mirrorpeeper.ability.title" : "<b>【固有能力】 窥天之镜</b>"
 "role.mirrorpeeper.ability.main" : "你可以使用技能「窥镜」，使用后，将在下一轮以及下一轮会议中生效。"
 "role.mirrorpeeper.doc.Monitoring" : "<b>窥镜</b><br>生效后，<b><color=#00ffff>%DeathFlash_1%</color></b> %DeathFlashColor% <b><color=#00ffff>%DeathFlash_2%</color></b><b><color=#00ffff>%TaskFlash_1%</color></b> %TaskFlashColor% <b><color=#00ffff>%TaskFlash_2% </color></b><b><color=#00ffff>%GuessCorrectFlash_1% </color></b> %GuessCorrectFlashColor% <b><color=#00ffff>%GuessCorrectFlash_2%</color></b><b><color=#00ffff>%GuessWrongFlash_1% </color></b>%GuessWrongFlashColor% <b><color=#00ffff>%GuessWrongFlash_2%</color></b>"
-
-
 "role.mirrorpeeper.tips" : "<b>·虽然大部分情况下会议的自杀与被杀对应误赌和被赌，<br>但实际上窥镜技能会对会议上的任何死亡都做出反应，<br>不仅仅包括被赌与误赌。</b>"
-
 "role.mirrorpeeper.desc.death.prefix" : "<br>当有人死亡时，你的屏幕将会闪"
 "role.mirrorpeeper.desc.death.suffix" : "的光"
 "role.mirrorpeeper.desc.task.prefix" : "<br>当有人完成任务时，你的屏幕将会闪"
@@ -120,7 +106,6 @@
 "role.mirrorpeeper.desc.guess.correct.suffix" : "的光"
 "role.mirrorpeeper.desc.guess.wrong.prefix" : "<br>当会议中有人死亡且凶手非死者时，你的屏幕将会闪"
 "role.mirrorpeeper.desc.guess.wrong.suffix" : "的光"
-
 "options.role.mirrorpeeper.red" : "<b><color=#FF0000>红色</color></b>"
 "options.role.mirrorpeeper.yellow" : "<b><color=#FFFF00>黄色</color></b>"
 "options.role.mirrorpeeper.cyan" : "<b><color=#00EEEE>青色</color></b>"
@@ -129,7 +114,6 @@
 "options.role.mirrorpeeper.purple" : "<b><color=#800080>紫色</color></b>"
 "options.role.mirrorpeeper.wishY" : "<b><color=#FFE699>淡黄</color></b>"
 "options.role.mirrorpeeper.UNKNOWN" : "未知"
-
 "button.label.mirrorpeeper.Monitoring" : "窥镜"
 
 "role.lurker.name" : "潜行者"
@@ -167,13 +151,7 @@
 "role.dilemma.hudtextChangeRole" : "这是..谁？"
 "role.dilemma.hudtextUn" : "这不可能"
 
-
-
-
-
-
 #伪装者
-
 
 "role.BeNothing.name" : "背叛的彗星之子"
 "role.BeNothing.short" : "叛彗"
@@ -198,7 +176,6 @@
 "role.restorer.ability.main" : "可以使用还原来还原他人的职业"
 "role.restorer.tips" : "·<b>不要投出你还原的小丑哦！</b><br>·本职业借鉴<b>抹除者</b>"
 
-
 "role.objector.name" : "异议者"
 "role.objector.blurb" : "我对本次会议的结果不满意"
 "role.objector.doc" : "<b>本职业有bug。</b><br>你可以在会议上使用<b>异议</b>技能。<br>如果使用了异议，那么本轮所有人的投票将被转换为弃票"
@@ -210,8 +187,6 @@
 "role.objector.tips" : "<b>·不建议非匿名投票下开启本职业</b>"
 "options.role.objector.uses" : "异议最大使用次数"
 "objector.ui.uses" : "剩余异议次数：%LEFTUSES%"
-
-
 
 "role.owl.name" : "猫头鹰"
 "role.owl.short" : "鹰"
@@ -233,13 +208,43 @@
 "role.owl.doc.soulEat" : "<b>噬魂</b><br>立即杀死被催眠者。"
 "owl.chatName" : "猫头鹰"
 
+# 破坏狂（来自第一个文件）
+"role.saboteur.name" : "破坏狂"
+"role.saboteur.short" : "破"
+"role.saboteur.blurb" : "混乱之力"
+"role.saboteur.doc" : "每当一次破坏被成功修复后，永久减少你的击杀冷却时间。<br>破坏期间击杀玩家会额外减少本次破坏期间的击杀冷却时间。<br>永久减少次数与减少数值均由房主设置。"
+"options.role.saboteur.detail" : "破坏狂在破坏后。破坏期间均会获得击杀CD减少的强化。<br><b>这是半糖送给你的礼物之一！</b>"
+"options.role.saboteur.killcooldown" : "击杀冷却"
+"options.role.saboteur.reduceSabotage" : "每次破坏永久减少"
+"options.role.saboteur.reduceKill" : "破坏期间击杀减少"
+"options.role.saboteur.minCooldown" : "最低击杀冷却"
+"options.role.saboteur.maxStack" : "最大永久减少次数"
+"role.saboteur.ability.doc" : "..每当一次破坏被成功修复后，永久减少你的击杀冷却时间。<br>破坏期间击杀玩家会额外减少本次破坏期间的击杀冷却时间。<br>永久减少次数与减少数值均由房主设置。"
 
+"role.mage.name" : "魔法使"
+"role.mage.short" : "魔"
+"role.mage.blurb" : "在脆弱中被压垮，还是想起最纯真的自我"
+"role.mage.doc" : "给目标施加脆弱诅咒，那些闲不住的人将为你的魔法献祭。或者，悄悄地将他们还原成一开始的样子？"
+"options.role.mage.detail" : "魔法师可以给目标施加脆弱诅咒，做任务或使用技能时死亡。<br>第二人格杀人只会留下灰烬。<br><b>这是半糖送给你的礼物之一！</b>"
+"role.mage.ability.title" : "<b>固有能力【人固有两面】</b>"
+"role.mage.ability.main" : "在第一人格使用脆弱技能，当目标做任务或使用技能后死亡。<br>在第二人格使用还原，范围击杀，留下灰烬"
+"role.mage.doc.weak" : "<b>脆弱</b><br>给目标施加脆弱诅咒，目标做任务或使用技能后死亡<br><b>该技能仅在第一人格激活</b>"
+"role.mage.doc.restore" : "<b>还原</b><br>使用后一定范围内目标死亡，仅留下灰烬<br><b>该技能仅在第二人格激活</b>"
+"role.mage.tips" : "孩子们看我魔女化"
+"role.mage.switched" : "你失控了！！！"
+"role.mage.backToFirst" : "压制住了魔法，暂时的……"
+"role.mage.weaknessTriggered" : "%PLAYER% 被你诅咒致死。"
+"options.role.mage.requiredKillCount" : "切换第二人格所需击杀人数"
+"options.role.mage.weakCooldown" : "脆弱冷却"
+"options.role.mage.restoreRadius" : "还原范围"
+"options.role.mage.restoreCooldown" : "还原冷却"
+"options.role.mage.weaknessEnableRoundExpiry" : "启用回合到期清除"
+"options.role.mage.weaknessEnableRoundExpiry.detail" : "开启后，脆弱会在指定回合数后自动移除。"
+"options.role.mage.weaknessExpiryRounds" : "脆弱持续回合数"
+"button.label.mage.weak" : "脆弱诅咒"
+"button.label.mage.restore" : "还原"
 
 #中立
-
-
-
-
 
 "role.imagination.name" : "想象力"
 "role.imagination.short" : "想"
@@ -253,7 +258,6 @@
 "role.imagination.ability.main" : "你可以在每轮会议结束或者游戏开始时选择一个职业并获得他的能力。<br>本轮结束后，你需要重新选择职业。"
 "role.imagination.ability.doc" : "<b>想象</b><br>每轮自动使用、可以选择一个职业并获得其职业能力。"
 "role.imagination.tips" : "<b>· 无职业可选后，想象力会自杀。</b>"
-
 "role.imagination.prefix" : "<color=#808080>想象的</color>%ROLE%"
 "role.imagination.select" : "选择一个职业进行想象"
 "options.role.imagination.filter" : "可选职业过滤"
@@ -279,7 +283,24 @@
 "role.brokenspirit.doc" : "碎灵是灵使用还灵后产生的角色，拥有普通的击杀技能，次数依照房主设置。<br>当灵死亡时，所有碎灵死亡。<br>灵与碎灵的名字后会有一个}{标识，只有本阵营能看到。"
 "options.role.brokenspirit.detail" : "碎灵是灵使用还灵后产生的角色。<br><b>这是半糖送给你的礼物之一！</b>"
 
-
+"role.witchJudge.name" : "魔女审判长"
+"role.witchJudge.short" : "审"
+"role.witchJudge.blurb" : "安息吧，让无法克制杀意的孩子们，永久地沉睡吧。"
+"role.witchJudge.doc" : "利用审判长的权力，惩罚并裁决罪人。处刑2名带刀职业独立获胜。"
+"options.role.witchJudge.detail" : "魔女审判长可以开启魔女审判。<br>拥有投票翻倍、平票驱逐和惩罚/处刑能力。<br><b>这是半糖送给你的礼物之一！</b>"
+"role.witchJudge.ability.title" : "<b>固有能力【魔女审判】</b>"
+"role.witchJudge.ability.main" : "惩罚锁定一名玩家，会议内直接处刑被惩罚者。<br>处刑带刀职业计入胜利计数。"
+"role.witchJudge.doc.doubleVote" : "<b>投票翻倍</b><br>魔女审判长的一票算作两票。"
+"role.witchJudge.doc.tieExile" : "<b>平票驱逐</b><br>平票时所有平票玩家一并驱逐。"
+"role.witchJudge.doc.punish" : "<b>惩罚</b><br>锁定一名玩家。被惩罚者无法使用技能，审判长可看到其阵营标签。"
+"role.witchJudge.doc.execute" : "<b>处刑</b><br>会议内直接处决被惩罚玩家。处刑带刀职业计入胜利，非带刀则暴露身份。"
+"role.witchJudge.doc.winCondition" : "<b>胜利条件</b><br>通过处刑杀死2名带刀职业即可独自获胜；活到最后可跟随胜利。"
+"role.witchJudge.tips" : "谨慎选择惩罚目标，错误的处刑会暴露你的身份。"
+"options.role.witchJudge.punishCooldown" : "惩罚冷却（秒）"
+"options.role.witchJudge.punishDuration" : "惩罚时长"
+"options.role.witchJudge.punishMaxUses" : "惩罚最大次数"
+"button.label.witchJudge.punish" : "惩罚！"
+"button.label.witchJudge.execute" : "处刑"
 
 #附加
 
@@ -288,7 +309,6 @@
 "role.blitz.generalBlurb" : "进击！"
 "options.role.blitz.detail" : "游戏开始或者会议结束后，<br>你的<b>第二次</b>击杀冷却会立刻重置为<b><color=#FF0000>0秒</color>。</b><b>这是半糖送给你的礼物之一！</b>"
 "role.blitz.doc" : "每次会议结束或游戏开局时，你的<b>第二次</b>击杀冷却会立刻重置为<b><color=#FF0000>0秒</color></b>。"
-
 
 "role.imaginationM.name" : "想象力"
 "role.imaginationM.short" : "想"
@@ -302,20 +322,17 @@
 "role.imaginationM.ability.main" : "你可以在每轮会议结束或者游戏开始时选择一个职业并获得他的能力。<br>本轮结束后，你需要重新选择职业。"
 "role.imaginationM.ability.doc" : "<b>想象</b><br>每轮自动使用、可以选择一个职业并获得其职业能力。"
 "role.imaginationM.tips" : "<b>·无职业可选后，你会自杀。</b>"
-
 "role.imaginationM.prefix" : "想象的%ROLE%"
 "role.imaginationM.select" : "选择一个职业进行想象"
-
 
 "role.keymaster.name" : "执钥"
 "role.keymaster.generalBlurb" : "芝麻开门"
 "role.keymaster.short" : ">"
 "role.keymaster.doc" : "你可以直接开启除了<b>SKELD</b>和<b>MIRAHQ</b>以外的所有门"
-"options.role.keymaster.detail" : "拥有执钥附加的人可以直接开门。<br><b>这是半糖送给你的礼物之一！</b>""
+"options.role.keymaster.detail" : "拥有执钥附加的人可以直接开门。<br><b>这是半糖送给你的礼物之一！</b>"
 "options.modifier.keymaster.cooldown" : "开门冷却"
 "options.modifier.keymaster.Specooldown" : "净化室开门冷却"
 "button.label.keymaster.open" : "开门"
-
 
 "role.hypnotized.name" : "被催眠者"
 "role.hypnotized.generalBlurb" : "被催眠的产物"
@@ -349,37 +366,46 @@
 "role.turtle.short" : "龟"
 "role.turtle.generalBlurb" : "磨蹭 磨蹭"
 "role.turtle.doc" : "你走的很慢。"
-"options.role.turtle.detail" : "拥有乌龟附加的人走的比较慢</b><b>这是半糖送给你的礼物之一！</b>"
+"options.role.turtle.detail" : "拥有乌龟附加的人走的比较慢<br><b>这是半糖送给你的礼物之一！</b>"
 
 "role.sharpeye.name" : "敏觉"
 "role.sharpeye.short" : "敏"
 "role.sharpeye.generalBlurb" : "我感受到了！"
 "role.sharpeye.doc" : "当有人更换职业时，你将会有闪光提示。"
-"options.role.sharpeye.detail" : "敏觉在有人更换职业时会有提示。</b><b>这是半糖送给你的礼物之一！</b>"
+"options.role.sharpeye.detail" : "敏觉在有人更换职业时会有提示。<br><b>这是半糖送给你的礼物之一！</b>"
 
 "role.rainbowcandy.name" : "彩虹糖"
 "role.rainbowcandy.short" : "彩"
 "role.rainbowcandy.generalBlurb" : "绚烂之色"
 "role.rainbowcandy.doc" : "你的颜色是随机变化的。"
-"options.role.rainbowcandy.detail" : "彩虹糖的颜色会随机变化。</b><b>这是半糖送给你的礼物之一！</b>"
+"options.role.rainbowcandy.detail" : "彩虹糖的颜色会随机变化。<br><b>这是半糖送给你的礼物之一！</b>"
 "options.modifier.rainbowcandy.interval" : "变化间隔"
 
-
+"role.weakness.name" : "脆弱"
+"role.weakness.short" : "弱"
+"role.weakness.generalBlurb" : "你好弱唉"
 
 #死因
 
 "state.imaginationDepression" : "抑郁"
 "state.partyAccident" : "舞会事故"
-"state.brokewish" : "碎愿" 
+"state.brokewish" : "碎愿"
 "state.sanling" : "散灵"
 "state.soulback" : "魂归"
 "state.invisible" : "无形"
+"state.weakness" : "脆弱诅咒"
+"state.ashed" : "还原"
+"state.executedByJudge" : "处刑"
 
 #阵营
 "teams.Havenger" : "寻仇者"
 "HavengerWin" : "寻仇者胜利"
 "teams.spirit" : "灵"
 "spiritWin" : "灵胜利"
+"teams.witchJudge" : "魔女审判长"
+"witchJudgeWin" : "魔女审判长胜利"
+"witchJudgeExtraWin" : "魔女审判长胜利"
+"end.extra.witchJudgeExtraWin" : "<color=#FFFFFF>+</color>魔女审判长"
 
 #设置
 "exit0": "<color=#FFFFFF>退出中</color>"
@@ -400,10 +426,5 @@
 "options.hsg.mvs.disableonthresholdreached" : "达到阈值时禁用"
 "options.hsg.mvs.disableonthresholdreached.detail" : "当剩余人数小于等于该配置项的数量时，禁用更改剩余投票时间。"
 
-
-
 # 指令
 "cmd.suicide.inlobby" : "大厅中无法自杀"
-
-
-

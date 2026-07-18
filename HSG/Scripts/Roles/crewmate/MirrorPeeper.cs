@@ -158,7 +158,7 @@
                 Monitoring = NebulaAPI.Modules.AbilityButton(
                     this,
                     MyPlayer,
-                    Virial.Compat.VirtualKeyInput.Ability,
+                    VirtualKeyInput.Ability,
                     Cooldown,
                     "mirrorpeeper.Monitoring",
                     MonitoringImage,

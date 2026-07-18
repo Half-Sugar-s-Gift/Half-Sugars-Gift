@@ -23,7 +23,7 @@ public class MaskedDancer : DefinedRoleTemplate, HasCitation, DefinedRole,
     {
        ConfigurationHolder!.Illustration = NebulaAPI.AddonAsset.GetResource("BigPic/MaskedDancer.png")?.AsImage(115f);
     }
-    Virial.Media.Image? DefinedAssignable.IconImage => NebulaAPI.AddonAsset.GetResource("Smallicon/MaskedDancerIcon.png")?.AsImage();
+    Image? DefinedAssignable.IconImage => NebulaAPI.AddonAsset.GetResource("Smallicon/MaskedDancerIcon.png")?.AsImage();
 
     Citation? HasCitation.Citation => Citations.hvtXsvc_hsg;
 
@@ -86,7 +86,7 @@ public class MaskedDancer : DefinedRoleTemplate, HasCitation, DefinedRole,
             Image inviteIcon = NebulaAPI.AddonAsset.GetResource("MaskedDancerInvite.png")?.AsImage(100f);
             Image startIcon = NebulaAPI.AddonAsset.GetResource("MaskedDancerStart.png")?.AsImage(100f);
 
-            var playerTracker = NebulaAPI.Modules.PlayerTracker(this, MyPlayer);
+            var playerTracker = NebulaAPI.Modules.PlayerTracker(this,MyPlayer);
             playerTracker.SetColor(MyRole.RoleColor);
             var invite = NebulaAPI.Modules.AbilityButton(
                 this, MyPlayer, VirtualKeyInput.Ability, 0f,
@@ -105,7 +105,6 @@ public class MaskedDancer : DefinedRoleTemplate, HasCitation, DefinedRole,
                 if (targetLike == null) return;
                 var invitedPlayer = targetLike.RealPlayer;
                 if (InvitePlayers.Contains(invitedPlayer)) return;
-
                 InvitePlayers.Add(invitedPlayer);
                 PlayerControl pc = null;
                 foreach (var p in PlayerControl.AllPlayerControls)
