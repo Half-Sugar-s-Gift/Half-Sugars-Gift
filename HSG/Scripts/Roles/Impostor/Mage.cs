@@ -121,6 +121,53 @@ public class Mage : DefinedRoleTemplate, DefinedRole, HasCitation,
 
         public Instance(GamePlayer player) : base(player) { }
 
+        // 显示带淡入+保持+淡出效果的标题
+        private static void SetTextWithFade(TitleShower? shower, string text, VColor color, float holdDuration = 1f, bool shake = true)
+        {
+            if (shower == null) return;
+
+            const float fadeInDuration = 0.3f;
+            float fadeInTimer = fadeInDuration;
+            float holdTimer = holdDuration;
+            float fadeOutAlpha = 1f;
+            float shakeTimer = 0f;
+
+            shower.SetText(text, color, new TitleTrait(s =>
+            {
+                var dt = Time.deltaTime;
+
+                // 抖动效果
+                if (shake)
+                {
+                    shakeTimer -= dt;
+                    if (shakeTimer < 0f)
+                    {
+                        shakeTimer = 0.08f;
+                        s.Transform.localPosition = new(
+                            ((float)System.Random.Shared.NextDouble() - 0.5f) * 0.06f,
+                            ((float)System.Random.Shared.NextDouble() - 0.5f) * 0.06f);
+                    }
+                }
+
+                // 透明度动画：淡入 → 保持 → 淡出
+                if (fadeInTimer > 0f)
+                {
+                    fadeInTimer -= dt;
+                    s.SetTextAlpha(Mathn.Clamp01(1f - fadeInTimer / fadeInDuration));
+                }
+                else if (holdTimer > 0f)
+                {
+                    holdTimer -= dt;
+                    s.SetTextAlpha(1f);
+                }
+                else
+                {
+                    fadeOutAlpha -= dt * 0.5f;
+                    s.SetTextAlpha(Mathn.Clamp01(fadeOutAlpha));
+                }
+            }));
+        }
+
         void RuntimeAssignable.OnActivated()
         {
             if (!AmOwner) return;
@@ -188,9 +235,8 @@ public class Mage : DefinedRoleTemplate, DefinedRole, HasCitation,
             _weakenedPlayerIds.Clear();
             if (_weakButton != null)
                 _weakButton.UpdateUsesIcon(_weakUsesLeft.ToString());
-            // 临时使用 TitleShower 显示提示
-            var title = NebulaAPI.CurrentGame?.GetModule<TitleShower>();
-            title?.SetText(Language.Translate("role.mage.backToFirst"), Cor.impRed, 3f, true);
+            SetTextWithFade(NebulaAPI.CurrentGame?.GetModule<TitleShower>(),
+                Language.Translate("role.mage.backToFirst"), Cor.impRed);
         }
 
         // === 还原 RPC（仅房主执行） ===
@@ -223,11 +269,10 @@ public class Mage : DefinedRoleTemplate, DefinedRole, HasCitation,
             if (_weakenedPlayerIds.Contains(ev.Player.PlayerId))
             {
                 // 临时使用 TitleShower 显示提示
-                var title = NebulaAPI.CurrentGame?.GetModule<TitleShower>();
-                title?.SetText(
+                SetTextWithFade(NebulaAPI.CurrentGame?.GetModule<TitleShower>(),
                     Language.Translate("role.mage.weaknessTriggered")
                         .Replace("%PLAYER%", ev.Player.Name),
-                    Cor.impRed, 3f, true);
+                    Cor.impRed);
             }
 
             // 第二人格不受影响
@@ -251,8 +296,8 @@ public class Mage : DefinedRoleTemplate, DefinedRole, HasCitation,
                     }
                 }
                 // 临时使用 TitleShower 显示提示
-                var title = NebulaAPI.CurrentGame?.GetModule<TitleShower>();
-                title?.SetText(Language.Translate("role.mage.switched"), Cor.impRed, 3f, true);
+                SetTextWithFade(NebulaAPI.CurrentGame?.GetModule<TitleShower>(),
+                    Language.Translate("role.mage.switched"), Cor.impRed);
             }
         }
 
