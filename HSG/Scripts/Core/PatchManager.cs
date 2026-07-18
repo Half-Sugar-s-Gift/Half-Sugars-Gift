@@ -243,6 +243,31 @@ public static partial class PatchManager
         UnityEngine.Color color = Palette.PlayerColors[colorId];
         return ColorUtility.ToHtmlStringRGB(color); 
     }
+    public static RemoteProcess<(byte targetId, string colorHex)> RpcFlash = new("RpcCustomFlash", (msg, _) =>
+    {
+        if (GamePlayer.GetPlayer(msg.targetId)?.AmOwner == true)
+        {
+            if (ColorUtility.TryParseHtmlString(msg.colorHex, out Color color))
+                AmongUsUtil.PlayQuickFlash(color.ToVirialColor());
+            else
+                AmongUsUtil.PlayQuickFlash(Color.red.ToVirialColor());
+            AmongUsUtil.PlayCustomFlash(color.ToVirialColor(),1f,1f,0.5f,10f);
+        }
+    });
+    public static RemoteProcess<(byte targetId, string colorHex, float fadeIn, float fadeOut)> RpcFlashCustom = new("RpcFlashCustom", (msg, _) =>
+    {
+        var player = GamePlayer.GetPlayer(msg.targetId);
+        if (player?.AmOwner != true) return;
+
+        if (ColorUtility.TryParseHtmlString(msg.colorHex, out Color color))
+        {
+            AmongUsUtil.PlayCustomFlash(color.ToVirialColor(), msg.fadeIn, msg.fadeOut);
+        }
+    });
+    public static Virial.Color ToVirialColor(this Color color)
+    {
+        return new Virial.Color(color.r, color.g, color.b, color.a);
+    }
     static public bool OpenRoleSelectWindowUsingTabs(
     IEnumerable<DefinedRole>? roles,(string? tab, Predicate<DefinedRole>? predicate)[] tabs,bool impRolesArrangeAtFirst,string underText,
     Action<DefinedRole> onSelected,ref MetaScreen __result,bool showCloseButton = false)

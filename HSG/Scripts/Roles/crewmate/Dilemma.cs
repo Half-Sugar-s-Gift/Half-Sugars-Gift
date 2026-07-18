@@ -110,7 +110,6 @@ public class Dilemma : DefinedRoleTemplate, DefinedRole, RuntimeAssignableGenera
                 case 1:
                     AmongUsUtil.PlayQuickFlash(Cor.Yellow);
                     MyPlayer.RequestEmergencyMeeting(true,false);
-                    Title?.SetText(Language.Translate("role.dilemma.hudtextEmergencyMeeting"),Cor.impRed, 1.5f, true);
                     break;
                 case 2:
                     var impostors = GamePlayer.AllPlayers.Where(p => p.IsImpostor && !p.IsDead).ToList();
