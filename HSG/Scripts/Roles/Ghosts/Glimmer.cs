@@ -1,5 +1,4 @@
-﻿using Nebula.Roles.Ghost;
-
+﻿
 namespace NebulaN.Roles.Ghost;
 
 public class Glimmer : DefinedGhostRoleTemplate, DefinedGhostRole,HasCitation
