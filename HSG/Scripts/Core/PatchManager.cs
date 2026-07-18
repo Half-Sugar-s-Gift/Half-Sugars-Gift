@@ -100,8 +100,9 @@ static public class Cor
     static public Virial.Color SpiritCor = new(0f, 0.1f, 0.4f);
     static public Virial.Color MPCor = new(0.902f, 0.902f, 1f);
     static public Virial.Color Yellow = new(1f, 1f, 0f);
-    static public Virial.Color LurkerCor = new(0.8f,0,0);
-    static public Virial.Color ImaginationCor = new(128,128,128);
+    static public Virial.Color LurkerCor = new(0.8f, 0, 0);
+    static public Virial.Color PurpleWitchJudge = new(0.45f, 0.1f, 0.55f);
+    static public Virial.Color ImaginationCor = new(128, 128, 128);
 }
 public class State
 {
@@ -129,6 +130,10 @@ public class State
     /// 死因：无形
     /// </summary>
     public static TranslatableTag INVISIBLE = new TranslatableTag("state.invisible");
+    /// <summary>
+    /// 死因：审判长处刑
+    /// </summary>
+    public static TranslatableTag ExecutedByJudge = new TranslatableTag("state.executedByJudge");
 }
 public static class Team
 {
@@ -137,8 +142,14 @@ public static class Team
     /// </summary>
     public static readonly RoleTeam SpiritTeam = NebulaAPI.Preprocessor.CreateTeam("teams.spirit", new Virial.Color(0f, 0.1f, 0.4f), 0);
     public static readonly GameEnd SpiritWin = NebulaAPI.Preprocessor.CreateEnd("spiritWin", SpiritTeam.Color, 100);
-    public static readonly RoleTeam ImaginationTeam = NebulaAPI.Preprocessor!.CreateTeam( "teams.imagination",new Virial.Color(128,128,128),TeamRevealType.OnlyMe);
-    public static readonly GameEnd ImaginationWin = NebulaAPI.Preprocessor!.CreateEnd("imaginationWin", ImaginationTeam.Color );
+    /// <summary>
+    /// 魔女审判长阵营
+    /// </summary>
+    public static readonly RoleTeam WitchJudgeTeam = NebulaAPI.Preprocessor.CreateTeam("teams.witchJudge", new Virial.Color(0.45f, 0.1f, 0.55f), 0);
+    public static readonly GameEnd WitchJudgeWin = NebulaAPI.Preprocessor.CreateEnd("witchJudgeWin", WitchJudgeTeam.Color, 100);
+    public static readonly ExtraWin ExtraWitchJudgeWin = NebulaAPI.Preprocessor.CreateExtraWin("witchJudgeExtraWin", WitchJudgeTeam.Color);
+    public static readonly RoleTeam ImaginationTeam = NebulaAPI.Preprocessor!.CreateTeam("teams.imagination", new Virial.Color(128, 128, 128), TeamRevealType.OnlyMe);
+    public static readonly GameEnd ImaginationWin = NebulaAPI.Preprocessor!.CreateEnd("imaginationWin", ImaginationTeam.Color);
 
 }
 #endregion
@@ -154,7 +165,7 @@ public static partial class PatchManager
     public static readonly IConfigurationHolder RandomEvents = NebulaAPI.Configurations.Holder(
         NebulaAPI.GUI.LocalizedTextComponent(""),
         NebulaAPI.GUI.LocalizedTextComponent(""),
-        new[] {ConfigurationTab.Settings},
+        new[] { ConfigurationTab.Settings },
         GameModes.AllGameModes
         );
     public static RemoteProcess<byte> RpcPlayMeetingDeath = new("PlayMeetingDeath", (victimId, _) =>
@@ -195,7 +206,7 @@ public static partial class PatchManager
         RandomEvents.AppendConfiguration(RandomEventSettings.RandomEventsTimesEveryGame);
         HsgDebug.Log("随机事件配置加载");
     }
-    
+
     static IEnumerator CoMeetingDeath(GamePlayer victim)
     {
         var hud = MeetingHud.Instance;
@@ -242,8 +253,30 @@ public static partial class PatchManager
 
         int colorId = pc.Data.DefaultOutfit.ColorId;
         UnityEngine.Color color = Palette.PlayerColors[colorId];
-        return ColorUtility.ToHtmlStringRGB(color); 
+        return ColorUtility.ToHtmlStringRGB(color);
     }
+    /// <summary>
+    /// 获取玩家当前颜色的本地化名称
+    /// </summary>
+    public static string GetPlayerColorName(GamePlayer player)
+    {
+        var pc = player.VanillaPlayer;
+        if (pc == null) return "白色";
+
+        int colorId = pc.Data.DefaultOutfit.ColorId;
+        try
+        {
+            var names = Palette.ColorNames;
+            if (names != null && colorId >= 0 && colorId < names.Length)
+            {
+                var name = DestroyableSingleton<TranslationController>.Instance.GetString(names[colorId]);
+                if (!string.IsNullOrEmpty(name)) return name;
+            }
+        }
+        catch { }
+        return $"玩家{colorId}";
+    }
+
     public static RemoteProcess<(byte targetId, string colorHex)> RpcFlash = new("RpcCustomFlash", (msg, _) =>
     {
         if (GamePlayer.GetPlayer(msg.targetId)?.AmOwner == true)
@@ -252,7 +285,7 @@ public static partial class PatchManager
                 AmongUsUtil.PlayQuickFlash(color.ToVirialColor());
             else
                 AmongUsUtil.PlayQuickFlash(Color.red.ToVirialColor());
-            AmongUsUtil.PlayCustomFlash(color.ToVirialColor(),1f,1f,0.5f,10f);
+            AmongUsUtil.PlayCustomFlash(color.ToVirialColor(), 1f, 1f, 0.5f, 10f);
         }
     });
     public static RemoteProcess<(byte targetId, string colorHex, float fadeIn, float fadeOut)> RpcFlashCustom = new("RpcFlashCustom", (msg, _) =>
@@ -270,14 +303,14 @@ public static partial class PatchManager
         return new Virial.Color(color.r, color.g, color.b, color.a);
     }
     static public bool OpenRoleSelectWindowUsingTabs(
-    IEnumerable<DefinedRole>? roles,(string? tab, Predicate<DefinedRole>? predicate)[] tabs,bool impRolesArrangeAtFirst,string underText,
-    Action<DefinedRole> onSelected,ref MetaScreen __result,bool showCloseButton = false)
+    IEnumerable<DefinedRole>? roles, (string? tab, Predicate<DefinedRole>? predicate)[] tabs, bool impRolesArrangeAtFirst, string underText,
+    Action<DefinedRole> onSelected, ref MetaScreen __result, bool showCloseButton = false)
     {
         var window = MetaScreen.GenerateWindow(
             new(7.6f, 4.2f),
             HudManager.Instance.transform,
             new Vector3(0, 0, -50f),
-            true,false,withCloseButton:showCloseButton
+            true, false, withCloseButton: showCloseButton
         );
 
         MetaWidgetOld widget = new();
@@ -442,6 +475,23 @@ public static partial class PatchManager
         pc.SetName("System");
         HudManager.Instance.Chat.AddChat(pc, msg);
         pc.SetName(orig);
+    }
+
+    public static void SendLocalNotification(string msg)
+    {
+        var notifier = HudManager.Instance.Notifier;
+        var newMessage = GameObject.Instantiate<LobbyNotificationMessage>(
+            notifier.notificationMessageOrigin,
+            Vector3.zero, Quaternion.identity, notifier.transform);
+        newMessage.transform.localPosition = new Vector3(0f, 0f, -2f);
+        newMessage.SetUp(msg,
+            notifier.settingsChangeSprite,
+            notifier.settingsChangeColor,
+            (Action)(() => notifier.OnMessageDestroy(newMessage)));
+        notifier.ShiftMessages();
+        notifier.AddMessageToQueue(newMessage);
+        AmongUsLLImpl.SoundManagerInstance.PlaySoundImmediate(
+            notifier.settingsChangeSound, false, 1f, 1f, null);
     }
 
     public static bool SendNormalMessage(string msg)
@@ -714,67 +764,67 @@ public static partial class PatchManager
                 __instance.freeChatField.Clear();
                 return false;
 
-        //    case "/hsgtitle":
-        //    case "/ht":
-        //        EnsureTitleEventSubscribed();
+                //    case "/hsgtitle":
+                //    case "/ht":
+                //        EnsureTitleEventSubscribed();
 
-        //        __instance.freeChatField.Clear();
-        //        if (parts.Length < 2)
-        //        {
-        //            SendLocalMessage("用法错误");
-        //            return false;
-        //        }
-        //        string scmd = parts[1].ToLower();
-        //        switch (scmd)
-        //        {
-        //            case "help":
-        //                ShowTitleHelp();
-        //                break;
+                //        __instance.freeChatField.Clear();
+                //        if (parts.Length < 2)
+                //        {
+                //            SendLocalMessage("用法错误");
+                //            return false;
+                //        }
+                //        string scmd = parts[1].ToLower();
+                //        switch (scmd)
+                //        {
+                //            case "help":
+                //                ShowTitleHelp();
+                //                break;
 
-        //            case "list":
-        //                NebulaManager.Instance.StartCoroutine(CoListTitles());
-        //                break;
+                //            case "list":
+                //                NebulaManager.Instance.StartCoroutine(CoListTitles());
+                //                break;
 
-        //            case "set":
-        //            case "create":
-        //            case "change":
-        //            case "del":
-        //                if (!CanManageTitles(PlayerControl.LocalPlayer))
-        //                {
-        //                    SendLocalMessage("权限不足");
-        //                    return false;
-        //                }
-        //                if (scmd == "set")
-        //                {
-        //                    if (parts.Length < 3) { SendLocalMessage("用法错误"); break; }
-        //                    if (!int.TryParse(parts[2], out int sid)) { SendLocalMessage("用法错误"); break; }
-        //                    CoSetTitle(sid);
-        //                }
-        //                else if (scmd == "create")
-        //                {
-        //                    HandleCreateTitle(parts);
-        //                }
-        //                else if (scmd == "change")
-        //                {
-        //                    if (parts.Length < 4) { SendLocalMessage("用法错误"); break; }
-        //                    if (!int.TryParse(parts[2], out int cid)) { SendLocalMessage("用法错误"); break; }
-        //                    string newType = string.Join(" ", parts.Skip(3));
-        //                    NebulaManager.Instance.StartCoroutine(CoChangeTitle(cid, newType));
-        //                }
-        //                else if (scmd == "del")
-        //                {
-        //                    if (parts.Length < 3) { SendLocalMessage("用法错误"); break; }
-        //                    if (!int.TryParse(parts[2], out int did)) { SendLocalMessage("用法错误"); break; }
-        //                    if (did == 0) { SendLocalMessage("不能删除 ID 0（不佩戴）"); break; }
-        //                    NebulaManager.Instance.StartCoroutine(CoDeleteTitle(did));
-        //                }
-        //                break;
+                //            case "set":
+                //            case "create":
+                //            case "change":
+                //            case "del":
+                //                if (!CanManageTitles(PlayerControl.LocalPlayer))
+                //                {
+                //                    SendLocalMessage("权限不足");
+                //                    return false;
+                //                }
+                //                if (scmd == "set")
+                //                {
+                //                    if (parts.Length < 3) { SendLocalMessage("用法错误"); break; }
+                //                    if (!int.TryParse(parts[2], out int sid)) { SendLocalMessage("用法错误"); break; }
+                //                    CoSetTitle(sid);
+                //                }
+                //                else if (scmd == "create")
+                //                {
+                //                    HandleCreateTitle(parts);
+                //                }
+                //                else if (scmd == "change")
+                //                {
+                //                    if (parts.Length < 4) { SendLocalMessage("用法错误"); break; }
+                //                    if (!int.TryParse(parts[2], out int cid)) { SendLocalMessage("用法错误"); break; }
+                //                    string newType = string.Join(" ", parts.Skip(3));
+                //                    NebulaManager.Instance.StartCoroutine(CoChangeTitle(cid, newType));
+                //                }
+                //                else if (scmd == "del")
+                //                {
+                //                    if (parts.Length < 3) { SendLocalMessage("用法错误"); break; }
+                //                    if (!int.TryParse(parts[2], out int did)) { SendLocalMessage("用法错误"); break; }
+                //                    if (did == 0) { SendLocalMessage("不能删除 ID 0（不佩戴）"); break; }
+                //                    NebulaManager.Instance.StartCoroutine(CoDeleteTitle(did));
+                //                }
+                //                break;
 
-        //            default:
-        //                SendLocalMessage($"未知子命令: {scmd}");
-        //                break;
-        //        }
-        //return false;
+                //            default:
+                //                SendLocalMessage($"未知子命令: {scmd}");
+                //                break;
+                //        }
+                //return false;
         }
         return true;
     }
