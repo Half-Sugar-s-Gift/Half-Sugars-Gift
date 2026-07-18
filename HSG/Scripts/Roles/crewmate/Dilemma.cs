@@ -1,7 +1,4 @@
 ﻿
-using Il2CppSystem.Drawing;
-using Virial.Events.Lobby;
-
 namespace NebulaN.Roles.Crewmate;
 
 public class Dilemma : DefinedRoleTemplate, DefinedRole, RuntimeAssignableGenerator<RuntimeRole>, IAssignableDocument, HasCitation
