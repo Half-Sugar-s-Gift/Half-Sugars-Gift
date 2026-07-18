@@ -239,7 +239,6 @@
 "role.mage.blurb" : "在脆弱中被压垮，还是想起最纯真的自我"
 "role.mage.doc" : "给目标施加脆弱诅咒，那些闲不住的人将为你的魔法献祭。或者，悄悄地将他们还原成一开始的样子？"
 "options.role.mage.detail" : "魔法师可以给目标施加脆弱诅咒，做任务或使用技能时死亡。<br>第二人格杀人只会留下灰烬。<br><b>这是半糖送给你的礼物之一！</b>"
-
 "role.mage.ability.title" : "<b>固有能力【人固有两面】</b>"
 "role.mage.ability.main" : "在第一人格使用脆弱技能，当目标做任务或使用技能后死亡。<br>在第二人格使用还原，范围击杀，留下灰烬"
 "role.mage.doc.weak" : "<b>脆弱</b><br>给目标施加脆弱诅咒，目标做任务或使用技能后死亡<br><b>该技能仅在第一人格激活</b>"
@@ -248,7 +247,7 @@
 "role.mage.switched" : "你失控了！！！"
 "role.mage.backToFirst" : "压制住了魔法，暂时的……"
 "role.mage.weaknessTriggered" : "%PLAYER% 被你诅咒致死。"
-"options.role.mage.requiredKillCount" : "切换人格所需击杀人数"
+"options.role.mage.requiredKillCount" : "切换第二人格所需击杀人数"
 "options.role.mage.weakCooldown" : "脆弱冷却"
 "options.role.mage.restoreRadius" : "还原范围"
 "options.role.mage.restoreCooldown" : "还原冷却"

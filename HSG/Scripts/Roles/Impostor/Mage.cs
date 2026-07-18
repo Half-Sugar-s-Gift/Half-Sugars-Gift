@@ -7,20 +7,22 @@ namespace HalfSugarGift.Roles.Impostor;
 
 /// <summary>
 /// 魔法师，内鬼阵营。
-/// 第一人格给N个目标施加脆弱，等N人死亡，切换第二人格， 使用还原，回归第一人格
-/// 均不具备普通击杀能力。
+/// 第一人格给目标施加脆弱，全死了切换第二人格， 还原范围攻击，回第一人格
+/// 不具备普通击杀能力。
 /// </summary>
+
 public class Mage : DefinedRoleTemplate, DefinedRole, HasCitation,
     RuntimeAssignableGenerator<RuntimeRole>, IAssignableDocument
 {
-    // 脆弱技能配置
+    // 切换第二人格所需击杀人数
     static IntegerConfiguration RequiredKillCount = NebulaAPI.Configurations.Configuration(
-        "options.role.mage.requiredKillCount", (1, 5, 1), 3
+        "options.role.mage.requiredKillCount", (1, 5, 1), 2
     );
+    // 脆弱技能冷却
     static FloatConfiguration WeakCooldown = NebulaAPI.Configurations.Configuration(
         "options.role.mage.weakCooldown", (5f, 60f, 1f), 20f, FloatConfigurationDecorator.Second
     );
-    // 还原技能范围（带 x 单位）
+    // 还原技能范围
     static FloatConfiguration RestoreRadius = NebulaAPI.Configurations.Configuration(
         "options.role.mage.restoreRadius", (0.5f, 3f, 0.1f), 1.5f,
         decorator: val => val + "x"
@@ -29,7 +31,7 @@ public class Mage : DefinedRoleTemplate, DefinedRole, HasCitation,
     static FloatConfiguration RestoreCooldown = NebulaAPI.Configurations.Configuration(
         "options.role.mage.restoreCooldown", (5f, 60f, 1f), 20f, FloatConfigurationDecorator.Second
     );
-    // 脆弱到期清除配置（从 Weakness 迁移至此）
+    // 脆弱到期清除配置
     internal static BoolConfiguration WeaknessEnableRoundExpiry = NebulaAPI.Configurations.Configuration(
         "options.role.mage.weaknessEnableRoundExpiry", false
     );
@@ -135,8 +137,8 @@ public class Mage : DefinedRoleTemplate, DefinedRole, HasCitation,
                 this, MyPlayer,
                 VirtualKeyInput.Ability,
                 WeakCooldown,
-                    "mage.weak",
-                    WeakButtonIcon,
+                "mage.weak",
+                WeakButtonIcon,
                 _ => _weakUsesLeft > 0 && MyPlayer.CanMove
                     && tracker.CurrentTarget != null && tracker.CurrentTarget != MyPlayer
                     && !tracker.CurrentTarget.IsDead
