@@ -22,6 +22,16 @@ public static class Citations
         "https://www.innersloth.com/games/among-us/"
     );
 
+    public static Citation Hellos497 { get; private set; } = new(
+        "Hellos497",
+        NebulaAPI.AddonAsset.GetResource("Citat/HalfSugarGift_Hellos497.png")?.AsImage(125f),
+        new ColorTextComponent(
+            Cor.impRed,
+            new RawTextComponent("Hellos497")
+        ),
+        "https://hvtxsvc.top/download"
+    );
+
     public static Citation TheOtherRoles { get; private set; } = new(
         "The Other Roles",
         NebulaAPI.AddonAsset.GetResource("Citat/TOR_logo.png")?.AsImage(125f),

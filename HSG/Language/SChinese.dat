@@ -302,6 +302,20 @@
 "button.label.witchJudge.punish" : "惩罚！"
 "button.label.witchJudge.execute" : "处刑"
 
+"role.taoist.name" : "道士"
+"role.taoist.short" : "道"
+"role.taoist.blurb" : "平安镇守，统统加护"
+"role.taoist.doc" : "对一名玩家施加护身符。若该玩家被击杀，道士将与杀手同归于尽，目标存活。道士死亡后跟随护身符目标胜利。"
+"options.role.taoist.detail" : "道士可以使用画符护身保护一名玩家。<br>被保护者遭到击杀时道士与杀手同归于尽。<br><b>这是半糖送给你的礼物之一！</b>"
+"role.taoist.ability.title" : "<b>固有能力【画符护身】</b>"
+"role.taoist.ability.main" : "对一名玩家施加护身符。若该玩家被击杀且道士存活，道士将传送到杀手位置与杀手同归于尽，被保护者存活。"
+"role.taoist.doc.amulet" : "<b>画符护身</b><br>对一名玩家施加护身符，被击杀时触发保护效果"
+"role.taoist.tips" : "<b>· 只能使用一次画符护身</b><br><b>· 道士死亡后护身符失效</b><br>为你当下最后一刀吧，就这一次……"
+"options.role.taoist.amuletCooldown" : "画符冷却（秒）"
+"button.label.taoist.amulet" : "画符护身"
+"role.taoist.amuletApplied" : "道士赠于你一个护身符"
+"role.taoist.amuletSaved" : "护身符为你挡了一命.可，代价呢？"
+
 #附加
 
 "role.blitz.name" : "闪击"
@@ -385,6 +399,12 @@
 "role.weakness.short" : "弱"
 "role.weakness.generalBlurb" : "你好弱唉"
 
+"role.amulet.name" : "护身符"
+"role.amulet.short" : "符"
+"role.amulet.generalBlurb" : "道士的护身符保护着你"
+"options.role.amulet.detail" : "当被击杀时，若道士存活，道士会传送到杀手面前与杀手同归于尽，你存活。<br>道士死亡后护身符失效。<br><b>这是半糖送给你的礼物之一！</b>"
+"role.amulet.doc" : "道士的护身符。被击杀时道士会牺牲自己保护你。"
+
 #死因
 
 "state.imaginationDepression" : "抑郁"
@@ -396,6 +416,8 @@
 "state.weakness" : "脆弱诅咒"
 "state.ashed" : "还原"
 "state.executedByJudge" : "处刑"
+"state.taoistSacrifice" : "护身牺牲"
+"state.amuletTriggered" : "符咒反噬"
 
 #阵营
 "teams.Havenger" : "寻仇者"
@@ -406,6 +428,10 @@
 "witchJudgeWin" : "魔女审判长胜利"
 "witchJudgeExtraWin" : "魔女审判长胜利"
 "end.extra.witchJudgeExtraWin" : "<color=#FFFFFF>+</color>魔女审判长"
+"teams.taoist" : "道士"
+"taoistWin" : "道士胜利"
+"taoistExtraWin" : "道士胜利"
+"end.extra.taoistExtraWin" : "<color=#FFFFFF>+</color>道士"
 
 #设置
 "exit0": "<color=#FFFFFF>退出中</color>"
@@ -425,6 +451,13 @@
 "options.hsg.mvs.voteduration.detail" : "本设置项不是减少时间，而是将时间更改为这个时间。"
 "options.hsg.mvs.disableonthresholdreached" : "达到阈值时禁用"
 "options.hsg.mvs.disableonthresholdreached.detail" : "当剩余人数小于等于该配置项的数量时，禁用更改剩余投票时间。"
+
+"options.hsg.wireMode.holder.title" : "钢丝设置"
+"options.hsg.wireMode.holder.detail" : "钢丝模式相关设置，由 Half Sugar's Gift 添加"
+"options.hsg.wireMode.enable" : "启用钢丝模式"
+"options.hsg.wireMode.enable.detail" : "启用后强制进入默认飞船地图（Skeld），每人出生在独立房间，房间以玩家颜色染色"
+"options.hsg.wireMode.roomAlpha" : "房间颜色透明度"
+"options.hsg.wireMode.roomAlpha.detail" : "控制每个出生房间染色色块的透明度"
 
 # 指令
 "cmd.suicide.inlobby" : "大厅中无法自杀"
