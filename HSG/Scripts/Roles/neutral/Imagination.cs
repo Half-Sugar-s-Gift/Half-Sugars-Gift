@@ -1,4 +1,4 @@
-﻿using Nebula.Configuration;
+using Nebula.Configuration;
 using NebulaN.Roles.Modifier;
 
 namespace NebulaN.Roles.Neutral
