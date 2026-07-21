@@ -37,8 +37,8 @@ public class Amulet : DefinedAllocatableModifierTemplate, DefinedAllocatableModi
             _killBlockSubscribed = true;
             GameOperatorManager.Instance.Subscribe<PlayerTryVanillaKillLocalEventAbstractPlayerEvent>(ev =>
             {
-                // 不是护身符持有者被攻击
-                if (ev.Dead != MyPlayer) return;
+                // Target 是 IPlayerlike，需转为 GamePlayer 比较 PlayerId
+                if (ev.Target is not GamePlayer target || target != MyPlayer) return;
                 // 持有者已死
                 if (MyPlayer.IsDead) return;
 
@@ -46,20 +46,21 @@ public class Amulet : DefinedAllocatableModifierTemplate, DefinedAllocatableModi
                 GamePlayer? taoist = null;
                 foreach (var p in GamePlayer.AllPlayerlikes)
                 {
-                    if (p.Role?.Role == Taoist.MyRole && !p.IsDead)
+                    if (p is GamePlayer gp && gp.Role?.Role == Taoist.MyRole && !gp.IsDead)
                     {
-                        taoist = p;
+                        taoist = gp;
                         break;
                     }
                 }
                 if (taoist == null) return; // 道士已死，护身符失效
 
-                // 安全检查：凶手不存在时不触发
-                if (ev.Murderer == null) return;
+                // ev.Player 是凶手（AbstractPlayerEvent.Player 为杀手）
+                var killer = ev.Player;
+                if (killer == null) return;
 
                 // 取消击杀，触发同归于尽
                 ev.Cancel();
-                Taoist.RpcTaoistSacrifice.Invoke((taoist.PlayerId, ev.Murderer.PlayerId));
+                Taoist.RpcTaoistSacrifice.Invoke((taoist.PlayerId, killer.PlayerId));
 
                 // 护身符持有者本地显示屏幕标题
                 if (MyPlayer.AmOwner)
@@ -67,10 +68,7 @@ public class Amulet : DefinedAllocatableModifierTemplate, DefinedAllocatableModi
                     var title = NebulaAPI.CurrentGame?.GetModule<TitleShower>();
                     if (title != null)
                         title.SetText(Language.Translate("role.taoist.amuletSaved"),
-                            new Virial.Color(0.8f, 0.7f, 0.2f), new TitleTrait(s =>
-                            {
-                                s.SetMain(2f);
-                            }));
+                            new Virial.Color(0.8f, 0.7f, 0.2f), 2f, false);
                 }
             }, this);
         }
@@ -78,6 +76,15 @@ public class Amulet : DefinedAllocatableModifierTemplate, DefinedAllocatableModi
         void RuntimeAssignable.OnActivated()
         {
             EnsureKillBlockSubscribed();
+
+            // 被施加护身符的玩家显示"你获得了道士的护身符！"
+            if (AmOwner)
+            {
+                var title = NebulaAPI.CurrentGame?.GetModule<TitleShower>();
+                if (title != null)
+                    title.SetText(Language.Translate("role.taoist.amuletApplied"),
+                        new Virial.Color(0.8f, 0.7f, 0.2f), 2f, false);
+            }
         }
 
         // 持有者因非击杀原因死亡时（如会议投票），移除护身符

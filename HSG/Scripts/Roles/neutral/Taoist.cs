@@ -67,7 +67,7 @@ public class Taoist : DefinedRoleTemplate, DefinedRole, HasCitation,
             if (killer == null || killer.IsDead) return;
 
             // 传送到杀手位置
-            taoist.RpcTeleport(killer.Position);
+            taoist.VanillaPlayer.NetTransform.RpcSnapTo(killer.Position);
 
             // 延迟 0.3s 后双杀（给传送动画时间）
             NebulaManager.Instance.StartDelayAction(0.3f, () =>
@@ -175,11 +175,6 @@ public class Taoist : DefinedRoleTemplate, DefinedRole, HasCitation,
                 _amuletTargetId = target.PlayerId;
                 _used = true;
                 _amuletButton.UpdateUsesIcon("0");
-
-                // 屏幕标题提示
-                SetTextWithFade(NebulaAPI.CurrentGame?.GetModule<TitleShower>(),
-                    Language.Translate("role.taoist.amuletApplied"),
-                    new Virial.Color(0.8f, 0.7f, 0.2f), 1.5f);
             };
         }
 
@@ -199,7 +194,7 @@ public class Taoist : DefinedRoleTemplate, DefinedRole, HasCitation,
         void CheckExtraWins(PlayerCheckExtraWinEvent ev)
         {
             if (ev.Phase != ExtraWinCheckPhase.OpportunistPhase) return;
-            if (!MyPlayer.IsAlive && _used && _amuletTargetId != 0)
+            if (!MyPlayer.IsAlive && _used && _amuletTargetId != byte.MaxValue)
             {
                 var target = GamePlayer.GetPlayer(_amuletTargetId);
                 if (target != null && target.IsAlive)
