@@ -287,7 +287,7 @@
 
 "role.taoist.name" : "道士"
 "role.taoist.short" : "道"
-"role.taoist.blurb" : "平安镇守，统统加护"
+"role.taoist.blurb" : "收下这张符便可保你平安"
 "role.taoist.doc" : "对一名玩家施加护身符。若该玩家被击杀，道士将与杀手同归于尽，目标存活。道士死亡后跟随护身符目标胜利。"
 "options.role.taoist.detail" : "道士可以使用画符护身保护一名玩家。<br>被保护者遭到击杀时道士与杀手同归于尽。<br><b>这是半糖送给你的礼物之一！</b>"
 "role.taoist.ability.title" : "<b>固有能力【画符护身】</b>"
@@ -431,12 +431,6 @@
 "options.hsg.mvs.disableonthresholdreached" : "达到阈值时禁用"
 "options.hsg.mvs.disableonthresholdreached.detail" : "当剩余人数小于等于该配置项的数量时，禁用更改剩余投票时间。"
 
-"options.hsg.wireMode.holder.title" : "钢丝设置"
-"options.hsg.wireMode.holder.detail" : "钢丝模式相关设置，由 Half Sugar's Gift 添加"
-"options.hsg.wireMode.enable" : "启用钢丝模式"
-"options.hsg.wireMode.enable.detail" : "启用后强制进入默认飞船地图（Skeld），每人出生在独立房间，房间以玩家颜色染色"
-"options.hsg.wireMode.roomAlpha" : "房间颜色透明度"
-"options.hsg.wireMode.roomAlpha.detail" : "控制每个出生房间染色色块的透明度"
 
 # 指令
 "cmd.suicide.inlobby" : "大厅中无法自杀"
