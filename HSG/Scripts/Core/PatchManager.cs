@@ -182,12 +182,6 @@ public static partial class PatchManager
         new[] { ConfigurationTab.Settings },
         GameModes.AllGameModes
         );
-    public static readonly IConfigurationHolder WireModeHolder = NebulaAPI.Configurations.Holder(
-        NebulaAPI.GUI.LocalizedTextComponent("options.hsg.wireMode.holder.title"),
-        NebulaAPI.GUI.LocalizedTextComponent("options.hsg.wireMode.holder.detail"),
-        new[] { ConfigurationTab.Settings },
-        GameModes.AllGameModes
-        );
     public static RemoteProcess<byte> RpcPlayMeetingDeath = new("PlayMeetingDeath", (victimId, _) =>
     {
         var victim = GamePlayer.GetPlayer(victimId);
@@ -197,7 +191,6 @@ public static partial class PatchManager
     static PatchManager()
     {
         LoadMVS();
-        LoadWireMode();
         //LoadRandomEventConfiguration();
     }
     static void LoadMVS()
@@ -208,12 +201,6 @@ public static partial class PatchManager
         MVS.AppendConfiguration(MoreVoteSettings.DisableOnThresholdReached);
         MVS.AppendConfiguration(MoreVoteSettings.VoteTime);
         HsgDebug.Log("MVS 加载");
-    }
-    static void LoadWireMode()
-    {
-        WireModeHolder.AppendConfiguration(WireModeSettings.EnableWireMode);
-        WireModeHolder.AppendConfiguration(WireModeSettings.RoomColorAlpha);
-        HsgDebug.Log("钢丝模式配置加载");
     }
     static void LoadPictures()
     {
@@ -635,12 +622,6 @@ public static partial class PatchManager
 
         if (parts[0][0] != '/')
         {
-            if (_settings.SmyStatus)
-            {
-                bool sent = SendNormalMessage($"?! {raw} !?");
-                if (sent) __instance.freeChatField.Clear();
-                return false;
-            }
             if (_settings.CatMode)
             {
                 bool sent = SendNormalMessage($"{raw} 喵~");
@@ -762,18 +743,6 @@ public static partial class PatchManager
                 {
                     SendLocalMessage("用法: /perm self 或 /perm user <玩家名>");
                 }
-                __instance.freeChatField.Clear();
-                return false;
-
-            case "/smy":
-            case "/surprisemyself":
-                try
-                {
-                    _settings.SmyStatus = bool.Parse(parts[1]);
-                    SaveSettings();
-                    SendLocalMessage($"诡异模式已{(_settings.SmyStatus ? "开启" : "关闭")}");
-                }
-                catch { SendLocalMessage("用法: /smy <true/false>"); }
                 __instance.freeChatField.Clear();
                 return false;
 
@@ -1300,9 +1269,6 @@ public class CommandSettings
 {
     [JsonSerializableField(true, false)]
     public bool CheckBaitEnabled = true;
-
-    [JsonSerializableField(true, false)]
-    public bool SmyStatus = false;
 
     [JsonSerializableField(true, false)]
     public bool CatMode = false;

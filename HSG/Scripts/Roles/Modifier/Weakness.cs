@@ -4,11 +4,6 @@ using Nebula.Extensions;
 
 namespace HalfSugarGift.Roles.Modifier;
 
-/// <summary>
-/// 脆弱附加，由魔法师施加。执行任务或使用杀人技能时立即死亡。
-/// 仅魔法师可见灰色名字。
-/// 配置项已迁移至 Mage 类中。
-/// </summary>
 public class Weakness : DefinedAllocatableModifierTemplate, DefinedAllocatableModifier,
     RuntimeAssignableGenerator<RuntimeModifier>, HasCitation
 {
@@ -28,7 +23,7 @@ public class Weakness : DefinedAllocatableModifierTemplate, DefinedAllocatableMo
     {
         public Instance(GamePlayer player) : base(player) { }
 
-        bool RuntimeAssignable.CanBeAwareAssignment => false; // 玩家不知情
+        bool RuntimeAssignable.CanBeAwareAssignment => false; // 
         DefinedModifier RuntimeModifier.Modifier => MyRole;
 
         private int _remainingRounds;
@@ -38,7 +33,6 @@ public class Weakness : DefinedAllocatableModifierTemplate, DefinedAllocatableMo
             _remainingRounds = Mage.WeaknessExpiryRounds;
         }
 
-        // 完成任务时死亡
         [Local]
         void OnTaskComplete(PlayerTaskCompleteLocalEvent ev)
         {
@@ -46,13 +40,11 @@ public class Weakness : DefinedAllocatableModifierTemplate, DefinedAllocatableMo
             MyPlayer.Suicide(Mage.WeaknessState, EventDetail.Kill, KillParameter.NormalKill);
         }
 
-        // 使用杀人技能时死亡（自刀不触发，如灵化使假死）
         [Local]
         void OnKillPlayer(PlayerKillPlayerEvent ev)
         {
             if (!AmOwner || MyPlayer.IsDead) return;
             if (ev.Murderer != MyPlayer) return;
-            // 跳过自刀（灵化使假死等特殊技能）
             if (ev.Murderer == ev.Dead) return;
             NebulaManager.Instance.StartDelayAction(0.1f, () =>
             {
@@ -61,7 +53,6 @@ public class Weakness : DefinedAllocatableModifierTemplate, DefinedAllocatableMo
             });
         }
 
-        // 使用管道技能时死亡（如工程师钻管道）
         [OnlyMyPlayer]
         [Local]
         void OnVentEnter(PlayerVentEnterEvent ev)
@@ -70,7 +61,6 @@ public class Weakness : DefinedAllocatableModifierTemplate, DefinedAllocatableMo
             MyPlayer.Suicide(Mage.WeaknessState, EventDetail.Kill, KillParameter.NormalKill);
         }
 
-        // 死亡时移除脆弱，防止复活后诅咒残留
         [Local]
         void OnPlayerDie(PlayerDieEvent ev)
         {
@@ -78,7 +68,6 @@ public class Weakness : DefinedAllocatableModifierTemplate, DefinedAllocatableMo
             MyPlayer.RemoveModifier(MyRole);
         }
 
-        // 回合到期自动清除（仅当启用时）
         [Local]
         void OnMeetingEnd(MeetingEndEvent ev)
         {
@@ -93,6 +82,7 @@ public class Weakness : DefinedAllocatableModifierTemplate, DefinedAllocatableMo
 
 /// <summary>
 /// Harmony 补丁：脆弱的玩家点击任意技能按钮时，优先触发诅咒死亡（阻止技能生效）
+/// 感谢AI和plana。谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢
 /// </summary>
 [NebulaPreprocess(PreprocessPhase.PostFixStructure)]
 internal static class WeaknessPatch

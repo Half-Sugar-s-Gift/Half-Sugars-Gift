@@ -4,17 +4,9 @@ using HSGTeam = HalfSugarGift.Core.Patch.Team;
 using static HalfSugarGift.Core.Patch.Cor;
 
 namespace HalfSugarGift.Roles.Neutral;
-
-/// <summary>
-/// 道士，中立阵营。
-/// 画符护身：可使用1次，对目标施加护身符。
-/// 目标被击杀时道士传送到杀手位置，与杀手同归于尽。
-/// 死亡后跟随护身符目标胜利。
-/// </summary>
 public class Taoist : DefinedRoleTemplate, DefinedRole, HasCitation,
     RuntimeAssignableGenerator<RuntimeRole>, IAssignableDocument
 {
-    // 画符护身冷却
     static FloatConfiguration AmuletCooldown = NebulaAPI.Configurations.Configuration(
         "options.role.taoist.amuletCooldown", (5f, 60f, 1f), 20f, FloatConfigurationDecorator.Second
     );
@@ -34,11 +26,9 @@ public class Taoist : DefinedRoleTemplate, DefinedRole, HasCitation,
     Virial.Media.Image? DefinedAssignable.IconImage =>
         NebulaAPI.AddonAsset.GetResource("Smallicon/TaoistIcon.png")?.AsImage();
 
-    // 死因标签
     public static readonly TranslatableTag SacrificedState = new TranslatableTag("state.taoistSacrifice");
     public static readonly TranslatableTag AmuletTriggeredState = new TranslatableTag("state.amuletTriggered");
 
-    // 文档用技能图标（暂时采用击杀图标）
     internal static readonly Virial.Media.Image? AmuletDocIcon =
         NebulaAPI.AddonAsset.GetResource("ExecuteButton.png")?.AsImage(115f);
 
@@ -55,7 +45,6 @@ public class Taoist : DefinedRoleTemplate, DefinedRole, HasCitation,
         yield break;
     }
 
-    // === 传送双杀 RPC ===
     internal static readonly RemoteProcess<(byte taoistId, byte killerId)> RpcTaoistSacrifice = new(
         "Taoist.Sacrifice",
         (data, _) =>
@@ -66,10 +55,8 @@ public class Taoist : DefinedRoleTemplate, DefinedRole, HasCitation,
             if (taoist == null || taoist.IsDead) return;
             if (killer == null || killer.IsDead) return;
 
-            // 传送到杀手位置
             taoist.VanillaPlayer.NetTransform.RpcSnapTo(killer.Position);
 
-            // 延迟 0.3s 后双杀（给传送动画时间）
             NebulaManager.Instance.StartDelayAction(0.3f, () =>
             {
                 if (!taoist.IsDead)
@@ -86,11 +73,9 @@ public class Taoist : DefinedRoleTemplate, DefinedRole, HasCitation,
         DefinedRole RuntimeRole.Role => MyRole;
         bool RuntimeRole.HasVanillaKillButton => false;
 
-        // 技能按钮图标
         private static readonly Virial.Media.Image? AmuletButtonIcon =
             NebulaAPI.AddonAsset.GetResource("ExecuteButton.png")?.AsImage(100f);
 
-        // 状态
         private bool _used;
         private byte _amuletTargetId = byte.MaxValue; 
 
@@ -98,7 +83,7 @@ public class Taoist : DefinedRoleTemplate, DefinedRole, HasCitation,
 
         public Instance(GamePlayer player) : base(player) { }
 
-        // 显示带淡入+保持+淡出效果的标题
+        //AI太好用了你们知道吗
         private static void SetTextWithFade(TitleShower? shower, string text, Virial.Color color, float holdDuration = 1f, bool shake = true)
         {
             if (shower == null) return;
@@ -126,7 +111,6 @@ public class Taoist : DefinedRoleTemplate, DefinedRole, HasCitation,
                     }
                 }
 
-                // 透明度动画：淡入 → 保持 → 淡出
                 if (fadeInTimer > 0f)
                 {
                     fadeInTimer -= dt;
@@ -144,7 +128,7 @@ public class Taoist : DefinedRoleTemplate, DefinedRole, HasCitation,
                 }
             }));
         }
-
+//AI不好用你们知道吗
         void RuntimeAssignable.OnActivated()
         {
             if (!AmOwner) return;
@@ -154,7 +138,6 @@ public class Taoist : DefinedRoleTemplate, DefinedRole, HasCitation,
 
             var tracker = NebulaAPI.Modules.PlayerTracker(this, MyPlayer);
 
-            // === 画符护身按钮 ===
             _amuletButton = NebulaAPI.Modules.AbilityButton(
                 this, MyPlayer,
                 VirtualKeyInput.Ability,
@@ -178,7 +161,6 @@ public class Taoist : DefinedRoleTemplate, DefinedRole, HasCitation,
             };
         }
 
-        // === 道士死亡 → 移除护身符 ===
         [Local]
         void OnMyDeath(PlayerDieEvent ev)
         {
@@ -189,12 +171,11 @@ public class Taoist : DefinedRoleTemplate, DefinedRole, HasCitation,
                 target.RemoveModifier(Amulet.MyRole);
         }
 
-        // === 道士死亡后跟随护身符目标胜利 ===
         [OnlyMyPlayer]
         void CheckExtraWins(PlayerCheckExtraWinEvent ev)
         {
             if (ev.Phase != ExtraWinCheckPhase.OpportunistPhase) return;
-            if (!MyPlayer.IsAlive && _used && _amuletTargetId != byte.MaxValue)
+            if (_used && _amuletTargetId != byte.MaxValue)
             {
                 var target = GamePlayer.GetPlayer(_amuletTargetId);
                 if (target != null && target.IsAlive)
