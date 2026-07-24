@@ -388,6 +388,7 @@
 "options.role.amulet.detail" : "当被击杀时，若道士存活，道士会传送到杀手面前与杀手同归于尽，你存活。<br>道士死亡后护身符失效。<br><b>这是半糖送给你的礼物之一！</b>"
 "role.amulet.doc" : "道士的护身符。被击杀时道士会牺牲自己保护你。"
 
+
 #死因
 
 "state.imaginationDepression" : "抑郁"
@@ -431,6 +432,10 @@
 "options.hsg.mvs.disableonthresholdreached" : "达到阈值时禁用"
 "options.hsg.mvs.disableonthresholdreached.detail" : "当剩余人数小于等于该配置项的数量时，禁用更改剩余投票时间。"
 
+
+# 星标功能
+"help.tabs.stars" : "星标"
+"help.stars.empty" : "暂无星标，点击职业详情页的星标按钮添加"
 
 # 指令
 "cmd.suicide.inlobby" : "大厅中无法自杀"
