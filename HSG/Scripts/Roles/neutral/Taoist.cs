@@ -178,7 +178,7 @@ public class Taoist : DefinedRoleTemplate, DefinedRole, HasCitation,
             if (_used && _amuletTargetId != byte.MaxValue)
             {
                 var target = GamePlayer.GetPlayer(_amuletTargetId);
-                if (target != null && target.IsAlive)
+                if (target != null)
                 {
                     ev.ExtraWinMask.Add(HSGTeam.ExtraTaoistWin);
                     ev.IsExtraWin = true;
