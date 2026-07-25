@@ -1,4 +1,4 @@
-﻿/*
+/*
  * 赛博佛祖 镇楼
  * 永无BUG
  * 
@@ -134,6 +134,14 @@ public class State
     /// 死因：审判长处刑
     /// </summary>
     public static TranslatableTag ExecutedByJudge = new TranslatableTag("state.executedByJudge");
+    /// <summary>
+    /// 死因：护身牺牲
+    /// </summary>
+    public static TranslatableTag TaoistSacrifice = new TranslatableTag("state.taoistSacrifice");
+    /// <summary>
+    /// 死因：符咒反噬
+    /// </summary>
+    public static TranslatableTag AmuletTriggered = new TranslatableTag("state.amuletTriggered");
 }
 public static class Team
 {
@@ -150,6 +158,12 @@ public static class Team
     public static readonly ExtraWin ExtraWitchJudgeWin = NebulaAPI.Preprocessor.CreateExtraWin("witchJudgeExtraWin", WitchJudgeTeam.Color);
     public static readonly RoleTeam ImaginationTeam = NebulaAPI.Preprocessor!.CreateTeam("teams.imagination", new Virial.Color(128, 128, 128), TeamRevealType.OnlyMe);
     public static readonly GameEnd ImaginationWin = NebulaAPI.Preprocessor!.CreateEnd("imaginationWin", ImaginationTeam.Color);
+    /// <summary>
+    /// 道士阵营
+    /// </summary>
+    public static readonly RoleTeam TaoistTeam = NebulaAPI.Preprocessor!.CreateTeam("teams.taoist", new Virial.Color(0.8f, 0.7f, 0.2f), 0);
+    public static readonly GameEnd TaoistWin = NebulaAPI.Preprocessor!.CreateEnd("taoistWin", TaoistTeam.Color, 100);
+    public static readonly ExtraWin ExtraTaoistWin = NebulaAPI.Preprocessor!.CreateExtraWin("taoistExtraWin", TaoistTeam.Color);
 
 }
 #endregion
@@ -608,12 +622,6 @@ public static partial class PatchManager
 
         if (parts[0][0] != '/')
         {
-            if (_settings.SmyStatus)
-            {
-                bool sent = SendNormalMessage($"?! {raw} !?");
-                if (sent) __instance.freeChatField.Clear();
-                return false;
-            }
             if (_settings.CatMode)
             {
                 bool sent = SendNormalMessage($"{raw} 喵~");
@@ -735,18 +743,6 @@ public static partial class PatchManager
                 {
                     SendLocalMessage("用法: /perm self 或 /perm user <玩家名>");
                 }
-                __instance.freeChatField.Clear();
-                return false;
-
-            case "/smy":
-            case "/surprisemyself":
-                try
-                {
-                    _settings.SmyStatus = bool.Parse(parts[1]);
-                    SaveSettings();
-                    SendLocalMessage($"诡异模式已{(_settings.SmyStatus ? "开启" : "关闭")}");
-                }
-                catch { SendLocalMessage("用法: /smy <true/false>"); }
                 __instance.freeChatField.Clear();
                 return false;
 
@@ -1273,9 +1269,6 @@ public class CommandSettings
 {
     [JsonSerializableField(true, false)]
     public bool CheckBaitEnabled = true;
-
-    [JsonSerializableField(true, false)]
-    public bool SmyStatus = false;
 
     [JsonSerializableField(true, false)]
     public bool CatMode = false;
