@@ -216,7 +216,7 @@
 "role.mage.ability.main" : "在第一人格使用脆弱技能，当目标做任务或使用技能后死亡。<br>在第二人格使用还原，范围击杀，留下灰烬"
 "role.mage.doc.weak" : "<b>脆弱</b><br>给目标施加脆弱诅咒，目标做任务或使用技能后死亡<br><b>该技能仅在第一人格激活</b>"
 "role.mage.doc.restore" : "<b>还原</b><br>使用后一定范围内目标死亡，仅留下灰烬<br><b>该技能仅在第二人格激活</b>"
-"role.mage.tips" : "孩子们看我魔女化"
+"role.mage.tips" : "失控了显然无法看清别人"
 "role.mage.switched" : "你失控了！！！"
 "role.mage.backToFirst" : "压制住了魔法，暂时的……"
 "role.mage.weaknessTriggered" : "%PLAYER% 被你诅咒致死。"
@@ -426,3 +426,23 @@
 
 # 指令
 "cmd.suicide.inlobby" : "大厅中无法自杀"
+
+#幽灵
+"role.glimmer.name" : "烁光"
+"role.glimmer.short" : "光"
+"role.glimmer.blurb" : "零星的光芒"
+"role.glimmer.doc" : "可以选择一名玩家，使其屏幕闪光。"
+
+"options.role.glimmer.uses" : "使用次数"
+"options.role.glimmer.cooldown" : "技能冷却"
+"options.role.glimmer.flashDuration" : "闪光持续时间"
+"options.role.glimmer.flashcolor" : "闪光颜色"
+"button.label.glimmer.flash" : "提醒"
+"options.role.glimmer.red" : "<b><color=#FF0000>红色</color></b>"
+"options.role.glimmer.yellow" : "<b><color=#FFFF00>黄色</color></b>"
+"options.role.glimmer.cyan" : "<b><color=#00EEEE>青色</color></b>"
+"options.role.glimmer.green" : "<b><color=#00FF00>绿色</color></b>"
+"options.role.glimmer.blue" : "<b><color=#0000FF>蓝色</color></b>"
+"options.role.glimmer.purple" : "<b><color=#800080>紫色</color></b>"
+"options.role.glimmer.wishY" : "<b><color=#FFE699>淡黄</color></b>"
+"options.role.glimmer.flashcolor.followtarget" : "跟随玩家颜色"

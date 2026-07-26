@@ -147,13 +147,13 @@ public class Wish : DefinedRoleTemplate, HasCitation, DefinedRole,
                 if (murderer != null)
                 {
                     string msg = Language.Translate("role.wish.markdead").Replace("%KILLER%", murderer.PlayerName)
-                        .Replace("%VICTIM%", MarkedPlayer.PlayerName).Replace("%COLOR%", PatchManager.ColorToHexRGB(MarkedPlayer.Role.Role.Color.ToUnityColor()));
+                        .Replace("%VICTIM%", MarkedPlayer.PlayerName).Replace("%COLOR%", ColorHelper.ColorToHexRGB(MarkedPlayer.Role.Role.Color.ToUnityColor()));
                     HudManager.Instance.Chat.AddChat(PlayerControl.LocalPlayer, msg);
                     HsgDebug.Log($"{msg}");
                 }
                 else
                 {
-                    string msg2 = Language.Translate("role.wish.murdererdead").Replace("%VICTIM%", MarkedPlayer.PlayerName).Replace("%COLOR%", PatchManager.ColorToHexRGB(MarkedPlayer.Role.Role.Color.ToUnityColor()));
+                    string msg2 = Language.Translate("role.wish.murdererdead").Replace("%VICTIM%", MarkedPlayer.PlayerName).Replace("%COLOR%", ColorHelper.ColorToHexRGB(MarkedPlayer.Role.Role.Color.ToUnityColor()));
                     HudManager.Instance.Chat.AddChat(PlayerControl.LocalPlayer, msg2);
                 }
             }

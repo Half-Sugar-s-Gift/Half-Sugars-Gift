@@ -147,18 +147,18 @@ public static class Team
 #region PatchManager主类
 public static partial class PatchManager
 {
-    public static readonly IConfigurationHolder MVS = NebulaAPI.Configurations.Holder(
-        NebulaAPI.GUI.LocalizedTextComponent("options.hsg.mvs.holder.title"),
-        NebulaAPI.GUI.LocalizedTextComponent("options.hsg.mvs.holder.detail"),
-        new[] { ConfigurationTab.Settings },
-        GameModes.AllGameModes
-    );
-    public static readonly IConfigurationHolder RandomEvents = NebulaAPI.Configurations.Holder(
-        NebulaAPI.GUI.LocalizedTextComponent(""),
-        NebulaAPI.GUI.LocalizedTextComponent(""),
-        new[] { ConfigurationTab.Settings },
-        GameModes.AllGameModes
-        );
+    //public static readonly IConfigurationHolder MVS = NebulaAPI.Configurations.Holder(
+    //    NebulaAPI.GUI.LocalizedTextComponent("options.hsg.mvs.holder.title"),
+    //    NebulaAPI.GUI.LocalizedTextComponent("options.hsg.mvs.holder.detail"),
+    //    new[] { ConfigurationTab.Settings },
+    //    GameModes.AllGameModes
+    //);
+    //public static readonly IConfigurationHolder RandomEvents = NebulaAPI.Configurations.Holder(
+    //    NebulaAPI.GUI.LocalizedTextComponent(""),
+    //    NebulaAPI.GUI.LocalizedTextComponent(""),
+    //    new[] { ConfigurationTab.Settings },
+    //    GameModes.AllGameModes
+    //    );
     public static RemoteProcess<byte> RpcPlayMeetingDeath = new("PlayMeetingDeath", (victimId, _) =>
     {
         var victim = GamePlayer.GetPlayer(victimId);
@@ -167,18 +167,18 @@ public static partial class PatchManager
     });
     static PatchManager()
     {
-        LoadMVS();
+        //LoadMVS();
         //LoadRandomEventConfiguration();
     }
-    static void LoadMVS()
-    {
-        MVS.AppendConfiguration(MoreVoteSettings.EnableVoteTimeChange);
-        MVS.AppendConfiguration(MoreVoteSettings.TriggerCount);
-        MVS.AppendConfiguration(MoreVoteSettings.VoteDuration);
-        MVS.AppendConfiguration(MoreVoteSettings.DisableOnThresholdReached);
-        MVS.AppendConfiguration(MoreVoteSettings.VoteTime);
-        HsgDebug.Log("MVS 加载");
-    }
+    //static void LoadMVS()
+    //{
+    //    MVS.AppendConfiguration(MoreVoteSettings.EnableVoteTimeChange);
+    //    MVS.AppendConfiguration(MoreVoteSettings.TriggerCount);
+    //    MVS.AppendConfiguration(MoreVoteSettings.VoteDuration);
+    //    MVS.AppendConfiguration(MoreVoteSettings.DisableOnThresholdReached);
+    //    MVS.AppendConfiguration(MoreVoteSettings.VoteTime);
+    //    HsgDebug.Log("MVS 加载");
+    //}
     static void LoadPictures()
     {
         Hint WithImage(string id)
@@ -188,15 +188,15 @@ public static partial class PatchManager
         HintManager.AllHints = new();
         HintManager.RegisterHint(WithImage(""));
     }
-    static void LoadRandomEventConfiguration()
-    {
-        RandomEvents.AppendConfiguration(RandomEventSettings.EnableRandomEventsSettings);
-        RandomEvents.AppendConfiguration(RandomEventSettings.EnableChangeRandomTime);
-        RandomEvents.AppendConfiguration(RandomEventSettings.HowToReport);
-        RandomEvents.AppendConfiguration(RandomEventSettings.EnableVoiceReport);
-        RandomEvents.AppendConfiguration(RandomEventSettings.RandomEventsTimesEveryGame);
-        HsgDebug.Log("随机事件配置加载");
-    }
+    //static void LoadRandomEventConfiguration()
+    //{
+    //    RandomEvents.AppendConfiguration(RandomEventSettings.EnableRandomEventsSettings);
+    //    RandomEvents.AppendConfiguration(RandomEventSettings.EnableChangeRandomTime);
+    //    RandomEvents.AppendConfiguration(RandomEventSettings.HowToReport);
+    //    RandomEvents.AppendConfiguration(RandomEventSettings.EnableVoiceReport);
+    //    RandomEvents.AppendConfiguration(RandomEventSettings.RandomEventsTimesEveryGame);
+    //    HsgDebug.Log("随机事件配置加载");
+    //}
     static RemoteProcess<(byte playerId, float x, float y)> RpcRequestMove = new("RpcRequestMove", (msg, _) =>
     {
         if (!AmongUsClient.Instance.AmHost) return;
@@ -823,11 +823,6 @@ public static partial class PatchManager
         string cmd = parts[0].ToLower();
         switch (cmd)
         {
-            case "/ghelp":
-                __instance.freeChatField.Clear();
-                ShowHelp();
-                return false;
-
             case "/return":
             case "/kickself":
             case "/quit":
@@ -839,13 +834,6 @@ public static partial class PatchManager
                 string reason = parts.Length > 1 ? string.Join(" ", parts.Skip(1)) : null;
                 RpcReturnRequest.Invoke((PlayerControl.LocalPlayer.PlayerId, reason));
                 __instance.freeChatField.Clear();
-                return false;
-
-            case "/gi":
-            case "/ys":
-            case "/GenshinImpact":
-                __instance.freeChatField.Clear();
-                Application.OpenURL("https://ys.mihoyo.com/cloud");
                 return false;
 
             case "/checkbait":
@@ -996,7 +984,6 @@ public static partial class PatchManager
         sb.AppendLine("<b>/Ghelp</b>  — 显示本帮助");
         sb.AppendLine("<b>/return</b>  <理由> — 踢出自己");
         sb.AppendLine("<b>/CheckBait</b>  — 击杀诱饵时提示");
-        sb.AppendLine("<b>/gi</b> — 打开原神云游戏");
         sb.AppendLine("<b>/perm</b>  — 权限查询");
         sb.AppendLine("====================");
         SendLocalMessage(sb.ToString());
