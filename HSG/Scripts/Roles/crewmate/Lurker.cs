@@ -83,6 +83,7 @@ public class Lurker : DefinedRoleTemplate, HasCitation, DefinedRole,
         ModAbilityButton? Btn;
         
         static public bool CanKill = false;
+        private bool _isAlive = true;
         void RuntimeAssignable.OnActivated()
         {
             ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;
@@ -109,6 +110,7 @@ public class Lurker : DefinedRoleTemplate, HasCitation, DefinedRole,
                 }
                 button.StartCoolDown();
             };
+            GameOperatorManager.Instance?.Subscribe<EndCriteriaPreMetEvent>(OnEndCriteriaPreMet, this);
         }
         static public RemoteProcess RpcSetBool = new("SetBool_H", _ =>
         {
@@ -116,7 +118,6 @@ public class Lurker : DefinedRoleTemplate, HasCitation, DefinedRole,
         });
 
 
-        [Local]
         [OnlyHost]
         void NeedWin(PlayerDieEvent ev)
         {
@@ -133,7 +134,25 @@ public class Lurker : DefinedRoleTemplate, HasCitation, DefinedRole,
             int CrewCount = AlivePlayers.Count(p => p.Role.Role.Category == RoleCategory.CrewmateRole);
             if (AlivePlayers.Count==CrewCount) NebulaAPI.CurrentGame?.TriggerGameEnd(NebulaGameEnds.CrewmateGameEnd, GameEndReason.Situation);
         }
-        void EraseCanKill(GameStartEvent ev) => CanKill = false;
-
+        [OnlyHost]
+        private void OnEndCriteriaPreMet(EndCriteriaPreMetEvent ev)
+        {
+            if (!_isAlive) return;
+            var crewmateEnd = NebulaGameEnds.CrewmateGameEnd.Get();
+            if (ev.GameEnd == crewmateEnd) return;
+            ev.Reject();
+        }
+        [OnlyMyPlayer]
+        void OnDie(PlayerDieEvent ev)
+        {
+            if (ev.Player == MyPlayer)
+                _isAlive = false;
+        }
+        [OnlyMyPlayer]
+        void OnGameStart(GameStartEvent ev)
+        {
+            _isAlive = true;
+            CanKill = false;
+        }
     }
 }

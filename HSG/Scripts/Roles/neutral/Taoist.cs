@@ -45,13 +45,14 @@ public class Taoist : DefinedRoleTemplate, DefinedRole, HasCitation,
         yield break;
     }
 
-    internal static readonly RemoteProcess<(byte taoistId, byte killerId)> RpcTaoistSacrifice = new(
+    internal static readonly RemoteProcess<(byte taoistId, byte killerId, byte targetId)> RpcTaoistSacrifice = new(
         "Taoist.Sacrifice",
         (data, _) =>
         {
             if (!AmongUsClient.Instance.AmHost) return;
             var taoist = GamePlayer.GetPlayer(data.taoistId);
             var killer = GamePlayer.GetPlayer(data.killerId);
+            var target = GamePlayer.GetPlayer(data.targetId);
             if (taoist == null || taoist.IsDead) return;
             if (killer == null || killer.IsDead) return;
 
@@ -63,6 +64,8 @@ public class Taoist : DefinedRoleTemplate, DefinedRole, HasCitation,
                     taoist.Suicide(SacrificedState, EventDetail.Kill, KillParameter.NormalKill);
                 if (!killer.IsDead)
                     killer.Suicide(AmuletTriggeredState, EventDetail.Kill, KillParameter.NormalKill);
+                if (target != null && target.IsDead)
+                    target.Revive(null, target.Position, true, false);
             });
         }
     );

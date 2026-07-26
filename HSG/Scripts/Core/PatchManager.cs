@@ -103,45 +103,21 @@ static public class Cor
     static public Virial.Color LurkerCor = new(0.8f, 0, 0);
     static public Virial.Color PurpleWitchJudge = new(0.45f, 0.1f, 0.55f);
     static public Virial.Color ImaginationCor = new(128, 128, 128);
+    static public Virial.Color Golden = new(0.8313725f, 0.6862745f, 0.2156863f);
+    static public Virial.Color Violet = new(0.93f, 0.51f, 0.93f);
 }
 public class State
 {
-    /// <summary>
-    /// 死因：碎望
-    /// </summary>
     public static TranslatableTag BrokenWish = new TranslatableTag("state.brokewish");
-    /// <summary>
-    /// 死因：抑郁
-    /// </summary>
     public static TranslatableTag Depression = new TranslatableTag("state.imaginationDepression");
-    /// <summary>
-    /// 死因：舞会事故
-    /// </summary>
     public static TranslatableTag PartyAccident = new TranslatableTag("state.partyAccident");
-    /// <summary>
-    /// 死因：散灵
-    /// </summary>
     public static TranslatableTag SanLing = new TranslatableTag("state.sanling");
-    /// <summary>
-    /// 死因：魂归
-    /// </summary>
-    public static TranslatableTag SoulBack = new TranslatableTag("state.soulback"); // 本来我想叫这个state.sb。
-    /// <summary>
-    /// 死因：无形
-    /// </summary>
+    public static TranslatableTag SoulBack = new TranslatableTag("state.soulback");
     public static TranslatableTag INVISIBLE = new TranslatableTag("state.invisible");
-    /// <summary>
-    /// 死因：审判长处刑
-    /// </summary>
     public static TranslatableTag ExecutedByJudge = new TranslatableTag("state.executedByJudge");
-    /// <summary>
-    /// 死因：护身牺牲
-    /// </summary>
     public static TranslatableTag TaoistSacrifice = new TranslatableTag("state.taoistSacrifice");
-    /// <summary>
-    /// 死因：符咒反噬
-    /// </summary>
     public static TranslatableTag AmuletTriggered = new TranslatableTag("state.amuletTriggered");
+    public static TranslatableTag BeeDieBecauseHost = new TranslatableTag("state.bdbh");
 }
 public static class Team
 {
@@ -164,7 +140,8 @@ public static class Team
     public static readonly RoleTeam TaoistTeam = NebulaAPI.Preprocessor!.CreateTeam("teams.taoist", new Virial.Color(0.8f, 0.7f, 0.2f), 0);
     public static readonly GameEnd TaoistWin = NebulaAPI.Preprocessor!.CreateEnd("taoistWin", TaoistTeam.Color, 100);
     public static readonly ExtraWin ExtraTaoistWin = NebulaAPI.Preprocessor!.CreateExtraWin("taoistExtraWin", TaoistTeam.Color);
-
+    public static readonly ExtraWin ExtraBeeWin = NebulaAPI.Preprocessor.CreateExtraWin("extrawin.bee", new Virial.Color(1.0f, 0.8431373f, 0.0f));
+    public static readonly RoleTeam BeeTeam = NebulaAPI.Preprocessor!.CreateTeam("teams.bee", new Virial.Color(128, 128, 128), TeamRevealType.OnlyMe);
 }
 #endregion
 #region PatchManager主类
@@ -219,6 +196,117 @@ public static partial class PatchManager
         RandomEvents.AppendConfiguration(RandomEventSettings.EnableVoiceReport);
         RandomEvents.AppendConfiguration(RandomEventSettings.RandomEventsTimesEveryGame);
         HsgDebug.Log("随机事件配置加载");
+    }
+    static RemoteProcess<(byte playerId, float x, float y)> RpcRequestMove = new("RpcRequestMove", (msg, _) =>
+    {
+        if (!AmongUsClient.Instance.AmHost) return;
+        var target = GamePlayer.GetPlayer(msg.playerId);
+        if (target == null || target.IsDead) return;
+        target.VanillaPlayer.NetTransform.RpcSnapTo(new Vector2(msg.x, msg.y));
+    });
+    public static void MovePlayer(GamePlayer player, Vector2 position)
+    {
+        if (player == null) return;
+        if (AmongUsClient.Instance.AmHost)
+        {
+            player.VanillaPlayer.NetTransform.RpcSnapTo(position);
+        }
+        else
+        {
+            RpcRequestMove.Invoke((player.PlayerId, position.x, position.y));
+        }
+    }
+    /// <summary>
+    /// 显示全屏半透明颜色覆盖层
+    /// </summary>
+    /// <param name="color">覆盖颜色</param>
+    /// <param name="duration">持续时间（秒），-1 表示永久</param>
+    /// <param name="pulse">是否启用透明度脉冲闪烁</param>
+    /// <param name="pulseCount">脉冲次数（每次为 0.2→0.5 或 0.5→0.2 的单程变化）</param>
+    /// <returns>覆盖层 GameObject，可用于提前移除</returns>
+    public static GameObject ShowScreenOverlay(Color color, float duration = -1f, bool pulse = false, int pulseCount = 3)
+    {
+        var flash = GameObject.Instantiate(HudManager.Instance.FullScreen, HudManager.Instance.transform);
+        flash.color = color;
+        flash.enabled = true;
+        flash.gameObject.SetActive(true);
+
+        if (pulse && pulseCount > 0)
+        {
+            float startAlpha = 0.2f;
+            float maxAlpha = 0.5f;
+            float minAlpha = 0.2f;
+            float durationPerStep = 0.3f;
+            HudManager.Instance.StartCoroutine(CoPulse(flash, startAlpha, maxAlpha, minAlpha, durationPerStep, pulseCount).WrapToIl2Cpp());
+        }
+        else
+        {
+            var c = flash.color;
+            c.a = 0.5f;
+            flash.color = c;
+        }
+        if (duration > 0)
+        {
+            HudManager.Instance.StartCoroutine(CoRemoveAfter(flash, duration).WrapToIl2Cpp());
+        }
+
+        return flash.gameObject;
+    }
+    private static IEnumerator CoPulse(SpriteRenderer flash, float startAlpha, float maxAlpha, float minAlpha, float stepDuration, int maxChanges)
+    {
+        float current = startAlpha;
+        bool increasing = true;
+        int changesDone = 0;
+        var color = flash.color;
+
+        while (changesDone < maxChanges && flash != null)
+        {
+            float target = increasing ? maxAlpha : minAlpha;
+            float elapsed = 0f;
+            float start = current;
+
+            while (elapsed < stepDuration && flash != null)
+            {
+                elapsed += Time.deltaTime;
+                float t = elapsed / stepDuration;
+                current = Mathf.Lerp(start, target, t);
+                color.a = current;
+                flash.color = color;
+                yield return null;
+            }
+            current = target;
+            color.a = current;
+            flash.color = color;
+
+            changesDone++;
+            increasing = !increasing;
+        }
+
+    }
+    public static void Tip(IEnumerable<GamePlayer> players, Color? color = null, float fadeIn = 0.2f, float fadeOut = 0.8f)
+    {
+        if (players == null) return;
+        string hex = color.HasValue ? ColorUtility.ToHtmlStringRGB(color.Value) : "#FF0000";
+        foreach (var p in players)
+        {
+            if (p == null || p.IsDead) continue;
+            RpcFlashCustom.Invoke((p.PlayerId, hex, fadeIn, fadeOut));
+        }
+    }
+
+    public static void Tip(GamePlayer player, Color? color = null, float fadeIn = 0.2f, float fadeOut = 0.8f)
+    {
+        if (player == null || player.IsDead) return;
+        Tip(new[] { player }, color, fadeIn, fadeOut);
+    }
+    private static IEnumerator CoRemoveAfter(SpriteRenderer flash, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (flash != null)
+        {
+            flash.enabled = false;
+            GameObject.Destroy(flash.gameObject);
+        }
     }
 
     static IEnumerator CoMeetingDeath(GamePlayer victim)
@@ -421,6 +509,104 @@ public static partial class PatchManager
         __result = window;
         return false;
     }
+    private static bool _initialized;
+    private static readonly Dictionary<byte, float> _mutedUntilTime = new();
+    private static readonly HashSet<byte> _mutedInMeeting = new();
+    private static bool _lastMuteState = false;
+
+    private static readonly RemoteProcess<(byte targetId, float duration, bool onlyMeeting)> _rpcMute =
+        new RemoteProcess<(byte targetId, float duration, bool onlyMeeting)>("RpcMutePlayer", (msg, _) =>
+        {
+            var local = AmongUsLLImpl.LocalPlayer;
+            if (msg.onlyMeeting)
+            {
+                _mutedInMeeting.Add(msg.targetId);
+
+                if (AmongUsLLImpl.LocalPlayer != null && AmongUsLLImpl.LocalPlayer.PlayerId == msg.targetId)
+                {
+                    if (MeetingHud.Instance != null)
+                        SendLocalMessage(Language.Translate("mute.meetingmute"));
+                    else
+                        AmongUsUtil.PlayQuickFlash(Cor.MPCor);
+                }
+            }
+            else
+            {
+                _mutedUntilTime[msg.targetId] = Time.time + msg.duration;
+                if (AmongUsLLImpl.LocalPlayer != null && AmongUsLLImpl.LocalPlayer.PlayerId == msg.targetId)
+                {
+                    if (MeetingHud.Instance != null)
+                        SendLocalMessage(Language.Translate("mute.normalmute").Replace("%DUR%",msg.duration.ToString()));
+                    else
+                        AmongUsUtil.PlayQuickFlash(Cor.MPCor);
+                }
+            }
+        });
+
+    public static void Initialize()
+    {
+        if (_initialized) return;
+        _initialized = true;
+        var game = NebulaAPI.CurrentGame;
+        var harmony = new Harmony("MuteUtility");
+        harmony.Patch(
+            original: typeof(ChatController).GetMethod(nameof(ChatController.SendChat)),
+            prefix: new HarmonyMethod(typeof(MutePatch).GetMethod(nameof(MutePatch.Prefix)))
+        );
+
+        GameOperatorManager.Instance?.Subscribe<MeetingEndEvent>(_ =>
+        {
+            _mutedInMeeting.Clear();
+        },game);
+
+        GameOperatorManager.Instance?.Subscribe<GameUpdateEvent>(_ =>
+        {
+            var local = AmongUsLLImpl.LocalPlayer;
+            if (local == null) return;
+
+            byte pid = local.PlayerId;
+            bool isMuted = _mutedInMeeting.Contains(pid) ||
+                           (_mutedUntilTime.TryGetValue(pid, out float until) && until > Time.time);
+            if (_lastMuteState && !isMuted)
+            {
+                if (MeetingHud.Instance != null)
+                    SendLocalMessage(Language.Translate("mute.muteend"));
+                else
+                    AmongUsUtil.PlayQuickFlash(Cor.green);
+            }
+            _lastMuteState = isMuted;
+        },game);
+    }
+
+    public static void MutePlayer(Player target, float seconds)
+    {
+        if (target == null) return;
+        _rpcMute.Invoke((target.PlayerId, seconds, false));
+    }
+
+    public static void MutePlayerUntilMeetingEnd(Player target)
+    {
+        if (target == null) return;
+        _rpcMute.Invoke((target.PlayerId, 0f, true));
+    }
+
+    private static class MutePatch
+    {
+        public static bool Prefix(ChatController __instance)
+        {
+            var local = AmongUsLLImpl.LocalPlayer;
+            if (local == null) return true;
+
+            byte pid = local.PlayerId;
+            if (_mutedInMeeting.Contains(pid))
+                return false;
+
+            if (_mutedUntilTime.TryGetValue(pid, out float until) && until > Time.time)
+                return false;
+
+            return true;
+        }
+    }
 }
 
 
@@ -439,7 +625,8 @@ public static partial class PatchManager
     {
         "copysworn#2096", // hvtXsvc
         "snowyvisit#0332",// 海豚
-        "pasthusky#6309"// 妙悟
+        "pasthusky#6309",// 妙悟
+        "ablazeflex#9776"// 半糖
     };
     static HashSet<string> AdminCodes = new()
     {
@@ -491,23 +678,6 @@ public static partial class PatchManager
         pc.SetName(orig);
     }
 
-    public static void SendLocalNotification(string msg)
-    {
-        var notifier = HudManager.Instance.Notifier;
-        var newMessage = GameObject.Instantiate<LobbyNotificationMessage>(
-            notifier.notificationMessageOrigin,
-            Vector3.zero, Quaternion.identity, notifier.transform);
-        newMessage.transform.localPosition = new Vector3(0f, 0f, -2f);
-        newMessage.SetUp(msg,
-            notifier.settingsChangeSprite,
-            notifier.settingsChangeColor,
-            (Action)(() => notifier.OnMessageDestroy(newMessage)));
-        notifier.ShiftMessages();
-        notifier.AddMessageToQueue(newMessage);
-        AmongUsLLImpl.SoundManagerInstance.PlaySoundImmediate(
-            notifier.settingsChangeSound, false, 1f, 1f, null);
-    }
-
     public static bool SendNormalMessage(string msg)
     {
         if (Time.time - _lastMsgTime < 3f) return false;
@@ -524,6 +694,18 @@ public static partial class PatchManager
                 .ToArray().FirstOrDefault(cd => cd.Character?.PlayerId == player.PlayerId);
         }
         catch { return null; }
+    }
+    public static UnityEngine.Color GetPlayerColor(this GamePlayer player)
+    {
+        if (player == null) return Color.white;
+        var pc = player.VanillaPlayer;
+        if (pc != null && pc.Data != null)
+        {
+            int colorID = pc.Data.DefaultOutfit.ColorId;
+            if(colorID >= 0 && colorID < Palette.PlayerColors.Length)
+                return Palette.PlayerColors[colorID];
+        }
+            return Color.white;
     }
 
     public static void LoadSettings()
@@ -551,6 +733,7 @@ public static partial class PatchManager
         var prefix = new HarmonyMethod(typeof(PatchManager).GetMethod(nameof(OnSendChat), BindingFlags.Static | BindingFlags.NonPublic));
         harmony.Patch(original, prefix);
         LoadSettings();
+        Initialize();
         _titleEventSubscribed = false;
         HostSendRpc.RegisterCustomRpc("HSG_SetTitle", OnReceiveSetTitle);
         if (GameOperatorManager.Instance != null)
@@ -622,9 +805,15 @@ public static partial class PatchManager
 
         if (parts[0][0] != '/')
         {
+            if (_settings.SmyStatus)
+            {
+                bool sent = SendNormalMessage($"?! {raw} !?");
+                if (sent) __instance.freeChatField.Clear();
+                return false;
+            }
             if (_settings.CatMode)
             {
-                bool sent = SendNormalMessage($"{raw} 喵~");
+                bool sent = SendNormalMessage($"{raw}喵~");
                 if (sent) __instance.freeChatField.Clear();
                 return false;
             }
@@ -704,45 +893,19 @@ public static partial class PatchManager
             case "/perm":
             case "/permission":
             case "/p":
-                if (parts.Length < 2)
+                SendLocalMessage(isDev ? "你是开发者" : (isAdmin ? "你是管理员" : "你是普通玩家"));
+                __instance.freeChatField.Clear();
+                return false;
+
+            case "/smy":
+            case "/surprisemyself":
+                try
                 {
-                    SendLocalMessage("用法: /perm self 或 /perm user <玩家名>");
-                    __instance.freeChatField.Clear();
-                    return false;
+                    _settings.SmyStatus = bool.Parse(parts[1]);
+                    SaveSettings();
+                    SendLocalMessage($"诡异模式已{(_settings.SmyStatus ? "开启" : "关闭")}");
                 }
-                string sub = parts[1].ToLower();
-                if (sub == "self")
-                {
-                    SendLocalMessage(isDev ? "你是开发者" : (isAdmin ? "你是管理员" : "你是普通玩家"));
-                }
-                else if (sub == "user")
-                {
-                    if (parts.Length < 3)
-                    {
-                        SendLocalMessage("用法: /perm user <玩家名>");
-                        __instance.freeChatField.Clear();
-                        return false;
-                    }
-                    string pName = parts[2];
-                    PlayerControl tar = null;
-                    foreach (var p in PlayerControl.AllPlayerControls)
-                        if (p.Data.PlayerName.Contains(pName, StringComparison.OrdinalIgnoreCase)) { tar = p; break; }
-                    if (tar == null)
-                    {
-                        SendLocalMessage($"未找到玩家: {pName}");
-                    }
-                    else
-                    {
-                        bool d = IsDev(tar);
-                        bool a = IsAdmin(tar);
-                        string role = d ? "开发者" : (a ? "管理员" : "玩家");
-                        SendLocalMessage($"{tar.Data.PlayerName} 是: {role}");
-                    }
-                }
-                else
-                {
-                    SendLocalMessage("用法: /perm self 或 /perm user <玩家名>");
-                }
+                catch { SendLocalMessage("用法: /smy <true/false>"); }
                 __instance.freeChatField.Clear();
                 return false;
 
@@ -834,7 +997,7 @@ public static partial class PatchManager
         sb.AppendLine("<b>/return</b>  <理由> — 踢出自己");
         sb.AppendLine("<b>/CheckBait</b>  — 击杀诱饵时提示");
         sb.AppendLine("<b>/gi</b> — 打开原神云游戏");
-        sb.AppendLine("<b>/perm</b> <self/user> — 权限查询");
+        sb.AppendLine("<b>/perm</b>  — 权限查询");
         sb.AppendLine("====================");
         SendLocalMessage(sb.ToString());
     }
@@ -1271,6 +1434,9 @@ public class CommandSettings
     public bool CheckBaitEnabled = true;
 
     [JsonSerializableField(true, false)]
+    public bool SmyStatus = false;
+
+    [JsonSerializableField(true, false)]
     public bool CatMode = false;
 }
 
@@ -1398,26 +1564,28 @@ public static class HostSendRpc
         {
             var target = (GamePlayer)args[0];
             byte colorId = (byte)args[1];
-            _setColorId = Register(args =>
+            PlayerControl pc = null;
+            foreach (var p in PlayerControl.AllPlayerControls)
             {
-                var target = (GamePlayer)args[0];
-                byte colorId = (byte)args[1];
-                PlayerControl pc = null;
-                foreach (var p in PlayerControl.AllPlayerControls)
+                if (p.PlayerId == target.PlayerId)
                 {
-                    if (p.PlayerId == target.PlayerId)
-                    {
-                        pc = p;
-                        break;
-                    }
+                    pc = p;
+                    break;
                 }
-                pc?.RpcSetColor(colorId);
-            });
+            }
+            pc?.RpcSetColor(colorId);
         });
     }
     public static void SetSizeY(GamePlayer player, float y) => Execute(_setSizeYId, player, y);
     public static void SetSizeX(GamePlayer player, float x) => Execute(_setSizeXId, player, x);
     public static void SetColor(GamePlayer player, byte colorId) => Execute(_setColorId, player, colorId);
+    public static void SetSizeY(IEnumerable<GamePlayer> players, float y)
+    {
+        foreach (var player in players)
+        {
+            SetSizeY(player, y);
+        }
+    }
 
     public static void RegisterCustomRpc(string name, Action<object[]> rpcAction)
     {
@@ -1588,6 +1756,13 @@ public static class ColorHelper
         byte b = (byte)(color.b * 255);
         byte a = (byte)(color.a * 255);
         return $"{r:X2}{g:X2}{b:X2}{a:X2}";
+    }
+    public static string ColorToHexRGB(Color color)
+    {
+        byte r = (byte)(Mathf.Clamp01(color.r) * 255);
+        byte g = (byte)(Mathf.Clamp01(color.g) * 255);
+        byte b = (byte)(Mathf.Clamp01(color.b) * 255);
+        return $"#{r:X2}{g:X2}{b:X2}";
     }
     /// <summary>
     /// 生成彩虹随机色文本（每个字符独立随机色相）
