@@ -151,17 +151,6 @@
 
 #伪装者
 
-"role.BeNothing.name" : "背叛的彗星之子"
-"role.BeNothing.short" : "叛彗"
-"role.BeNothing.blurb" : "Q！"
-"options.role.BeNothing.detail" : "可进入隐身状态，同时大幅提升移动速度。<br>持续时间结束后恢复正常。<br><b>这是半糖送给你的礼物之一！</b>"
-"role.BeNothing.doc" : "<b>本职业为测试职业，拥有逆天+Bug双重因素。</b><br><b>正常游玩别开。</b><br>可进入隐身状态，同时大幅提升移动速度。持续时间结束后恢复正常。"
-"options.role.BeNothing.cooldown" : "隐身冷却"
-"options.role.BeNothing.duration" : "隐身持续时间"
-"options.role.BeNothing.speedMultiplier" : "加速倍率"
-"button.label.BeNothing" : "隐身"
-
-
 "role.objector.name" : "异议者"
 "role.objector.blurb" : "我对本次会议的结果不满意"
 "role.objector.doc" : "<b>本职业有bug。</b><br>你可以在会议上使用<b>异议</b>技能。<br>如果使用了异议，那么本轮所有人的投票将被转换为弃票"
@@ -338,12 +327,6 @@
 "options.modifier.wide.min" : "生长最低值"
 "options.modifier.wide.max" : "生长最高值"
 "options.modifier.wide.jiange" : "变化间隔"
-
-"role.QED.name" : "QED"
-"role.QED.short" : "QED"
-"options.role.QED.detail" : "...<b>这是半糖送给你的礼物之一！</b>"
-"role.QED.generalBlurb" : "病名未知的疼痛"
-"role.QED.doc" : "你说的对但是<br><b>償（つぐな）いたい すぐ会（あ）いたい 来（く）る媒体（ばいたい）<br>病名（びょうめい）は無（な）いけど胸（むね）が痛（いた）い <br>誠(まこと)に意思(いし)が弱(よわ)い奇奇怪怪(ききかいかい) <br>どうしようもないけど まだ曖昧(あいまい) <br>息（いき）が詰(つ)まりそう <br>つまり 集(あつ)まりから <br>阻害(そがい)されてしまうような <br>申(もう)し訳(わけ)ないほどに集(あつ)まってく<br>Q E D <br>証明(しょうめい)</b>"
 
 "role.turtle.name" : "乌龟"
 "role.turtle.short" : "龟"
