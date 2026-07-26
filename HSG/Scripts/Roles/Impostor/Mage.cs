@@ -275,14 +275,13 @@ public class Mage : DefinedRoleTemplate, DefinedRole, HasCitation,
                 ev.Color = WeakGray;
         }
 
-        // === 第二人格视觉特效，AI太好用了你们知道吗 ===
         void OnUpdateCamera(CameraUpdateEvent ev)
         {
             if (!AmOwner) return;
             if (_switched && !MyPlayer.IsDead)
             {
-                ev.UpdateSaturation(0f, true);   // 黑白去色
-                ev.UpdateBrightness(1.15f, true); // 稍提亮（灰白感）
+                ev.UpdateSaturation(0f, true);   // 黑白，去色
+                ev.UpdateBrightness(1.15f, true); // 提亮
             }
         }
 

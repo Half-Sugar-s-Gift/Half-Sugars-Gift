@@ -23,7 +23,7 @@ public class Weakness : DefinedAllocatableModifierTemplate, DefinedAllocatableMo
     {
         public Instance(GamePlayer player) : base(player) { }
 
-        bool RuntimeAssignable.CanBeAwareAssignment => false; // 
+        bool RuntimeAssignable.CanBeAwareAssignment => false; 
         DefinedModifier RuntimeModifier.Modifier => MyRole;
 
         private int _remainingRounds;
@@ -82,7 +82,7 @@ public class Weakness : DefinedAllocatableModifierTemplate, DefinedAllocatableMo
 
 /// <summary>
 /// Harmony 补丁：脆弱的玩家点击任意技能按钮时，优先触发诅咒死亡（阻止技能生效）
-/// 感谢AI和plana。谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢
+/// 感谢AI和plana。谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢谢
 /// </summary>
 [NebulaPreprocess(PreprocessPhase.PostFixStructure)]
 internal static class WeaknessPatch
