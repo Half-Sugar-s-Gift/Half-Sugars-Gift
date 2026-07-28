@@ -1,57 +1,53 @@
 using HarmonyLib;
 using Nebula.Game;
-using Virial.Game;
 
 namespace hvtXsvc.GameMode.StarWreckEscape;
 
 /// <summary>
-/// 星骸逃生模式的 Intro 替换补丁。
-/// 因 Nebula 的 ShowIntroPatch 调用 InstantiateModule() 时，
-/// StarWreckEscapeModule 不实现 IGameModeModule 导致返回 null → NRE 崩溃，
-/// 故用 [HarmonyPriority(Priority.First)] 在此方法上抢先拦截，
-/// 完全代替 Nebula 和原版的 intro 流程。
+/// Intro 安全补丁。
+/// 
+/// 背景：StarWreckEscapeModule 不直接实现 IGameModeModule（因 AddModule 为 internal），
+/// 而是通过 GameModeModuleProxy（Reflection.Emit 动态代理）在 DIManager 中注册。
+/// 正常情况下 Nebula 的 ShowIntroPatch 能通过代理正常调用模块方法，intro 流程不会崩溃。
+/// 
+/// 此补丁作为安全网：如果因未知原因 Nebula 的 ShowIntroPatch 抛异常，
+/// Finalizer 会吞掉异常并执行降级初始化（触发 GameStartEvent + 销毁 intro）。
+/// 这确保即使发生异常，游戏也能正常开始，不会黑屏卡死。
 /// </summary>
 [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.CoBegin))]
-[HarmonyPriority(Priority.First)]
-internal static class IntroReplacePatch
+internal static class IntroSafetyPatch
 {
-    static bool Prefix(IntroCutscene __instance, ref Il2CppSystem.Collections.IEnumerator __result)
+    static Exception Finalizer(Exception __exception)
     {
-        // 仅拦截星骸逃生模式
-        if (Nebula.Configuration.GeneralConfigurations.CurrentGameMode != StarWreckEscapeRegistration.Definition)
-            return true; // 不是我们的模式，交给后续 patch 处理
+        if (__exception == null) return null;
 
-        HsgDebug.Log("[StarWreckIntro] 拦截 IntroCutscene.CoBegin，替换为星骸逃生模式流程");
+        // 仅处理星骸逃生模式下的异常
+        if (Nebula.Configuration.GeneralConfigurations.CurrentGameMode !=
+            StarWreckEscapeRegistration.Definition)
+            return __exception; // 不是我们的模式，让异常正常传播
 
-        // 设置 IntroCutscene 静态实例（NebulaGameManager.OnGameStart 依赖它）
-        IntroCutscene.Instance = __instance;
+        HsgDebug.Log($"[IntroSafety] CoBegin 异常被拦截: {__exception.GetType().Name}: {__exception.Message}");
 
-        __result = CoBeginStarWreck(__instance).WrapToIl2Cpp();
-        return false; // 阻止 Nebula 和原版 intro 执行
-    }
+        try
+        {
+            // 降级：手动触发 GameStartEvent（模拟 ShowIntroPatch 的清理逻辑）
+            NebulaGameManager.Instance?.OnGameStart();
+            HudManager.Instance.ShowVanillaKeyGuide();
+        }
+        catch (System.Exception ex2)
+        {
+            HsgDebug.Log($"[IntroSafety] 降级初始化也失败: {ex2.Message}");
+        }
 
-    static System.Collections.IEnumerator CoBeginStarWreck(IntroCutscene __instance)
-    {
-        // 播放 intro 音效
-        AmongUsLLImpl.SoundManagerInstance.PlaySound(__instance.IntroStinger, false, 1f, null);
+        // 确保 intro 对象被销毁
+        try
+        {
+            var intro = IntroCutscene.Instance;
+            if (intro != null)
+                GameObject.Destroy(intro.gameObject);
+        }
+        catch { }
 
-        // 隐藏原版 intro UI 元素（避免闪烁）
-        __instance.HideAndSeekPanels.SetActive(false);
-        __instance.CrewmateRules.SetActive(false);
-        __instance.ImpostorRules.SetActive(false);
-        __instance.ImpostorName.gameObject.SetActive(false);
-        __instance.ImpostorTitle.gameObject.SetActive(false);
-        __instance.ImpostorText.gameObject.SetActive(false);
-
-        // 短暂延迟确保音效播放 + UI 隐藏生效
-        yield return new UnityEngine.WaitForSeconds(0.3f);
-
-        // 触发 Nebula 的 OnGameStart（对应 ShowIntroPatch.OnDestroy 中的调用）
-        // 这会触发 GameStartEvent，让订阅该事件的各系统（如 StarWreckEscapeGameStarter）正常初始化
-        NebulaGameManager.Instance?.OnGameStart();
-        HudManager.Instance.ShowVanillaKeyGuide();
-
-        // 销毁 intro 对象
-        GameObject.Destroy(__instance.gameObject);
+        return null; // 吞掉异常
     }
 }
