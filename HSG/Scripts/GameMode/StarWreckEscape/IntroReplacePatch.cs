@@ -1,53 +1,90 @@
+using System.Collections;
 using HarmonyLib;
 using Nebula.Game;
 
 namespace hvtXsvc.GameMode.StarWreckEscape;
 
 /// <summary>
-/// Intro 安全补丁。
+/// StarWreckEscape Intro 补丁 — 使用 Postfix + Priority.Last 模式。
 /// 
-/// 背景：StarWreckEscapeModule 不直接实现 IGameModeModule（因 AddModule 为 internal），
-/// 而是通过 GameModeModuleProxy（Reflection.Emit 动态代理）在 DIManager 中注册。
-/// 正常情况下 Nebula 的 ShowIntroPatch 能通过代理正常调用模块方法，intro 流程不会崩溃。
+/// 关键教训（参考 ImmersionDream DraftMode）：
+/// 1. 不能用 Prefix 拦截 CoBegin — Nebula 的 ShowIntroPatch 也是 Prefix，
+///    多个 Prefix 可能同时运行并互相覆盖 __result。
+/// 2. 必须用 Postfix + Priority.Last — 在所有 Prefix 结束后替换 __result。
+/// 3. 包装模式：先让原生 intro 协程完整播放（含角色揭示动画），
+///    结束后再启动我们的 PhaseStateMachine。
 /// 
-/// 此补丁作为安全网：如果因未知原因 Nebula 的 ShowIntroPatch 抛异常，
-/// Finalizer 会吞掉异常并执行降级初始化（触发 GameStartEvent + 销毁 intro）。
-/// 这确保即使发生异常，游戏也能正常开始，不会黑屏卡死。
+/// Finalizer 作为兜底：如果 Nebula 的模块实例化仍抛出异常，吞掉并降级初始化。
 /// </summary>
 [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.CoBegin))]
-internal static class IntroSafetyPatch
+internal static class IntroReplacePatch
 {
-    static Exception Finalizer(Exception __exception)
+    // ──── Postfix（正常路径：包装原生 intro）────
+    [HarmonyPriority(Priority.Last)]
+    static void Postfix(ref Il2CppSystem.Collections.IEnumerator __result)
+    {
+        if (Nebula.Configuration.GeneralConfigurations.CurrentGameMode !=
+            StarWreckEscapeRegistration.Definition)
+            return;
+
+        HsgDebug.Log("[StarWreckIntro] Postfix — 包装原生 intro 协程，将在其结束后启动游戏模式");
+
+        var native = __result;
+        __result = CoWrap(native).WrapToIl2Cpp();
+    }
+
+    /// <summary>
+    /// 包装协程：先执行原生 intro（含角色揭示 + 动画），完成后启动星骸逃生模式。
+    /// </summary>
+    static IEnumerator CoWrap(Il2CppSystem.Collections.IEnumerator nativeIntro)
+    {
+        // ── 阶段 1：原生 intro ──
+        // 此时 Nebula 的 ShowIntroPatch 已将 __result 设为原生揭示协程，
+        // 角色会正常显示 "Crewmate" / "Impostor" 等动画。
+        while (nativeIntro.MoveNext())
+            yield return nativeIntro.Current;
+
+        HsgDebug.Log("[StarWreckIntro] 原生 intro 完成，启动 PhaseStateMachine");
+
+        // ── 阶段 2：启动我们的游戏模式 ──
+        // 此时 intro 已结束，HUD 正常显示，游戏世界已加载。
+        // PhaseStateMachine.StartGame() 防重复，仅首次调用生效。
+        if (PhaseStateMachine.CurrentPhase == StarWreckPhase.Inactive)
+            PhaseStateMachine.StartGame();
+    }
+
+    // ──── Finalizer（异常兜底）────
+    static System.Exception Finalizer(System.Exception __exception)
     {
         if (__exception == null) return null;
 
-        // 仅处理星骸逃生模式下的异常
         if (Nebula.Configuration.GeneralConfigurations.CurrentGameMode !=
             StarWreckEscapeRegistration.Definition)
-            return __exception; // 不是我们的模式，让异常正常传播
+            return __exception;
 
-        HsgDebug.Log($"[IntroSafety] CoBegin 异常被拦截: {__exception.GetType().Name}: {__exception.Message}");
+        HsgDebug.Log($"[StarWreckIntro] Finalizer 拦截异常: {__exception.GetType().Name}: {__exception.Message}");
 
         try
         {
-            // 降级：手动触发 GameStartEvent（模拟 ShowIntroPatch 的清理逻辑）
             NebulaGameManager.Instance?.OnGameStart();
             HudManager.Instance.ShowVanillaKeyGuide();
+
+            if (PhaseStateMachine.CurrentPhase == StarWreckPhase.Inactive)
+                PhaseStateMachine.StartGame();
         }
         catch (System.Exception ex2)
         {
-            HsgDebug.Log($"[IntroSafety] 降级初始化也失败: {ex2.Message}");
+            HsgDebug.Log($"[StarWreckIntro] 降级初始化也失败: {ex2.Message}");
         }
 
-        // 确保 intro 对象被销毁
         try
         {
             var intro = IntroCutscene.Instance;
             if (intro != null)
-                GameObject.Destroy(intro.gameObject);
+                UnityEngine.Object.Destroy(intro.gameObject);
         }
         catch { }
 
-        return null; // 吞掉异常
+        return null;
     }
 }
