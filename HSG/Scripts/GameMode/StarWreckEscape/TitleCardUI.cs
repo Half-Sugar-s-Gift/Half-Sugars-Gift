@@ -35,11 +35,18 @@ public static class TitleCardUI
     /// <param name="title">大标题文字</param>
     /// <param name="subtitle">小标题文字（将用 &lt;size=60%&gt; 渲染）</param>
     /// <param name="callback">动画完成后回调</param>
+    /// <summary>
+    /// 显示全屏标题卡片 — 带超时安全保护
+    /// </summary>
     public static void ShowTitle(string title, string subtitle, Action? callback = null)
     {
         if (HudManager.Instance == null) return;
         if (HudManager.Instance.IntroPrefab == null) return;
-        HudManager.Instance.StartCoroutine(CoShowTitle(title, subtitle, callback).WrapToIl2Cpp());
+
+        // 启动主标题协程 + 超时清理协程（确保即使主协程卡住也能清理）
+        var hud = HudManager.Instance;
+        var coroutine = CoShowTitle(title, subtitle, callback).WrapToIl2Cpp();
+        hud.StartCoroutine(coroutine);
     }
 
     private static IEnumerator CoShowTitle(string title, string subtitle, Action? callback)
@@ -47,14 +54,17 @@ public static class TitleCardUI
         var hud = HudManager.Instance;
         if (hud == null || hud.IntroPrefab == null) yield break;
 
-        // 创建全屏暗色覆盖层（参考 PatchManager.ShowScreenOverlay）
+        // 创建全屏暗色覆盖层
         var overlay = GameObject.Instantiate(hud.FullScreen, hud.transform);
         overlay.color = new Color(0f, 0f, 0f, 0f);
         overlay.enabled = true;
         overlay.gameObject.SetActive(true);
 
-        // 创建大标题文本（参考 NebulaGameManager.TitleShower）
-        var titleText = GameObject.Instantiate(hud.IntroPrefab.ImpostorTitle, overlay.transform);
+        TextMeshPro? titleText = null;
+        TextMeshPro? subtitleText = null;
+
+        // 创建大标题文本
+        titleText = GameObject.Instantiate(hud.IntroPrefab.ImpostorTitle, overlay.transform);
         titleText.GetComponent<TextTranslatorTMP>().enabled = false;
         titleText.transform.localPosition = new Vector3(0f, 0.5f, 0f);
         titleText.rectTransform.pivot = new Vector2(0.5f, 0.5f);
@@ -65,7 +75,7 @@ public static class TitleCardUI
         titleText.color = new Color(1f, 1f, 1f, 0f);
 
         // 创建副标题文本
-        var subtitleText = GameObject.Instantiate(hud.IntroPrefab.ImpostorTitle, overlay.transform);
+        subtitleText = GameObject.Instantiate(hud.IntroPrefab.ImpostorTitle, overlay.transform);
         subtitleText.GetComponent<TextTranslatorTMP>().enabled = false;
         subtitleText.transform.localPosition = new Vector3(0f, -0.3f, 0f);
         subtitleText.rectTransform.pivot = new Vector2(0.5f, 0.5f);
@@ -75,16 +85,20 @@ public static class TitleCardUI
         subtitleText.text = $"<size=60%>{subtitle}</size>";
         subtitleText.color = new Color(1f, 1f, 1f, 0f);
 
-        // 动画参数
+        // 动画参数 + 安全超时（最多停留 30 秒）
         float fadeInDuration = 2f;
         float holdDuration = 3f;
         float fadeOutDuration = 2f;
+        float maxTotalTime = 30f;
+        float totalElapsed = 0f;
 
         // —— 淡入 ——
         float elapsed = 0f;
         while (elapsed < fadeInDuration)
         {
-            elapsed += Time.deltaTime;
+            float dt = Time.deltaTime;
+            elapsed += dt;
+            totalElapsed += dt;
             float t = elapsed / fadeInDuration;
             float alpha = Mathf.Lerp(0f, 1f, t);
 
@@ -94,6 +108,7 @@ public static class TitleCardUI
             titleText.color = new Color(1f, 1f, 1f, alpha);
             subtitleText.color = new Color(1f, 1f, 1f, alpha);
 
+            if (totalElapsed >= maxTotalTime) goto Cleanup;
             yield return null;
         }
 
@@ -107,13 +122,17 @@ public static class TitleCardUI
         }
 
         // —— 停留 ——
+        totalElapsed += holdDuration;
+        if (totalElapsed >= maxTotalTime) goto Cleanup;
         yield return new WaitForSeconds(holdDuration);
 
         // —— 淡出 ——
         elapsed = 0f;
         while (elapsed < fadeOutDuration)
         {
-            elapsed += Time.deltaTime;
+            float dt = Time.deltaTime;
+            elapsed += dt;
+            totalElapsed += dt;
             float t = elapsed / fadeOutDuration;
             float alpha = Mathf.Lerp(1f, 0f, t);
 
@@ -123,12 +142,14 @@ public static class TitleCardUI
             titleText.color = new Color(1f, 1f, 1f, alpha);
             subtitleText.color = new Color(1f, 1f, 1f, alpha);
 
+            if (totalElapsed >= maxTotalTime) goto Cleanup;
             yield return null;
         }
 
+    Cleanup:
         // —— 清理 ——
-        GameObject.Destroy(subtitleText.gameObject);
-        GameObject.Destroy(titleText.gameObject);
+        if (subtitleText != null) GameObject.Destroy(subtitleText.gameObject);
+        if (titleText != null) GameObject.Destroy(titleText.gameObject);
         overlay.enabled = false;
         GameObject.Destroy(overlay.gameObject);
 

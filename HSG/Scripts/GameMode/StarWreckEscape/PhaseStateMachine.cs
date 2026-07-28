@@ -1,5 +1,7 @@
 namespace hvtXsvc.GameMode.StarWreckEscape;
 
+using Nebula.Game;
+
 /// <summary>
 /// StarWreckEscape 的阶段枚举
 /// </summary>
@@ -27,20 +29,23 @@ internal class PhaseStateMachine
     /// </summary>
     public static void StartGame()
     {
+        // 防重复调用
+        if (CurrentPhase != StarWreckPhase.Inactive) return;
+
         CurrentPhase = StarWreckPhase.PhaseOne;
 
         // 创建并启动阶段一
         phaseOneManager = new PhaseOneManager();
+
+        // 注册到 GameOperator 系统，使其事件处理方法被自动发现
+        GameOperatorManager.Instance?.Subscribe(phaseOneManager, phaseOneManager);
 
         // 订阅阶段一事件
         phaseOneManager.OnPhaseComplete += TransitionToPhaseTwo;
         phaseOneManager.OnOxygenDepleted += OnOxygenDepleted;
 
         phaseOneManager.StartPhase();
-
-        // 显示阶段标题
-        var (title, subtitle) = TitleCardUI.GetPhaseTitle(0);
-        TitleCardUI.ShowTitle(title, subtitle);
+        // 注意：StartPhase() 内部已调用 TitleCardUI.ShowTitle，此处不重复调用
 
         // 预加载所有地图（内部只激活 Skeld）
         MapPreloader.PreloadAll();
@@ -84,6 +89,7 @@ internal class PhaseStateMachine
             MapPreloader.SwitchTo(5); // Fungle
 
             phaseThreeManager = new PhaseThreeManager();
+            GameOperatorManager.Instance?.Subscribe(phaseThreeManager, NebulaAPI.CurrentGame!);
             phaseThreeManager.StartPhase();
         });
     }
