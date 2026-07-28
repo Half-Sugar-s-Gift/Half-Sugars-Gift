@@ -34,7 +34,7 @@ internal class PhaseOneManager : FlexibleLifespan, IGameOperator
     }
 
     /// <summary>
-    /// 启动阶段一：显示标题、分配共享任务、开始氧气倒计时。
+    /// 启动阶段一：分配共享任务、开始氧气倒计时。
     /// </summary>
     public void StartPhase()
     {
@@ -50,13 +50,8 @@ internal class PhaseOneManager : FlexibleLifespan, IGameOperator
 
         HsgDebug.Log($"PhaseOneManager: 阶段一启动，氧气初始 {StarWreckEscapeConfig.OxygenInitialTime}s");
 
-        // 显示阶段标题
-        var (title, subtitle) = TitleCardUI.GetPhaseTitle(0);
-        TitleCardUI.ShowTitle(title, subtitle, () =>
-        {
-            // 标题动画完成后分配共享任务
-            SharedTaskPool.AssignTasks();
-        });
+        // 直接分配共享任务（不显示标题卡片，避免遮盖画面）
+        SharedTaskPool.AssignTasks();
 
         // 订阅共享任务完成事件（增加氧气时间）
         SharedTaskPool.OnAllTasksCompleted += OnSharedTasksDone;

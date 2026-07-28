@@ -44,11 +44,11 @@ internal class PhaseStateMachine
         phaseOneManager.OnPhaseComplete += TransitionToPhaseTwo;
         phaseOneManager.OnOxygenDepleted += OnOxygenDepleted;
 
-        phaseOneManager.StartPhase();
-        // 注意：StartPhase() 内部已调用 TitleCardUI.ShowTitle，此处不重复调用
-
         // 预加载所有地图（内部只激活 Skeld）
         MapPreloader.PreloadAll();
+
+        // 直接启动阶段一（不显示标题卡片，避免遮盖原版 intro 过渡）
+        phaseOneManager.StartPhase();
     }
 
     /// <summary>
