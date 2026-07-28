@@ -1,0 +1,47 @@
+#星骸逃生模式
+"gamemode.starwreckescape" : "星骸逃生"
+
+"options.starwreck.impostor.outdoor.timeout" : "内鬼室外停留上限"
+"options.starwreck.password.input.time" : "密码输入时限"
+"options.starwreck.oxygen.initial.time" : "氧气初始时间"
+"options.starwreck.oxygen.per.task" : "每任务氧气增加"
+"options.starwreck.temperature.changerate" : "体温变化速率"
+"options.starwreck.temperature.death.threshold" : "死亡温差阈值"
+"options.starwreck.doctor.cure.uses" : "医生治愈次数"
+
+#设置页面
+"options.starwreck" : "星骸逃生设置"
+"options.starwreck.detail" : "调整星骸逃生模式的各项参数"
+
+#阶段标题
+"phase.starwreck.one.title" : "第一章 薪火未熄"
+"phase.starwreck.one.subtitle" : "在这艘铁棺材里，杀死你的从来不是怪物——是氧气一点一点归零的声音。抓住每一分，每一秒"
+"phase.starwreck.two.title" : "冰与火共舞"
+"phase.starwreck.two.subtitle" : "距离不是你的朋友，是你的审判官。"
+"phase.starwreck.three.title" : "孢子黎明"
+"phase.starwreck.three.subtitle" : "最后一个人站着的时候，他面对的不只是一只怪——是所有曾经的队友。"
+
+#阶段提示
+"phase.starwreck.one.start" : "【星骸逃生】第一阶段：重启飞船 - 任务开始！注意氧气倒计时！"
+"phase.starwreck.two.start" : "【星骸逃生】第二阶段：障碍赛 - 注意体温！"
+"phase.starwreck.three.start" : "【星骸逃生】第三阶段：孢子黎明 - 死者已复活为内鬼！"
+"phase.starwreck.three.countdown" : "【星骸逃生】逃生倒计时：%TIME% 秒"
+"phase.starwreck.three.password" : "【星骸逃生】密码面板已开启！输入密码 /password spore"
+"phase.starwreck.three.password.correct" : "【星骸逃生】密码正确！10秒后逃生！"
+"phase.starwreck.three.password.wrong" : "【星骸逃生】密码错误！"
+
+#职业
+"doctor" : "医生"
+"doctorAssistant" : "医生助手"
+"infector" : "感染者"
+"doctor.cure" : "治愈"
+"doctorAssistant.assist" : "辅助治愈"
+
+#密码面板
+"passwordpanel.notice" : "【密码面板】本阶段密码: %PASSWORD%  剩余时间: %TIME%s"
+"passwordpanel.board" : "所有任务已完成！前往登录艇区域输入密码。"
+"passwordpanel.confirm" : "密码已确认！30秒后登录艇起飞！"
+
+#随机事件设置
+"options.hsg.res.holder.title" : "随机事件设置"
+"options.hsg.res.holder.detail" : "自定义随机事件的开关与参数"

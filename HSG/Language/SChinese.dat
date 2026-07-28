@@ -401,7 +401,7 @@
 "options.hsg.mvs.voteduration.detail" : "本设置项不是减少时间，而是将时间更改为这个时间。"
 "options.hsg.mvs.disableonthresholdreached" : "达到阈值时禁用"
 "options.hsg.mvs.disableonthresholdreached.detail" : "当剩余人数小于等于该配置项的数量时，禁用更改剩余投票时间。"
-
+"options.hsg.mvs.votetime" : "投票时长"
 
 # 星标功能
 "help.tabs.stars" : "星标"
