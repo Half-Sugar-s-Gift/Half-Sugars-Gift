@@ -907,6 +907,11 @@ public static partial class PatchManager
                 catch { SendLocalMessage("用法: /cat <true/false>"); }
                 __instance.freeChatField.Clear();
                 return false;
+            case "/ghelp":
+            case "/help":
+                ShowHelp();
+                __instance.freeChatField.Clear();
+                return false;
             case "":
                 __instance.freeChatField.Clear();
                 return false;
